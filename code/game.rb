@@ -38,7 +38,7 @@ class CollisionsDemo < Game
                       text_position + V[0, line_height * 4])
     display.fill_text("broad phase: quadtree",
                       text_position + V[0, line_height * 5])
-    display.fill_text("narrow phase: simplistic",
+    display.fill_text("narrow phase: points",
                       text_position + V[0, line_height * 6])
   end
 end
