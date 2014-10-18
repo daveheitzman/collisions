@@ -52,6 +52,6 @@ class Scene
   end
 
   def remove_box
-    @box_count -= 0 if things.shift
+    @box_count -= 1 unless things.shift.nil?
   end
 end
