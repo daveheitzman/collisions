@@ -3,7 +3,7 @@ class Box
 
   def initialize(position = V[])
     @position = position
-    @size = V[16, 16]
+    @size = V[20, 20]
     @velocity = V[48, 48]
 
     @velocity.x *= -1 if rand.round.zero?
