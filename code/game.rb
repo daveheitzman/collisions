@@ -33,12 +33,5 @@ class CollisionsDemo < Game
     display.fill_text("+ add, - remove",
                       text_position + V[120, line_height * 2])
     display.fill_color = Color[10, 10, 10]
-
-    display.fill_text("dimensions: 2",
-                      text_position + V[0, line_height * 4])
-    display.fill_text("broad phase: quadtree",
-                      text_position + V[0, line_height * 5])
-    display.fill_text("narrow phase: points",
-                      text_position + V[0, line_height * 6])
   end
 end
