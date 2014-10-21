@@ -1,34 +1,39 @@
 class Box
-  attr_accessor :position, :size, :velocity
+  attr_accessor :x, :y, :width, :height, :velocity
 
-  def initialize(position = V[])
-    @position = position
-    @size = V[20, 20]
-    @velocity = V[48, 48]
+  def initialize(x = 0, y = 0)
+    @x = x
+    @y = y
 
-    @velocity.x *= -1 if rand.round.zero?
-    @velocity.y *= -1 if rand.round.zero?
+    @width = 20
+    @height = 20
+
+    @velocity_x = 48
+    @velocity_y = 48
+    @velocity_x *= -1 if rand.round.zero?
+    @velocity_y *= -1 if rand.round.zero?
   end
 
   def update(game, things, elapsed)
-    @position += @velocity * elapsed
+    @x += @velocity_x * elapsed
+    @y += @velocity_y * elapsed
 
     # Vertical wall collision
     if y < 0
-      @position.y = 0
-      @velocity.y *= -1
+      @y = 0
+      @velocity_y *= -1
     elsif y + height > game.scene.height
-      @position.y = game.scene.height - height
-      @velocity.y *= -1
+      @y = game.scene.height - height
+      @velocity_y *= -1
     end
 
     # Horizontal wall collision
     if x < 0
-      @position.x = 0
-      @velocity.x *= -1
+      @x = 0
+      @velocity_x *= -1
     elsif x + width > game.scene.width
-      @position.x = game.scene.width - width
-      @velocity.x *= -1
+      @x = game.scene.width - width
+      @velocity_x *= -1
     end
 
     # Thing collision
@@ -41,65 +46,41 @@ class Box
   def draw(d)
     d.stroke_color = Color[201, 94, 18]
     d.stroke_width = 2
-    d.stroke_rectangle(@position, @size)
+    d.stroke_rectangle(@x, @y, @width, @height)
 
     if @collided
       d.fill_color = d.stroke_color
-      d.fill_rectangle(@position, @size)
+      d.fill_rectangle(@x, @y, @width, @height)
       @collided = false
     end
   end
 
-  def x
-    position.x
-  end
-
-  def y
-    position.y
-  end
-
-  def z
-    position.z
-  end
-
-  def width
-    size.x
-  end
-
-  def height
-    size.y
-  end
-
-  def depth
-    size.z
-  end
-
   def top
-    y
+    @y
   end
 
   def bottom
-    y + height
+    @y + @height
   end
 
   def left
-    x
+    @x
   end
 
   def right
-    x + width
+    @x + @width
   end
 
   def front
-    z
+    @z
   end
 
   def back
-    z + depth
+    @z + @depth
   end
 
   def center
-    position + size / 2
+    [@x + @width / 2, @y + @height / 2]
   end
 
   def colliding?(thing)

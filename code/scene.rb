@@ -1,13 +1,14 @@
 require 'quadtree'
 
 class Scene
-  attr_accessor :things, :size
+  attr_accessor :things, :width, :height
   attr_reader :box_count
 
   def initialize
+    @width = 512
+    @height = 512
     @things = []
-    @size = V[512, 512]
-    @tree = Quadtree.new(V[], @size)
+    @tree = Quadtree.new(0, 0, @width, @height)
     @box_count = 0
 
     20.times { add_box }
@@ -31,23 +32,11 @@ class Scene
 
     display.stroke_color = Color[10, 10, 10]
     display.stroke_width = 3
-    display.stroke_rectangle(V[], @size)
-  end
-
-  def width
-    size.x
-  end
-
-  def height
-    size.y
-  end
-
-  def depth
-    size.z
+    display.stroke_rectangle(0, 0, @width, @height)
   end
 
   def add_box
-    things << Box.new(V[width * rand, height * rand])
+    things << Box.new(@width * rand, @height * rand)
     @box_count += 1
   end
 

@@ -2,9 +2,11 @@ class Quadtree
   MAX_THINGS = 5
   MAX_LEVELS = 5
 
-  def initialize(position, size, level = 0)
-    @position = position
-    @size = size
+  def initialize(x, y, width, height, level = 0)
+    @x = x
+    @y = y
+    @width = width
+    @height = height
     @level = level
     @things = []
     @nodes = []
@@ -42,22 +44,23 @@ class Quadtree
   def draw(d)
     d.stroke_color = C['#f33']
     d.stroke_width = 1
-    d.stroke_rectangle(@position, @size)
+    d.stroke_rectangle(@x, @y, @width, @height)
     @nodes.each { |n| n.draw(d) }
   end
 
   private
 
   def split
-    half_size = @size / 2
+    half_width = @width / 2
+    half_height = @height / 2
+    next_level = @level + 1
 
     @nodes = [
-      Quadtree.new(V[@position.x + half_size.x, @position.y], half_size,
-                   @level + 1),
-      Quadtree.new(@position, half_size, @level +1),
-      Quadtree.new(V[@position.x, @position.y + half_size.y], half_size,
-                   @level + 1),
-      Quadtree.new(@position + half_size, half_size, @level + 1)
+      Quadtree.new(@x + half_width, @y, half_width, half_height, next_level),
+      Quadtree.new(@x, @y, half_width, half_height, next_level),
+      Quadtree.new(@x, @y + half_height, half_width, half_height, next_level),
+      Quadtree.new(@x + half_width, @y + half_height, half_width, half_height,
+                   next_level)
     ]
 
     @things.each do |thing|
@@ -69,13 +72,14 @@ class Quadtree
   def node_for(thing)
     return if @nodes.empty? || thing.nil?
 
-    middle = @position + @size / 2
+    middle_x = @x + @width / 2
+    middle_y = @y + @height / 2
 
-    fits_top = thing.bottom < middle.y
-    fits_bottom = thing.top > middle.y
+    fits_top = thing.bottom < middle_y
+    fits_bottom = thing.top > middle_y
 
     # If fits left...
-    if thing.right < middle.x
+    if thing.right < middle_x
       if fits_top
         @nodes[1]
       elsif fits_bottom
@@ -83,7 +87,7 @@ class Quadtree
       end
 
     # If fits right...
-    elsif thing.left > middle.x
+    elsif thing.left > middle_x
       if fits_top
         @nodes[0]
       elsif fits_bottom

@@ -1,6 +1,5 @@
-GIT
-  remote: git://github.com/yeahrb/yeah.git
-  revision: 233824e3d52f1a3ba04728139acfd00b9f8c43b1
+PATH
+  remote: ../yeah
   specs:
     yeah (0.4.3.dev)
       opal (~> 0.7.0.beta1)
