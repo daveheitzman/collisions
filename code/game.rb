@@ -29,7 +29,7 @@ class CollisionsDemo < Game
     line_height = display.text_size
     display.fill_color = TEXT_COLOR
 
-    display.fill_text("fps: #{ticker.actual_rate}", text_x, text_y)
+    display.fill_text("fps: #{ticker.ticks_per_second}", text_x, text_y)
 
     display.fill_text("boxes: #{@scene.box_count}",
                       text_x, text_y + line_height * 2)

@@ -1,6 +1,7 @@
 class Quadtree
   MAX_THINGS = 5
   MAX_LEVELS = 5
+  COLOR = Color['#f33']
 
   def initialize(x, y, width, height, level = 0)
     @x = x
@@ -42,7 +43,7 @@ class Quadtree
   end
 
   def draw(d)
-    d.stroke_color = C['#f33']
+    d.stroke_color = COLOR
     d.stroke_width = 1
     d.stroke_rectangle(@x, @y, @width, @height)
     @nodes.each { |n| n.draw(d) }

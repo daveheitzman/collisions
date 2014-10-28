@@ -1,4 +1,6 @@
 class Box
+  COLOR = Color[201, 94, 18]
+
   attr_accessor :x, :y, :width, :height, :velocity
 
   def initialize(x = 0, y = 0)
@@ -44,7 +46,7 @@ class Box
   end
 
   def draw(d)
-    d.stroke_color = Color[201, 94, 18]
+    d.stroke_color = COLOR
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
 
