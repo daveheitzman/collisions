@@ -39,6 +39,14 @@ class Box
     end
 
     # Thing collision
+    %x{
+      for (var i = 0; i < things.length; i++) {
+        if (things[i] == this) continue;
+        if (this['$colliding?'](things[i])) this.collided = true;
+      }
+    }
+    return
+
     things.each do |thing|
       next if self == thing
       @collided = true if colliding?(thing)

@@ -24,11 +24,21 @@ class Scene
     end
 
     #@tree.things = @things
-    @things.each { |t| t.update(game, @things, elapsed) }
+    #@things.each { |t| t.update(game, @things, elapsed) }
+    %x{
+      for (var i = 0; i < self.things.length; i++) {
+        self.things[i].$update(game, self.things, elapsed);
+      }
+    }
   end
 
   def draw(display)
-    @things.each { |t| t.draw(display) }
+    #@things.each { |t| t.draw(display) }
+    %x{
+      for (var i = 0; i < self.things.length; i++) {
+        self.things[i].$draw(display);
+      }
+    }
 
     #@tree.draw(display)
 
