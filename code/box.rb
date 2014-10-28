@@ -59,7 +59,7 @@ class Box
     d.stroke_rectangle(@x, @y, @width, @height)
 
     if @collided
-      d.fill_color = d.stroke_color
+      d.fill_color = COLOR
       d.fill_rectangle(@x, @y, @width, @height)
       @collided = false
     end
