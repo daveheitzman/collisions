@@ -1,15 +1,16 @@
 class Box
   COLOR = Color[201, 94, 18]
 
-  attr_accessor :x, :y, :width, :height, :velocity
+  attr_accessor :x, :y, :width, :height, :velocity, :in_collision
+  attr_reader :filled 
 
   def initialize(x = 0, y = 0)
     @x = x
     @y = y
-
+    @in_collision=false
     @width = 20
     @height = 20
-
+    @filled = rand >= 0.5 
     @velocity_x = 48
     @velocity_y = 48
     @velocity_x *= -1 if rand.round.zero?
@@ -39,18 +40,14 @@ class Box
     end
 
     # Thing collision
-    %x{
-      for (var i = 0; i < things.length; i++) {
-        if (things[i] == this) continue;
-        if (this['$colliding?'](things[i])) this.collided = true;
-      }
-    }
-    return
+    # %x{
+    #   for (var i = 0; i < things.length; i++) {
+    #     if (things[i] == this) continue;
+    #     if (this['$colliding?'](things[i])) this.collided = true;
+    #   }
+    # }
+    # return
 
-    things.each do |thing|
-      next if self == thing
-      @collided = true if colliding?(thing)
-    end
   end
 
   def draw(d)
@@ -58,7 +55,7 @@ class Box
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
 
-    if @collided
+    if @filled
       d.fill_color = COLOR
       d.fill_rectangle(@x, @y, @width, @height)
       @collided = false
@@ -94,7 +91,7 @@ class Box
   end
 
   def colliding?(thing)
-    left < thing.right && right > thing.left &&
+    @in_collision = left < thing.right && right > thing.left &&
       top < thing.bottom && bottom > thing.top
   end
 end
