@@ -19,9 +19,9 @@ class CollisionsDemo < Game
     display.clear
 
     display.push
-      offset = (display.height - @scene.height) / 2
-      display.translate(offset, offset)
-      @scene.draw(display)
+    offset = (display.height - @scene.height) / 2
+    display.translate(offset, offset)
+    @scene.draw(display)
     display.pop
 
     text_x = @scene.width + offset * 2

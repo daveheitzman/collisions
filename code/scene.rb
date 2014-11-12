@@ -18,6 +18,7 @@ class Scene
   end
 
   def update(game, elapsed)
+    @aa=V[1,1]
     if game.keyboard.pressing? :equals
       add_box
     elsif game.keyboard.pressing? :minus
