@@ -17,7 +17,7 @@ class Box
     # @velocity_y *= -1 if rand.round.zero?
   end
 
-  def update(game, things, elapsed)
+  def update(game,  elapsed)
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
 

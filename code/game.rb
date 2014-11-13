@@ -1,5 +1,7 @@
 require 'scene'
 require 'box'
+require 'hero'
+require 'bullet'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]

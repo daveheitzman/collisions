@@ -13,25 +13,31 @@ class Scene
     @things = []
     #@tree = Quadtree.new(0, 0, @width, @height)
     @box_count = 0
-
+    @hero=Hero.new(@width / 2 , @height - 10)
     100.times { add_box }
   end
 
   def update(game, elapsed)
-    @aa=V[1,1]
     if game.keyboard.pressing? :equals
       add_box
     elsif game.keyboard.pressing? :minus
       remove_box
+    elsif game.keyboard.pressing? :a 
+      @hero.left()
+    elsif game.keyboard.pressing? :d
+      @hero.right()
+    elsif game.keyboard.pressing? :space
+      @things << @hero.new_bullet
+      # @things << Box.new(10,100)
     end
-
     #@tree.things = @things
     #@things.each { |t| t.update(game, @things, elapsed) }
     %x{
       for (var i = 0; i < self.things.length; i++) {
-        self.things[i].$update(game, self.things, elapsed);
+        self.things[i].$update(game, elapsed);
       }
     }
+    @hero.update(game, elapsed)
     collide_boxes 
   end
 
@@ -45,6 +51,7 @@ class Scene
 
     #@tree.draw(display)
 
+    @hero.draw(display)
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
     display.stroke_rectangle(0, 0, @width, @height)
@@ -53,13 +60,16 @@ class Scene
   def collide_boxes
 
     @things.each_with_index do |thing, i|
+      if thing.is_a?(Bullet) && thing.dead
+        @things[i]=nil
+      end
+      next if thing.nil? 
       b1_ind=i
       b2_ind=nil
-      next if thing.nil?
       collided_tmp=thing.in_collision
       
       @things.each_with_index do |thing2, i2| 
-        next if thing == thing2 || thing2.nil?
+        next if thing == thing2 || thing2.nil? || thing.is_a?(Bullet)
         if thing.colliding?(thing2)
           thing.in_collision = true 
           b2_ind=i2
