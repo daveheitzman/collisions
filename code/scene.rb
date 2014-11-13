@@ -2,6 +2,7 @@ require 'quadtree'
 
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
+  BULLET_WAIT = 0.15
 
   attr_accessor :things, :width, :height
   attr_reader :box_count
@@ -15,6 +16,7 @@ class Scene
     @box_count = 0
     @hero=Hero.new(@width / 2 , @height - 10)
     100.times { add_box }
+    @bullet_off_delay = -1
   end
 
   def update(game, elapsed)
@@ -22,12 +24,19 @@ class Scene
       add_box
     elsif game.keyboard.pressing? :minus
       remove_box
-    elsif game.keyboard.pressing? :a 
+    end
+    if game.keyboard.pressing? :left
       @hero.left()
-    elsif game.keyboard.pressing? :d
+    elsif game.keyboard.pressing? :right
       @hero.right()
-    elsif game.keyboard.pressing? :space
-      @things << @hero.new_bullet
+    end
+    if game.keyboard.pressing? :space
+      if @bullet_off_delay < 0
+        @things << @hero.new_bullet
+        @bullet_off_delay=BULLET_WAIT
+      else 
+        @bullet_off_delay -= elapsed
+      end   
       # @things << Box.new(10,100)
     end
     #@tree.things = @things
@@ -58,7 +67,6 @@ class Scene
   end
 
   def collide_boxes
-
     @things.each_with_index do |thing, i|
       if thing.is_a?(Bullet) && thing.dead
         @things[i]=nil
@@ -67,10 +75,17 @@ class Scene
       b1_ind=i
       b2_ind=nil
       collided_tmp=thing.in_collision
-      
+      hit_by_bullet=false 
       @things.each_with_index do |thing2, i2| 
-        next if thing == thing2 || thing2.nil? || thing.is_a?(Bullet)
+        next if thing == thing2 || thing2.nil? 
         if thing.colliding?(thing2)
+          if thing.is_a?(Bullet) || thing2.is_a?(Bullet) 
+            hit_by_bullet=true
+            # if anything hits a bullet , bullet and thing are dead
+            @things[i]=nil    
+            @things[i2]=nil
+            next 
+          end 
           thing.in_collision = true 
           b2_ind=i2
           break
@@ -78,7 +93,7 @@ class Scene
         thing.in_collision=false
       end 
       
-      if !collided_tmp && thing.in_collision
+      if !hit_by_bullet && !collided_tmp && thing.in_collision
         #collision starting
         if things[b1_ind].filled && things[b2_ind].filled 
           # two boxes, both filled collide => new box ! 

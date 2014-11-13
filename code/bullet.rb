@@ -12,7 +12,7 @@ class Bullet < Box
     @x = x
     @y = y
     @in_collision=false
-    @radius=9
+    @radius=25
     @filled = true
     @velocity_x = 0
     @velocity_y = -435
@@ -35,16 +35,17 @@ class Bullet < Box
   end
 
   def draw(d)
-    # # d.stroke_color = COLOR
-    # # d.stroke_width = 2
-    # # d.stroke_circle(@x, @y, @radius)
+    # d.stroke_color = COLOR
+    # d.stroke_width = 2
+    # d.stroke_ellipse(V[@x, @y], V[@radius,@radius])
 
     # if @filled
     #   d.fill_color = COLOR
     #   # d.fill_circle(@x, @y, @radius)
-    #   d.fill_ellipse(V[@x, @y], @radius)
+    #   d.fill_ellipse(V[@x, @y], V[@radius,@radius])
     # end
-    # @collided = false
+
+    @collided = false
     d.stroke_color = COLOR
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
@@ -58,10 +59,6 @@ class Bullet < Box
   end
 
 
-  def update(game, elapsed)
-    super
-    @in_collision=false
-  end
     
   # def left
   #   @velocity_x -= 11.5
