@@ -9,8 +9,6 @@ class Roid<Box
     @x = x
     @y = y
     @in_collision=false
-    @width = 20
-    @height = 20
     @filled = rand >= 0.5 
     @velocity_x = rand*128 - 64
     @velocity_y = rand*128 - 64 
@@ -18,6 +16,7 @@ class Roid<Box
     @p_rot=0
     @p_rot_delta=rand * 0.01
     @radius = rad || SIZE_RANGE.to_a.sample
+    @width = @height = @radius * 2 
 
     ang=0
     while ang < TWO_PI
@@ -35,20 +34,7 @@ class Roid<Box
     @y += @velocity_y * elapsed
     @p_rot += @p_rot_delta
     @p_rot = @p_rot % TWO_PI
-    # Vertical wall collision
-    if (y - @radius) < 0
-      @y=game.scene.height - @radius - 1
-    elsif (y + @radius) > game.scene.height
-      @y=@radius+1
-    end
-
-    # Horizontal wall collision
-    if (x - @radius) < 0
-      @x=game.scene.width - @radius - 1
-    elsif (x + @radius) > game.scene.width
-      @x=@radius+1
-    end
-
+    check_wall_collision
   end
 
   def draw(d)

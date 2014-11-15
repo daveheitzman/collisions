@@ -3,7 +3,7 @@ class Box
   TWO_PI=Math::PI*2
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled , :game, :dead, :radius 
+  attr_reader :filled , :game, :dead, :radius , :ttl
 
   def initialize(x = 0, y = 0)
     @x = x
@@ -11,46 +11,38 @@ class Box
     @in_collision=false
     @width = 20
     @height = 20
+    @radius=((@width**2+@height**2)**-0.5) / 2
     @filled = rand >= 0.5 
     @velocity_x = rand*128 - 64
     @velocity_y = rand*128 - 64 
     @dead=false
-    @radius=[@width/2,@height/2].max 
   end
 
   def update(game,  elapsed)
     @game ||= game
+    check_wall_collision
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
+    @ttl -= 1
+  end
+
+  def check_wall_collision
 
     # Vertical wall collision
-    if y < 0
-      @y = 0
-      @velocity_y *= -1
-    elsif y + height > game.scene.height
-      @y = game.scene.height - height
-      @velocity_y *= -1
+    if (y - @radius) < 0
+      @y=game.scene.height - @radius - 1
+    elsif (y + @radius) > game.scene.height
+      @y=@radius+1
     end
 
     # Horizontal wall collision
-    if x < 0
-      @x = 0
-      @velocity_x *= -1
-    elsif x + width > game.scene.width
-      @x = game.scene.width - width
-      @velocity_x *= -1
+    if (x - @radius) < 0
+      @x=game.scene.width - @radius - 1
+    elsif (x + @radius) > game.scene.width
+      @x=@radius+1
     end
 
-    # Thing collision
-    # %x{
-    #   for (var i = 0; i < things.length; i++) {
-    #     if (things[i] == this) continue;
-    #     if (this['$colliding?'](things[i])) this.collided = true;
-    #   }
-    # }
-    # return
-
-  end
+  end 
 
   def draw(d)
     d.stroke_color = COLOR

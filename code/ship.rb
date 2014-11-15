@@ -37,11 +37,7 @@ class Ship < Box
 
   def update(game, elapsed)
     super
-    # @p_rot += elapsed 
-    # @p_rot = @p_rot % TWO_PI
-    # @velocity_x *= 0.99
-    # @velocity_y *= 0.99
-    @in_collision=false
+
   end
     
   def left
@@ -108,10 +104,10 @@ class Ship < Box
 
       d.begin_shape
       d.move_to 0,0
-      d.move_to 0,-13
-      d.line_to 8,8
-      d.line_to -8,8
-      d.line_to 0,-13
+      d.move_to 0,-(@height/2)
+      d.line_to @width/2,(@height/2)
+      d.line_to -(@width/2),(@height/2)
+      d.line_to 0,-(@height/2)
       d.end_shape
 
       d.stroke_shape
