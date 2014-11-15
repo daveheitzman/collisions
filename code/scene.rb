@@ -15,6 +15,7 @@ class Scene
     #@tree = Quadtree.new(0, 0, @width, @height)
     @box_count = 0
     @hero=Hero.new(@width / 2 , @height - 10)
+    @ship=Ship.new(@width / 2 , @height / 2)
     100.times { add_box }
     @bullet_off_delay = -1
   end
@@ -27,8 +28,10 @@ class Scene
     end
     if game.keyboard.pressing? :left
       @hero.left()
+      @ship.left()
     elsif game.keyboard.pressing? :right
       @hero.right()
+      @ship.right()
     end
     if game.keyboard.pressing? :space
       if @bullet_off_delay < 0
@@ -47,6 +50,7 @@ class Scene
       }
     }
     @hero.update(game, elapsed)
+    @ship.update(game, elapsed)
     collide_boxes 
   end
 
@@ -61,6 +65,7 @@ class Scene
     #@tree.draw(display)
 
     @hero.draw(display)
+    @ship.draw(display)
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
     display.stroke_rectangle(0, 0, @width, @height)

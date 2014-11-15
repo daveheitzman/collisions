@@ -1,5 +1,5 @@
-class Hero < Box
-  COLOR = Color[33, 122, 248]
+class Ship < Box
+  COLOR = Color[133, 47, 222]
   MAX_VELOCITY=400
   TWO_PI=Math::PI*2
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
@@ -23,13 +23,11 @@ class Hero < Box
     d.stroke_color = COLOR
     d.stroke_width = 2
 
-    draw_polygon(d, [600,600], @p_rot, 3, 30)
+    draw_triangle(d, @p_rot )
 
-    d.stroke_rectangle(@x, @y, @width, @height)
 
     if @filled
       d.fill_color = COLOR
-      d.fill_rectangle(@x, @y, @width, @height)
       @collided = false
     end
   end
@@ -52,8 +50,8 @@ class Hero < Box
     # end 
     @p_rot -= 0.1
     @p_rot = @p_rot % TWO_PI
-    @velocity_x -= 11.5
-    @velocity_x = -MAX_VELOCITY if @velocity_x < -MAX_VELOCITY
+    # @velocity_x -= 11.5
+    # @velocity_x = -MAX_VELOCITY if @velocity_x < -MAX_VELOCITY
   end 
   
   def right 
@@ -66,8 +64,8 @@ class Hero < Box
     # end 
     @p_rot += 0.1
     @p_rot = @p_rot % TWO_PI
-    @velocity_x += 11.5
-    @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
+    # @velocity_x += 11.5
+    # @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
   end  
 
   def new_bullet
@@ -79,40 +77,27 @@ class Hero < Box
     return b
   end 
 
-  def draw_polygon(d, position, rotation, side_count, radius)
-    angle_per = Math::PI * 2 / side_count
-
+  def draw_triangle(d,rot)
     d.push
       d.stroke_color = COLOR
+      d.fill_color = COLOR
       d.stroke_width = 2
 
-      d.translate position.first,position.last
-      d.rotate rotation
+      d.translate @x, @y
+      d.rotate rot
 
       d.begin_shape
-        d.move_to radius, 0
-
-        side_count.times do |i|
-          d.line_to radius * Math.cos(angle_per * i),
-                      radius * Math.sin(angle_per * i)
-        end
+      d.move_to 0,0
+      d.move_to 0,-13
+      d.line_to 8,8
+      d.line_to -8,8
+      d.line_to 0,-13
       d.end_shape
 
       d.stroke_shape
+      d.fill_shape
     d.pop
   end
 
-  def draw_triangle
-    d.push
-    d.begin_shape
-    d.move_to 100,100
-    d.line_to 150,150
-    d.line_to 100,150
-    d.line_to 100,100
-    d.end_shape
-    d.fill_shape
-    d.stroke_shape
-    d.pop
-  end
 
 end

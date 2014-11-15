@@ -1,6 +1,7 @@
 require 'scene'
 require 'box'
 require 'hero'
+require 'ship'
 require 'bullet'
 
 class CollisionsDemo < Game
@@ -39,7 +40,7 @@ class CollisionsDemo < Game
     display.fill_text("+ add, - remove",
                       text_x=text_x + 120, text_y= text_y + line_height * 2)
     display.fill_text("elapsed: #{elapsed}", text_x=text_x + 120, text_y= text_y + line_height * 2 )
-    display.fill_text("bullets: #{@scene.things.select{|i| i.is_a?(Box) }.size }", text_x=text_x + 120, text_y= text_y + line_height * 2 )
+    display.fill_text("bullets: #{@scene.things.select{|i| i.is_a?(Bullet) }.size }", text_x=text_x + 120, text_y= text_y + line_height * 2 )
     display.fill_color = TEXT_COLOR
   end
 end
