@@ -6,23 +6,25 @@ class Scene
   THRUST_SOUND_WAIT = 0.5
 
   attr_accessor :things, :width, :height
-  attr_reader :box_count, :ship, :hero
+  attr_reader :box_count, :ship, :hero, :dead
 
   def initialize
     @box_repro_chance=0.2
     @width = 512
     @height = 512
     @things = []
-    #@tree = Quadtree.new(0, 0, @width, @height)
     @box_count = 0
     @hero=Hero.new(@width / 2 , @height - 10)
     @ship=Ship.new(@width / 2 , @height / 2)
-    # 1.times { add_box }
     5.times { add_roid }
     @bullet_off_delay = -1
+    @ttl=9999999999
+    @dead=false
   end
 
   def update(game, elapsed)
+    @ttl -= 1
+    @dead=true if @ttl < 0 
     if game.keyboard.pressing? :equals
       add_box
     elsif game.keyboard.pressing? :minus
@@ -87,7 +89,8 @@ class Scene
       hit_by_bullet=false 
       
       if @ship.colliding?(thing)
-        
+        @ship = ShipExploding.new(@ship)  
+        @ttl = 90
       end 
       
       @things.each_with_index do |thing2, i2| 

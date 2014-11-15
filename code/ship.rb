@@ -5,7 +5,7 @@ class Ship < Box
   THRUST_SOUND=Sound['thrust.wav']
   THRUST_SOUND_WAIT=0.7
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled, :p_rot , :game 
+  attr_reader :filled, :p_rot , :game , :velocity_x, :velocity_y
 
   def initialize(x = 0, y = 0)
     super
@@ -24,20 +24,21 @@ class Ship < Box
 
 
   def draw(d)
-    d.stroke_color = COLOR
-    d.stroke_width = 2
+    unless @dead 
+      d.stroke_color = COLOR
+      d.stroke_width = 2
 
-    draw_triangle(d, @p_rot )
+      draw_triangle(d, @p_rot )
 
-    if @filled
-      d.fill_color = COLOR
-      @collided = false
-    end
+      if @filled
+        d.fill_color = COLOR
+        @collided = false
+      end
+    end 
   end
 
   def update(game, elapsed)
     super
-
   end
     
   def left
@@ -69,7 +70,7 @@ class Ship < Box
   end  
 
   def thrust
-    if game.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
+    if game && game.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
       @thrust_sound_last=game.elapsed_total
       THRUST_SOUND.play
     else
@@ -126,6 +127,7 @@ class Ship < Box
     # if @in_collision
     #   puts 'ship collided'
     # end  
+    @dead=true if @in_collision
     @in_collision
   end
 

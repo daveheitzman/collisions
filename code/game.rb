@@ -4,6 +4,8 @@ require 'hero'
 require 'ship'
 require 'bullet'
 require 'roid'
+require 'ship_exploding'
+require 'ship_segment'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
@@ -20,6 +22,10 @@ class CollisionsDemo < Game
   def update(elapsed)
     @scene.update(self, elapsed)
     @elapsed_total += elapsed
+    if @scene.dead 
+      setup 
+      return 
+    end 
     display.fill_color = BG_COLOR
     display.clear
 

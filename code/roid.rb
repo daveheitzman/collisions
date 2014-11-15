@@ -26,9 +26,12 @@ class Roid<Box
                       @radius * Math.sin(ang )]
       @points << point
     end 
+    @ttl=99999999999999999
   end
 
   def update(game,  elapsed)
+    @ttl -= 1 
+    @dead = true if @ttl < 0
     @game ||= game
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
