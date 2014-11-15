@@ -1,8 +1,9 @@
 class Box
   COLOR = Color[201, 94, 18]
+  TWO_PI=Math::PI*2
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled , :game
+  attr_reader :filled , :game, :dead, :radius 
 
   def initialize(x = 0, y = 0)
     @x = x
@@ -13,8 +14,8 @@ class Box
     @filled = rand >= 0.5 
     @velocity_x = rand*128 - 64
     @velocity_y = rand*128 - 64 
-    # @velocity_x *= -1 if rand.round.zero?
-    # @velocity_y *= -1 if rand.round.zero?
+    @dead=false
+    @radius=[@width/2,@height/2].max 
   end
 
   def update(game,  elapsed)
@@ -95,4 +96,5 @@ class Box
     @in_collision = left < thing.right && right > thing.left &&
       top < thing.bottom && bottom > thing.top
   end
+
 end

@@ -1,7 +1,6 @@
 class Ship < Box
   COLOR = Color[133, 47, 222]
   MAX_VELOCITY=400
-  TWO_PI=Math::PI*2
   SHOOT_SOUND=Sound['shoot.wav']
   THRUST_SOUND=Sound['thrust.wav']
   THRUST_SOUND_WAIT=0.7

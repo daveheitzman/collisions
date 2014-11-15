@@ -3,6 +3,7 @@ require 'box'
 require 'hero'
 require 'ship'
 require 'bullet'
+require 'roid'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]

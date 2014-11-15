@@ -17,7 +17,8 @@ class Scene
     @box_count = 0
     @hero=Hero.new(@width / 2 , @height - 10)
     @ship=Ship.new(@width / 2 , @height / 2)
-    100.times { add_box }
+    # 1.times { add_box }
+    15.times { add_roid }
     @bullet_off_delay = -1
   end
 
@@ -54,30 +55,19 @@ class Scene
       else 
         @bullet_off_delay -= elapsed
       end   
-      # @things << Box.new(10,100)
     end
-    #@tree.things = @things
-    #@things.each { |t| t.update(game, @things, elapsed) }
-    %x{
-      for (var i = 0; i < self.things.length; i++) {
-        self.things[i].$update(game, elapsed);
-      }
-    }
+    @things.each do |t|
+      t.update(game,elapsed)
+    end 
     @hero.update(game, elapsed)
     @ship.update(game, elapsed)
     collide_boxes 
   end
 
   def draw(display)
-    #@things.each { |t| t.draw(display) }
-    %x{
-      for (var i = 0; i < self.things.length; i++) {
-        self.things[i].$draw(display);
-      }
-    }
-
-    #@tree.draw(display)
-
+    @things.each do |t|
+      t.draw(display)
+    end 
     @hero.draw(display)
     @ship.draw(display)
     display.stroke_color = BORDER_COLOR
@@ -87,10 +77,10 @@ class Scene
 
   def collide_boxes
     @things.each_with_index do |thing, i|
-      if thing.is_a?(Bullet) && thing.dead
+      next if thing.nil? 
+      if thing.dead
         @things[i]=nil
       end
-      next if thing.nil? 
       b1_ind=i
       b2_ind=nil
       collided_tmp=thing.in_collision
@@ -114,21 +104,6 @@ class Scene
       
       if !hit_by_bullet && !collided_tmp && thing.in_collision
         #collision starting
-        if things[b1_ind].filled && things[b2_ind].filled 
-          # two boxes, both filled collide => new box ! 
-          add_box
-        elsif !things[b1_ind].filled && !things[b2_ind].filled
-          # two boxes, both empty collide => remove both box ! 
-          @things[b1_ind]=nil    
-          @things[b2_ind]=nil
-        else 
-          #two boxes, one full, one not -- full one dies 
-          if @things[b1_ind].filled
-            @things[b1_ind]=nil
-          elsif @things[b2_ind].filled 
-            @things[b2_ind]=nil
-          end         
-        end 
       elsif collided_tmp && !thing.in_collision 
         #collision ending
       end 
@@ -137,6 +112,10 @@ class Scene
     @box_count=@things.size
   end 
 
+  def add_roid
+    things << Roid.new(@width * rand, @height * rand)
+    @box_count += 1
+  end
   def add_box
     things << Box.new(@width * rand, @height * rand)
     @box_count += 1

@@ -47,6 +47,11 @@ class Bullet < Box
 
   end
 
+  def colliding?(thing)
+    dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
+    @in_collision = dist < thing.radius 
+  end
+
 
     
   # def left
