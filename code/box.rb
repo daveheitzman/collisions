@@ -11,11 +11,12 @@ class Box
     @in_collision=false
     @width = 20
     @height = 20
-    @radius=((@width**2+@height**2)**-0.5) / 2
+    @radius=((@width**2+@height**2) ** 0.5) / 2
     @filled = rand >= 0.5 
     @velocity_x = rand*128 - 64
     @velocity_y = rand*128 - 64 
     @dead=false
+    @ttl = 999999999999999
   end
 
   def update(game,  elapsed)
@@ -24,6 +25,7 @@ class Box
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
     @ttl -= 1
+    @in_collision=false
   end
 
   def check_wall_collision

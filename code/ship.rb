@@ -12,8 +12,8 @@ class Ship < Box
     @x = x
     @y = y
     @in_collision=false
-    @width = 11
-    @height = 20
+    @width = 13
+    @height = 18
     @filled = true
     @velocity_x = 0
     @velocity_y = 0
