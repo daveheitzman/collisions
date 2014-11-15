@@ -7,8 +7,8 @@ class Bullet < Box
   def initialize(x = 0, y = 0)
     super
     @dead=false
-    @width=8
-    @height=8
+    @width=4
+    @height=4
     @x = x
     @y = y
     @in_collision=false
@@ -35,26 +35,15 @@ class Bullet < Box
   end
 
   def draw(d)
-    # d.stroke_color = COLOR
-    # d.stroke_width = 2
-    # d.stroke_ellipse(V[@x, @y], V[@radius,@radius])
-
-    # if @filled
-    #   d.fill_color = COLOR
-    #   # d.fill_circle(@x, @y, @radius)
-    #   d.fill_ellipse(V[@x, @y], V[@radius,@radius])
-    # end
-
     @collided = false
+    d.push
     d.stroke_color = COLOR
     d.stroke_width = 2
-    d.stroke_rectangle(@x, @y, @width, @height)
 
-    if @filled
-      d.fill_color = COLOR
-      d.fill_rectangle(@x, @y, @width, @height)
-      @collided = false
-    end
+    d.fill_color = COLOR
+    d.fill_rectangle(@x, @y, @width, @height)
+    @collided = false
+    d.pop
 
   end
 

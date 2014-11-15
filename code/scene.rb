@@ -30,12 +30,11 @@ class Scene
 
     if game.keyboard.pressing? :z
       if @bullet_off_delay < 0
-        @things << @ship.new_bullet
+        @things << @ship.missile
         @bullet_off_delay=BULLET_WAIT
       else 
         @bullet_off_delay -= elapsed
       end   
-      @ship.missile() 
     end 
 
     @ship.thrust() if game.keyboard.pressing? :x
