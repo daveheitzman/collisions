@@ -2,7 +2,7 @@ class Box
   COLOR = Color[201, 94, 18]
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled 
+  attr_reader :filled , :game
 
   def initialize(x = 0, y = 0)
     @x = x
@@ -18,6 +18,7 @@ class Box
   end
 
   def update(game,  elapsed)
+    @game ||= game
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
 

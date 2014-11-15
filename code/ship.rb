@@ -2,8 +2,11 @@ class Ship < Box
   COLOR = Color[133, 47, 222]
   MAX_VELOCITY=400
   TWO_PI=Math::PI*2
+  SHOOT_SOUND=Sound['shoot.wav']
+  THRUST_SOUND=Sound['thrust.wav']
+  THRUST_SOUND_WAIT=0.7
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled 
+  attr_reader :filled, :p_rot , :game 
 
   def initialize(x = 0, y = 0)
     super
@@ -16,6 +19,7 @@ class Ship < Box
     @velocity_x = 0
     @velocity_y = 0
     @p_rot=0
+    @thrust_sound_last=0
   end
 
 
@@ -24,7 +28,6 @@ class Ship < Box
     d.stroke_width = 2
 
     draw_triangle(d, @p_rot )
-
 
     if @filled
       d.fill_color = COLOR
@@ -36,7 +39,8 @@ class Ship < Box
     super
     # @p_rot += elapsed 
     # @p_rot = @p_rot % TWO_PI
-    @velocity_x *= 0.99
+    # @velocity_x *= 0.99
+    # @velocity_y *= 0.99
     @in_collision=false
   end
     
@@ -68,12 +72,27 @@ class Ship < Box
     # @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
   end  
 
+  def thrust
+    if game.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
+      @thrust_sound_last=game.elapsed_total
+      THRUST_SOUND.play
+    else
+
+    end 
+    @velocity_x = (Math.cos(@p_rot-Math::PI/2) * 3) + @velocity_x
+    @velocity_y = (Math.sin(@p_rot-Math::PI/2) * 3) + @velocity_y 
+  end 
+
+  def missile
+    new_bullet
+  end 
+
+
   def new_bullet
-    Sound['shoot.wav'].play
+    SHOOT_SOUND.play
     b=Bullet.new @x+(@width/2)-5, @y
-    # b=Bullet.new 250, 250
-    # b.velocity_y = -15
-    b.velocity_x = 0.2*@velocity_x
+    b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
+    b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
     return b
   end 
 

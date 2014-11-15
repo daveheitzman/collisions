@@ -3,9 +3,10 @@ require 'quadtree'
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
   BULLET_WAIT = 0.15
+  THRUST_SOUND_WAIT = 0.5
 
   attr_accessor :things, :width, :height
-  attr_reader :box_count
+  attr_reader :box_count, :ship, :hero
 
   def initialize
     @box_repro_chance=0.2
@@ -26,6 +27,20 @@ class Scene
     elsif game.keyboard.pressing? :minus
       remove_box
     end
+
+    if game.keyboard.pressing? :z
+      if @bullet_off_delay < 0
+        @things << @ship.new_bullet
+        @bullet_off_delay=BULLET_WAIT
+      else 
+        @bullet_off_delay -= elapsed
+      end   
+      @ship.missile() 
+    end 
+
+    @ship.thrust() if game.keyboard.pressing? :x
+    @ship.thrust() if game.keyboard.pressing? :up
+
     if game.keyboard.pressing? :left
       @hero.left()
       @ship.left()
