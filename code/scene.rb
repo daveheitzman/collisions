@@ -18,7 +18,7 @@ class Scene
     @hero=Hero.new(@width / 2 , @height - 10)
     @ship=Ship.new(@width / 2 , @height / 2)
     # 1.times { add_box }
-    15.times { add_roid }
+    5.times { add_roid }
     @bullet_off_delay = -1
   end
 
@@ -85,6 +85,11 @@ class Scene
       b2_ind=nil
       collided_tmp=thing.in_collision
       hit_by_bullet=false 
+      
+      if @ship.colliding?(thing)
+        
+      end 
+      
       @things.each_with_index do |thing2, i2| 
         next if thing == thing2 || thing2.nil? 
         if thing.colliding?(thing2)
@@ -93,6 +98,14 @@ class Scene
             # if anything hits a bullet , bullet and thing are dead
             @things[i]=nil    
             @things[i2]=nil
+            if thing.is_a?(Roid) || thing2.is_a?(Roid)
+              roid=[thing,thing2].select{|t| t.is_a?(Roid)}.first
+              if roid.radius > Roid::MIN_RADIUS * 1.25 
+                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
+                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
+                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
+              end 
+            end 
             next 
           end 
           thing.in_collision = true 

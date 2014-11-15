@@ -18,6 +18,7 @@ class Ship < Box
     @velocity_x = 0
     @velocity_y = 0
     @p_rot=0
+    @radius=5    
     @thrust_sound_last=0
   end
 
@@ -96,9 +97,10 @@ class Ship < Box
   end 
 
   def draw_triangle(d,rot)
+    color= @in_collision ? Color[233, 122, 200] : COLOR
     d.push
-      d.stroke_color = COLOR
-      d.fill_color = COLOR
+      d.stroke_color = color
+      d.fill_color = color
       d.stroke_width = 2
 
       d.translate @x, @y
@@ -117,5 +119,18 @@ class Ship < Box
     d.pop
   end
 
+  def colliding?(thing)
+    @in_collision = @in_collision || 
+    if thing.is_a?(Roid)
+      dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
+      dist < (thing.radius + @radius) 
+    else
+      false
+    end
+    # if @in_collision
+    #   puts 'ship collided'
+    # end  
+    @in_collision
+  end
 
 end

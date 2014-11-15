@@ -1,10 +1,11 @@
 class Roid<Box
   COLOR = Color[201, 94, 18]
   SIZE_RANGE=25..50
+  MIN_RADIUS=10
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader :filled , :game
 
-  def initialize(x = 0, y = 0)
+  def initialize(x = 0, y = 0, rad=nil )
     @x = x
     @y = y
     @in_collision=false
@@ -16,7 +17,7 @@ class Roid<Box
     @points = []
     @p_rot=0
     @p_rot_delta=rand * 0.01
-    @radius = SIZE_RANGE.to_a.sample
+    @radius = rad || SIZE_RANGE.to_a.sample
 
     ang=0
     while ang < TWO_PI
