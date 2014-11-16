@@ -16,8 +16,8 @@ class Roid < Box
     @level = level || 1
     @in_collision=false
     @filled = rand >= 0.5 
-    @velocity_x = rand*128 - 64
-    @velocity_y = rand*128 - 64 
+    @velocity_x = (rand*128 - 64) * ( 1 + @level/10 )
+    @velocity_y = (rand*128 - 64) * ( 1 + @level/10 ) 
     @points = []
     @p_rot=0
     @p_rot_delta=rand * 0.01

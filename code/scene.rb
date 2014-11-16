@@ -15,7 +15,7 @@ class Scene
     @things = []
     @outcome="died"
     @ship = Ship.new(@width / 2 , @height / 2)
-    (4+level).times{ add_roid }
+    (2+level).times{ add_roid }
     @bullet_off_delay = -1
     @ttl=9999999999
     @dead=false
@@ -63,6 +63,7 @@ class Scene
       @ttl=90
       @outcome="solved"
     end 
+    freeze 
   end
 
   def draw(display)
@@ -136,5 +137,8 @@ class Scene
   def add_roid
     things << Roid.new(@width * rand, @height * rand , nil, @level)
   end
+
+  def freeze 
+  end 
 
 end
