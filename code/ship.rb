@@ -5,6 +5,9 @@ class Ship < Box
   SHOOT_SOUND=MutableSound['laser01.wav']
   THRUST_SOUND=MutableSound['thrust.wav']
   THRUST_SOUND_WAIT=0.7
+  # todo: make prettier immune state 
+  IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
+
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader  :p_rot, :velocity_x, :velocity_y
 
@@ -80,6 +83,13 @@ class Ship < Box
 
   def draw_triangle(d,rot)
     color= @in_collision ? Color[233, 122, 200] : COLOR
+    @last_immune_color ||= 0    
+    if immune? 
+      @last_immune_color += 1
+      @last_immune_color %= IMMUNE_COLORS.size 
+      # color = Color[ (rand*128).to_i, (rand*128).to_i, (191+rand*64).to_i  ]
+      color = IMMUNE_COLORS[@last_immune_color]
+    end 
     d.push
       d.stroke_color = color
       d.fill_color = color

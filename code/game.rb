@@ -34,7 +34,8 @@ class CollisionsDemo < Game
 
   def restart_level
     @player.lose_life
-    @scene = Scene.new(self,@level)
+    @scene.spawn_player
+    @scene.revive
   end 
 
   def update(elapsed)

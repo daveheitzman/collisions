@@ -14,12 +14,10 @@ class Scene
     @height = 600
     @things = []
     @outcome="died"
-    @ship = Ship.new(self, @width / 2 , @height / 2)
-    @ship.make_immune(33)
+    spawn_player
     (22+level).times{ add_roid }
     @bullet_off_delay = -1
-    @ttl=9999999999
-    @dead=false
+    revive
   end
 
   def update( elapsed)
@@ -139,6 +137,15 @@ class Scene
   end 
 
   def freeze 
+  end 
+  def spawn_player 
+    @ship = Ship.new(self, @width / 2 , @height / 2)
+    @ship.make_immune(3)
+  end 
+
+  def revive 
+    @ttl=9999999999
+    @dead=false
   end 
 
   def elapsed_total
