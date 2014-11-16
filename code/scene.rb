@@ -1,8 +1,8 @@
-
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
   BULLET_WAIT = 0.15
   THRUST_SOUND_WAIT = 0.5
+  GAME_FONT=Font['envy_code_r.ttf']
 
   attr_accessor :things, :width, :height
   attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game
@@ -79,6 +79,9 @@ class Scene
     end 
     if @level < 0 
       display.fill_color = Color[33,33,33]
+      display.text_font GAME_FONT
+      display.text_size=30
+      display.scale 1
       display.fill_text("Game Over", width/2-50, height/2 )
     end 
     display.stroke_color = BORDER_COLOR

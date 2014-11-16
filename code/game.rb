@@ -14,7 +14,6 @@ class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
-
   attr_accessor :scene, :elapsed_total
 
   def setup
