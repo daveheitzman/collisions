@@ -23,43 +23,48 @@ class Scene
   def update( elapsed)
     @ttl -= 1
     @dead=true if @ttl < 0 
+    if @level >= 0
+      if @game.keyboard.pressing? :z
+        if @bullet_off_delay < 0
+          @things << @ship.missile
+          @bullet_off_delay=BULLET_WAIT
+        else 
+          @bullet_off_delay -= elapsed
+        end   
+      end 
 
-    if @game.keyboard.pressing? :z
-      if @bullet_off_delay < 0
-        @things << @ship.missile
-        @bullet_off_delay=BULLET_WAIT
-      else 
-        @bullet_off_delay -= elapsed
-      end   
-    end 
+      @ship.thrust() if game.keyboard.pressing? :x
+      @ship.thrust() if game.keyboard.pressing? :up
 
-    @ship.thrust() if game.keyboard.pressing? :x
-    @ship.thrust() if game.keyboard.pressing? :up
-
-    if game.keyboard.pressing? :left
-      # @hero.left()
-      @ship.left()
-    elsif game.keyboard.pressing? :right
-      # @hero.right()
-      @ship.right()
-    end
-    if game.keyboard.pressing? :space
-      if @bullet_off_delay < 0
-        # @things << @hero.new_bullet
-        @bullet_off_delay=BULLET_WAIT
-      else 
-        @bullet_off_delay -= elapsed
-      end   
+      if game.keyboard.pressing? :left
+        # @hero.left()
+        @ship.left()
+      elsif game.keyboard.pressing? :right
+        # @hero.right()
+        @ship.right()
+      end
+      if game.keyboard.pressing? :space
+        if @bullet_off_delay < 0
+          # @things << @hero.new_bullet
+          @bullet_off_delay=BULLET_WAIT
+        else 
+          @bullet_off_delay -= elapsed
+        end   
+      end
     end
     @things.each do |t|
       t.update(elapsed)
     end 
-    @ship.update( elapsed)
+    if @level >= 0
+      @ship.update( elapsed)
+    end 
     things_size=@things.size
-    collide_boxes 
-    if things_size > 0 && @things.empty?
-      @ttl=90
-      @outcome="solved"
+    if @level >= 0
+      collide_boxes 
+      if things_size > 0 && @things.empty?
+        @ttl=90
+        @outcome="solved"
+      end 
     end 
     freeze 
   end
@@ -69,7 +74,13 @@ class Scene
       t.draw(display)
     end 
     # @hero.draw(display)
-    @ship.draw(display)
+    if @level >= 0 
+      @ship.draw(display)
+    end 
+    if @level < 0 
+      display.fill_color = Color[33,33,33]
+      display.fill_text("Game Over", width/2-50, height/2 )
+    end 
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
     display.stroke_rectangle(0, 0, @width, @height)
@@ -151,4 +162,8 @@ class Scene
   def elapsed_total
     game.elapsed_total
   end
+
+  def game_over
+    @level=-1
+  end 
 end

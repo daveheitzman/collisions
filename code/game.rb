@@ -33,9 +33,13 @@ class CollisionsDemo < Game
   end 
 
   def restart_level
-    @player.lose_life
-    @scene.spawn_player
-    @scene.revive
+    if @player.lose_life > 0 
+      @scene.spawn_player
+      @scene.revive
+    else 
+      @scene.revive
+      @scene.game_over
+    end 
   end 
 
   def update(elapsed)
@@ -73,6 +77,7 @@ class CollisionsDemo < Game
     display.fill_text("elapsed: #{elapsed}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("bullets: #{@scene.things.select{|i| i.is_a?(Bullet) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship rot: #{@scene.ship.p_rot}", text_x=text_x, text_y= text_y + line_height * 2 )
+    display.fill_text("lives: #{@player.lives.to_s}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_color = TEXT_COLOR
   end
 end
