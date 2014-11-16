@@ -1,4 +1,4 @@
-class ShipExploding < Ship
+class RoidExploding < Ship
   COLOR = Color[133, 47, 222]
   MAX_VELOCITY=400
   EXPLOSION_SOUND=Sound['ship_explosion.wav']
@@ -17,7 +17,7 @@ class ShipExploding < Ship
       @segments << ShipSegment.new(ship)
     end 
 
-    @ttl=1
+    @ttl=55
   end
 
   def draw(d)

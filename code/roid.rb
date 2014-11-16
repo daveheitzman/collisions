@@ -1,13 +1,13 @@
 class Roid<Box
   COLOR = Color[201, 94, 18]
-  SIZE_RANGE=25..50
+  SIZE_RANGE=19..60
   MIN_RADIUS=10
   EXPLOSION_SOUND_01=Sound['rock01.wav']
   EXPLOSION_SOUND_02=Sound['rock02.wav']
   EXPLOSION_SOUND_03=Sound['rock03.wav']
   EXPLOSION_SOUNDS = [ EXPLOSION_SOUND_01, EXPLOSION_SOUND_02, EXPLOSION_SOUND_03 ]
 
-  attr_accessor :x, :y, :width, :height, :velocity, :in_collision
+  attr_accessor :x, :y, :width, :height, :velocity, :velocity_x, :velocity_y, :in_collision
   attr_reader :filled , :game
 
   def initialize(x = 0, y = 0, rad=nil )

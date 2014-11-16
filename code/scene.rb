@@ -108,6 +108,9 @@ class Scene
                 @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
                 @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
                 @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
+              else 
+                roid=RoidExploding.new(roid)
+                @things << roid 
               end 
             end 
             next 
