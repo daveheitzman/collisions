@@ -26,9 +26,16 @@ class Roid<Box
     ang=0
     while ang < TWO_PI
       prev_ang=ang
-      ang+= rand*(TWO_PI/8) + TWO_PI/16
-      point=[@radius * Math.cos(ang ),
-                      @radius * Math.sin(ang )]
+      ang+=rand*(TWO_PI/8) + TWO_PI/16
+      ang = [ang,TWO_PI].min
+      rad=
+      if rand < 0.2 
+        ( @radius/2 ) + @radius*rand
+      else 
+        @radius 
+      end 
+      point=[rad * Math.cos(ang ),
+            rad * Math.sin(ang )]
       @points << point
     end 
     @ttl=99999999999999999
