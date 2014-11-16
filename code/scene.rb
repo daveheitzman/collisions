@@ -10,8 +10,8 @@ class Scene
 
   def initialize
     @box_repro_chance=0.2
-    @width = 512
-    @height = 512
+    @width = 800
+    @height = 800
     @things = []
     @box_count = 0
     @hero=Hero.new(@width / 2 , @height - 10)
