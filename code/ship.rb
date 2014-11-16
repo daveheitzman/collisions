@@ -6,16 +6,15 @@ class Ship < Box
   THRUST_SOUND=Sound['thrust.wav']
   THRUST_SOUND_WAIT=0.7
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled, :p_rot , :game , :velocity_x, :velocity_y
+  attr_reader  :p_rot, :velocity_x, :velocity_y
 
-  def initialize(x = 0, y = 0)
+  def initialize(scene, x = 0, y = 0)
     super
     @x = x
     @y = y
     @in_collision=false
     @width = 13
     @height = 18
-    @filled = true
     @velocity_x = 0
     @velocity_y = 0
     @p_rot=0
@@ -31,48 +30,29 @@ class Ship < Box
 
       draw_triangle(d, @p_rot )
 
-      if @filled
-        d.fill_color = COLOR
-        @collided = false
-      end
+      d.fill_color = COLOR
+      @collided = false
     end 
   end
 
-  def update(game, elapsed)
+  def update(elapsed)
     super
+    limit_velocity
   end
     
   def left
-    # if @velocity_x > 0.1
-    #   @velocity_x *= 0.85
-    # elsif @velocity_x < -0.1
-    #   @velocity_x *= 1.15
-    # else
-    #   @velocity_x -= 11.5
-    # end 
     @p_rot -= 0.1
     @p_rot = @p_rot % TWO_PI
-    # @velocity_x -= 11.5
-    # @velocity_x = -MAX_VELOCITY if @velocity_x < -MAX_VELOCITY
   end 
   
   def right 
-    # if @velocity_x < -0.1
-    #   @velocity_x *= 0.85
-    # elsif @velocity_x > 0.1
-    #   @velocity_x *= 1.15
-    # else
-    #   @velocity_x += 11.5
-    # end 
     @p_rot += 0.1
     @p_rot = @p_rot % TWO_PI
-    # @velocity_x += 11.5
-    # @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
   end  
 
   def thrust
-    if game && game.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
-      @thrust_sound_last=game.elapsed_total
+    if @scene.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
+      @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
     else
 
@@ -84,11 +64,15 @@ class Ship < Box
   def missile
     new_bullet
   end 
-
+  
+  def limit_velocity
+    @velocity_y = MAX_VELOCITY if @velocity_y > MAX_VELOCITY
+    @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
+  end 
 
   def new_bullet
     SHOOT_SOUND.play
-    b=Bullet.new @x+(@width/2)-5, @y
+    b=Bullet.new @scene, @x+(@width/2)-5, @y
     b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
     b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
     return b

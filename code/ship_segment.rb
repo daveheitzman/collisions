@@ -1,9 +1,9 @@
 class ShipSegment < Roid
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision, :color
-  attr_reader :filled, :p_rot , :game 
+  attr_reader  :p_rot 
 
-  def initialize(ship)
-    super ship.x, ship.y
+  def initialize(scene,ship)
+    super scene, ship.x, ship.y
     @x = ship.x
     @y = ship.y
     xdelt=rand*10
@@ -32,7 +32,7 @@ class ShipSegment < Roid
     end 
   end
 
-  def update(game, elapsed)
+  def update(elapsed)
     super
   end
     

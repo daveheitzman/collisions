@@ -3,24 +3,25 @@ class Box
   TWO_PI=Math::PI*2
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled , :game, :dead, :radius , :ttl
+  attr_reader  :scene, :dead, :radius , :ttl
 
-  def initialize(x = 0, y = 0)
+  def initialize(scene, x = 0, y = 0)
+    @scene=scene
     @x = x
     @y = y
     @in_collision=false
     @width = 20
     @height = 20
     @radius=((@width**2+@height**2) ** 0.5) / 2
-    @filled = rand >= 0.5 
     @velocity_x = rand*128 - 64
     @velocity_y = rand*128 - 64 
     @dead=false
+    @start_immune=0
     @ttl = 999999999999999
+    @end_immune = 0
   end
 
-  def update(game,  elapsed)
-    @game ||= game
+  def update( elapsed)
     check_wall_collision
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
@@ -33,15 +34,15 @@ class Box
 
     # Vertical wall collision
     if (y - @radius) < 0
-      @y=game.scene.height - @radius - 1
-    elsif (y + @radius) > game.scene.height
+      @y=@scene.height - @radius - 1
+    elsif (y + @radius) > @scene.height
       @y=@radius+1
     end
 
     # Horizontal wall collision
     if (x - @radius) < 0
-      @x=game.scene.width - @radius - 1
-    elsif (x + @radius) > game.scene.width
+      @x=@scene.width - @radius - 1
+    elsif (x + @radius) > @scene.width
       @x=@radius+1
     end
 
@@ -52,11 +53,9 @@ class Box
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
 
-    if @filled
-      d.fill_color = COLOR
-      d.fill_rectangle(@x, @y, @width, @height)
-      @collided = false
-    end
+    d.fill_color = COLOR
+    d.fill_rectangle(@x, @y, @width, @height)
+    @collided = false
   end
 
   def top
@@ -92,4 +91,12 @@ class Box
       top < thing.bottom && bottom > thing.top
   end
 
+
+  def make_immune(seconds)
+    @end_immune=@scene.elapsed_total + seconds
+  end 
+
+  def immune? 
+    @scene.elapsed_total < @end_immune
+  end 
 end

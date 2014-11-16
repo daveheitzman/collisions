@@ -3,17 +3,17 @@ class RoidExploding < Ship
   MAX_VELOCITY=400
   EXPLOSION_SOUND=Sound['ship_explosion.wav']
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled, :p_rot , :game 
+  attr_reader  :p_rot , :game 
 
-  def initialize(roid)
-    super roid.x, roid.y
+  def initialize(scene, roid)
+    super scene, roid.x, roid.y
     @x = roid.x
     @y = roid.y
     @segments=[]
-    (7+rand*6).to_i.times do |t|
-      @segments << ShipSegment.new(roid)
+    (4+rand*6).to_i.times do |t|
+      @segments << ShipSegment.new(scene, roid)
     end 
-    @ttl=90
+    @ttl=60
   end
 
   def draw(d)
@@ -22,10 +22,10 @@ class RoidExploding < Ship
     end 
   end
 
-  def update(game, elapsed)
+  def update(elapsed)
     super
     if !@dead 
-      @segments.each { |s| s.update(game,elapsed) }
+      @segments.each { |s| s.update(elapsed) }
     else 
       @segments=[]
     end 

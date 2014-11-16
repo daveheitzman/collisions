@@ -1,8 +1,9 @@
 
 class Player
-  attr_reader :lives  , :score 
+  attr_reader :lives  , :score , :scene
   
-  def initialize
+  def initialize(scene)
+    @scene=scene
     @lives=3
     @score=0
   end 

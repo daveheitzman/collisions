@@ -1,6 +1,5 @@
 require 'scene'
 require 'box'
-require 'hero'
 require 'ship'
 require 'bullet'
 require 'roid'
@@ -19,23 +18,23 @@ class CollisionsDemo < Game
 
   def setup
     @level = 1 
-    @player = Player.new
-    @scene = Scene.new(@level)
     @elapsed_total = 0
+    @player = Player.new(self)
+    @scene = Scene.new(self,@level)
   end
   
   def next_level
     @level+=1
-    @scene = Scene.new(@level)
+    @scene = Scene.new(self,@level)
   end 
 
   def restart_level
     @player.lose_life
-    @scene = Scene.new(@level)
+    @scene = Scene.new(self,@level)
   end 
 
   def update(elapsed)
-    @scene.update(self, elapsed)
+    @scene.update(elapsed)
     @elapsed_total += elapsed
     if @scene.dead 
       if @scene.outcome=="died" 

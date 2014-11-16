@@ -1,4 +1,3 @@
-require 'quadtree'
 
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
@@ -6,26 +5,28 @@ class Scene
   THRUST_SOUND_WAIT = 0.5
 
   attr_accessor :things, :width, :height
-  attr_reader :box_count, :ship, :hero, :dead, :outcome
+  attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game
 
-  def initialize( level )
+  def initialize( game, level )
+    @game=game
     @level=level
     @width = 700
     @height = 600
     @things = []
     @outcome="died"
-    @ship = Ship.new(@width / 2 , @height / 2)
+    @ship = Ship.new(self, @width / 2 , @height / 2)
+    @ship.make_immune(3)
     (2+level).times{ add_roid }
     @bullet_off_delay = -1
     @ttl=9999999999
     @dead=false
   end
 
-  def update(game, elapsed)
+  def update( elapsed)
     @ttl -= 1
     @dead=true if @ttl < 0 
 
-    if game.keyboard.pressing? :z
+    if @game.keyboard.pressing? :z
       if @bullet_off_delay < 0
         @things << @ship.missile
         @bullet_off_delay=BULLET_WAIT
@@ -53,10 +54,9 @@ class Scene
       end   
     end
     @things.each do |t|
-      t.update(game,elapsed)
+      t.update(elapsed)
     end 
-    # @hero.update(game, elapsed)
-    @ship.update(game, elapsed)
+    @ship.update( elapsed)
     things_size=@things.size
     collide_boxes 
     if things_size > 0 && @things.empty?
@@ -89,7 +89,7 @@ class Scene
       hit_by_bullet=false 
       
       if @ship.colliding?(thing)
-        @ship = ShipExploding.new(@ship)  
+        @ship = ShipExploding.new(self, @ship)  
         @ttl = 90
       end 
       
@@ -104,15 +104,12 @@ class Scene
             if thing.is_a?(Roid) || thing2.is_a?(Roid)
               roid=[thing,thing2].select{|t| t.is_a?(Roid)}.first
               roid.play_explosion
-              if roid.radius > Roid::MIN_RADIUS * 1.25 
-                # @things << Roid.new(roid.x, roid.y, 44, @level )
-                # @things << Roid.new(roid.x, roid.y, 44, @level )
-                # @things << Roid.new(roid.x, roid.y, 44, @level )
-                @things << Roid.new(roid.x, roid.y, roid.radius*0.7, @level )
-                @things << Roid.new(roid.x, roid.y, roid.radius*0.6, @level )
-                @things << Roid.new(roid.x, roid.y, roid.radius*0.5, @level )
+              if roid.radius > Roid::MIN_RADIUS * 1.05 
+                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
+                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
               else 
-                roid=RoidExploding.new(roid)
+                roid=RoidExploding.new(self, roid)
                 @things << roid 
               end 
             end 
@@ -135,10 +132,16 @@ class Scene
   end 
 
   def add_roid
-    things << Roid.new(@width * rand, @height * rand , nil, @level)
+    things << Roid.new(self, @width * rand, @height * rand , nil, @level)
   end
 
   def freeze 
   end 
 
+  def freeze 
+  end 
+
+  def elapsed_total
+    game.elapsed_total
+  end
 end

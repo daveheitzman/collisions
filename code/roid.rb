@@ -8,16 +8,13 @@ class Roid < Box
   EXPLOSION_SOUNDS = [ EXPLOSION_SOUND_01, EXPLOSION_SOUND_02, EXPLOSION_SOUND_03 ]
 
   attr_accessor :x, :y, :width, :height, :velocity, :velocity_x, :velocity_y, :in_collision
-  attr_reader :filled , :game, :radius
+  attr_reader  :game, :radius
 
-  def initialize(x=0 , y=0 , rad=nil , level=nil )
-    @x = x
-    @y = y
-    @level = level || 1
+  def initialize(scene, x=0 , y=0 , rad=nil  )
+    super(scene, x, y)
     @in_collision=false
-    @filled = rand >= 0.5 
-    @velocity_x = (rand*128 - 64) * ( 1 + @level/10 )
-    @velocity_y = (rand*128 - 64) * ( 1 + @level/10 ) 
+    @velocity_x = (rand*128 - 64) * ( 1 + @scene.level/10 )
+    @velocity_y = (rand*128 - 64) * ( 1 + @scene.level/10 ) 
     @points = []
     @p_rot=0
     @p_rot_delta=rand * 0.01
@@ -41,8 +38,8 @@ class Roid < Box
     end 
     @ttl=99999999999999999
   end
-  def update(game, elapsed)
-    @scene||=game.scene
+
+  def update(elapsed)
     @ttl -= 1 
     @dead = true if @ttl < 0
     @game ||= game
@@ -98,6 +95,10 @@ class Roid < Box
   def center
     [@x + @width / 2, @y + @height / 2]
   end
+  
+  def level
+    scene.level 
+  end 
 
   def play_explosion
     EXPLOSION_SOUNDS.sample.play

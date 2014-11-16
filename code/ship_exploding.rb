@@ -3,10 +3,10 @@ class ShipExploding < Ship
   MAX_VELOCITY=400
   EXPLOSION_SOUND=Sound['ship_explosion.wav']
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader :filled, :p_rot , :game 
+  attr_reader  :p_rot 
 
-  def initialize(ship)
-    super ship.x, ship.y
+  def initialize(scene, ship)
+    super scene, ship.x, ship.y
     @x = ship.x
     @y = ship.y
     @segments=[]
@@ -14,7 +14,7 @@ class ShipExploding < Ship
       EXPLOSION_SOUND.play
     end 
     (7+rand*6).to_i.times do |t|
-      @segments << ShipSegment.new(ship)
+      @segments << ShipSegment.new(@scene, ship)
     end 
 
     @ttl=90
@@ -26,10 +26,10 @@ class ShipExploding < Ship
     end 
   end
 
-  def update(game, elapsed)
+  def update(elapsed)
     super
     if !@dead 
-      @segments.each {|s| s.update(game,elapsed) }
+      @segments.each {|s| s.update(elapsed) }
     end 
   end
   

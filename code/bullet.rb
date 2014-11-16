@@ -4,7 +4,7 @@ class Bullet < Box
   attr_accessor :x, :y, :width, :height, :velocity_x, :velocity_y, :in_collision, :dead
   attr_reader :filled 
 
-  def initialize(x = 0, y = 0)
+  def initialize(scene, x = 0, y = 0)
     super
     @dead=false
     @width=4
@@ -18,17 +18,17 @@ class Bullet < Box
     @velocity_y = -435
   end
 
-  def update(game,  elapsed)
+  def update(elapsed)
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
 
     # Vertical wall collision
-    if y < 0 || y + height > game.scene.height
+    if y < 0 || y + height > @scene.height
       @dead=true
     end
 
     # Horizontal wall collision
-    if x < 0 || x + width > game.scene.width
+    if x < 0 || x + width > @scene.width
       @dead=true
     end
 
@@ -52,5 +52,4 @@ class Bullet < Box
     @in_collision = dist < thing.radius 
   end
 
-    
 end
