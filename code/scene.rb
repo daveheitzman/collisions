@@ -130,9 +130,18 @@ class Scene
               points=((1 / roid.radius) * 100).round(1)*10
               game.player.add_points(points.to_i)
               if roid.radius > Roid::MIN_RADIUS * 1.05 
-                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
-                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-                @things << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+                r=rand 
+                # too many rocks were getting generated per level. 
+                if r < @level / 22
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+                elsif r < (0.4 + @level / 22 ) 
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+                else 
+                  @things << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+                end   
               else 
                 roid=RoidExploding.new(self, roid)
                 @things << roid 
