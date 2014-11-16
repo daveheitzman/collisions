@@ -87,8 +87,8 @@ class Box
   end
 
   def colliding?(thing)
-    @in_collision = left < thing.right && right > thing.left &&
-      top < thing.bottom && bottom > thing.top
+    @in_collision = !immune? && (left < thing.right && right > thing.left &&
+      top < thing.bottom && bottom > thing.top)
   end
 
 

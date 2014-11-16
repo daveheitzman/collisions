@@ -15,8 +15,8 @@ class Scene
     @things = []
     @outcome="died"
     @ship = Ship.new(self, @width / 2 , @height / 2)
-    @ship.make_immune(3)
-    (2+level).times{ add_roid }
+    @ship.make_immune(33)
+    (22+level).times{ add_roid }
     @bullet_off_delay = -1
     @ttl=9999999999
     @dead=false

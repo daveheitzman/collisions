@@ -1,3 +1,4 @@
+require 'mutable_sound'
 require 'scene'
 require 'box'
 require 'ship'
@@ -17,10 +18,13 @@ class CollisionsDemo < Game
   attr_accessor :scene, :elapsed_total
 
   def setup
+    MutableSound.un_mute!
+    MutableSound.mute!
     @level = 1 
     @elapsed_total = 0
     @player = Player.new(self)
     @scene = Scene.new(self,@level)
+
   end
   
   def next_level
