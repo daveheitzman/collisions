@@ -2,6 +2,11 @@ class Roid<Box
   COLOR = Color[201, 94, 18]
   SIZE_RANGE=25..50
   MIN_RADIUS=10
+  EXPLOSION_SOUND_01=Sound['rock01.wav']
+  EXPLOSION_SOUND_02=Sound['rock02.wav']
+  EXPLOSION_SOUND_03=Sound['rock03.wav']
+  EXPLOSION_SOUNDS = [ EXPLOSION_SOUND_01, EXPLOSION_SOUND_02, EXPLOSION_SOUND_03 ]
+
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader :filled , :game
 
@@ -28,7 +33,6 @@ class Roid<Box
     end 
     @ttl=99999999999999999
   end
-
   def update(game,  elapsed)
     @ttl -= 1 
     @dead = true if @ttl < 0
@@ -85,6 +89,10 @@ class Roid<Box
   def center
     [@x + @width / 2, @y + @height / 2]
   end
+
+  def play_explosion
+    EXPLOSION_SOUNDS.sample.play
+  end 
 
   def colliding?(thing)
     @in_collision = left < thing.right && right > thing.left &&

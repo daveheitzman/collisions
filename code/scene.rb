@@ -103,6 +103,7 @@ class Scene
             @things[i2]=nil
             if thing.is_a?(Roid) || thing2.is_a?(Roid)
               roid=[thing,thing2].select{|t| t.is_a?(Roid)}.first
+              roid.play_explosion
               if roid.radius > Roid::MIN_RADIUS * 1.25 
                 @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
                 @things << Roid.new(roid.x,roid.y,roid.radius*0.6)

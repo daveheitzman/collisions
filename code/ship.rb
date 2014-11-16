@@ -1,7 +1,8 @@
 class Ship < Box
   COLOR = Color[133, 47, 222]
   MAX_VELOCITY=400
-  SHOOT_SOUND=Sound['shoot.wav']
+  # SHOOT_SOUND=Sound['shoot.wav']
+  SHOOT_SOUND=Sound['laser01.wav']
   THRUST_SOUND=Sound['thrust.wav']
   THRUST_SOUND_WAIT=0.7
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
