@@ -7,6 +7,8 @@ require 'roid'
 require 'ship_exploding'
 require 'roid_exploding'
 require 'ship_segment'
+require 'level_data'
+require 'player'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
@@ -16,15 +18,31 @@ class CollisionsDemo < Game
   attr_accessor :scene, :elapsed_total
 
   def setup
-    @scene = Scene.new
+    @level = 1 
+    @player = Player.new
+    @scene = Scene.new(@level)
     @elapsed_total = 0
   end
+  
+  def next_level
+    @level+=1
+    @scene = Scene.new(@level)
+  end 
+
+  def restart_level
+    @player.lose_life
+    @scene = Scene.new(@level)
+  end 
 
   def update(elapsed)
     @scene.update(self, elapsed)
     @elapsed_total += elapsed
     if @scene.dead 
-      setup 
+      if @scene.outcome=="died" 
+        restart_level
+      elsif @scene.outcome=="solved"
+        next_level
+      end 
       return 
     end 
     display.fill_color = BG_COLOR

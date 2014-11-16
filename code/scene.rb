@@ -6,17 +6,16 @@ class Scene
   THRUST_SOUND_WAIT = 0.5
 
   attr_accessor :things, :width, :height
-  attr_reader :box_count, :ship, :hero, :dead
+  attr_reader :box_count, :ship, :hero, :dead, :outcome
 
-  def initialize
-    @box_repro_chance=0.2
-    @width = 800
-    @height = 800
+  def initialize( level )
+    @level=level
+    @width = 700
+    @height = 600
     @things = []
-    @box_count = 0
-    @hero=Hero.new(@width / 2 , @height - 10)
-    @ship=Ship.new(@width / 2 , @height / 2)
-    5.times { add_roid }
+    @outcome="died"
+    @ship = Ship.new(@width / 2 , @height / 2)
+    (4+level).times{ add_roid }
     @bullet_off_delay = -1
     @ttl=9999999999
     @dead=false
@@ -25,11 +24,6 @@ class Scene
   def update(game, elapsed)
     @ttl -= 1
     @dead=true if @ttl < 0 
-    if game.keyboard.pressing? :equals
-      add_box
-    elsif game.keyboard.pressing? :minus
-      remove_box
-    end
 
     if game.keyboard.pressing? :z
       if @bullet_off_delay < 0
@@ -44,15 +38,15 @@ class Scene
     @ship.thrust() if game.keyboard.pressing? :up
 
     if game.keyboard.pressing? :left
-      @hero.left()
+      # @hero.left()
       @ship.left()
     elsif game.keyboard.pressing? :right
-      @hero.right()
+      # @hero.right()
       @ship.right()
     end
     if game.keyboard.pressing? :space
       if @bullet_off_delay < 0
-        @things << @hero.new_bullet
+        # @things << @hero.new_bullet
         @bullet_off_delay=BULLET_WAIT
       else 
         @bullet_off_delay -= elapsed
@@ -61,16 +55,21 @@ class Scene
     @things.each do |t|
       t.update(game,elapsed)
     end 
-    @hero.update(game, elapsed)
+    # @hero.update(game, elapsed)
     @ship.update(game, elapsed)
+    things_size=@things.size
     collide_boxes 
+    if things_size > 0 && @things.empty?
+      @ttl=90
+      @outcome="solved"
+    end 
   end
 
   def draw(display)
     @things.each do |t|
       t.draw(display)
     end 
-    @hero.draw(display)
+    # @hero.draw(display)
     @ship.draw(display)
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
@@ -105,9 +104,12 @@ class Scene
               roid=[thing,thing2].select{|t| t.is_a?(Roid)}.first
               roid.play_explosion
               if roid.radius > Roid::MIN_RADIUS * 1.25 
-                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
-                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
-                @things << Roid.new(roid.x,roid.y,roid.radius*0.6)
+                # @things << Roid.new(roid.x, roid.y, 44, @level )
+                # @things << Roid.new(roid.x, roid.y, 44, @level )
+                # @things << Roid.new(roid.x, roid.y, 44, @level )
+                @things << Roid.new(roid.x, roid.y, roid.radius*0.7, @level )
+                @things << Roid.new(roid.x, roid.y, roid.radius*0.6, @level )
+                @things << Roid.new(roid.x, roid.y, roid.radius*0.5, @level )
               else 
                 roid=RoidExploding.new(roid)
                 @things << roid 
@@ -129,19 +131,10 @@ class Scene
       end 
     end
     @things.compact!
-    @box_count=@things.size
   end 
 
   def add_roid
-    things << Roid.new(@width * rand, @height * rand)
-    @box_count += 1
-  end
-  def add_box
-    things << Box.new(@width * rand, @height * rand)
-    @box_count += 1
+    things << Roid.new(@width * rand, @height * rand , nil, @level)
   end
 
-  def remove_box
-    @box_count -= 1 unless things.shift.nil?
-  end
 end

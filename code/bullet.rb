@@ -52,13 +52,5 @@ class Bullet < Box
     @in_collision = dist < thing.radius 
   end
 
-
     
-  # def left
-  #   @velocity_x -= 11.5
-  # end 
-
-  # def right 
-  #   @velocity_x += 11.5
-  # end  
 end
