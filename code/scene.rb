@@ -8,20 +8,22 @@ class Scene
   attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game
 
   def initialize( game, level )
+    @ticks=0
     @game=game
     @level=level
     @width = 700
-    @height = 600
+    @height = 650
     @things = []
     @outcome="died"
     spawn_player
-    (22+level).times{ add_roid }
+    (2+level).times{ add_roid }
     @bullet_off_delay = -1
     revive
   end
 
   def update( elapsed)
     @ttl -= 1
+    @ticks += 1 
     @dead=true if @ttl < 0 
     if @level >= 0
       if @game.keyboard.pressing? :z
@@ -84,6 +86,14 @@ class Scene
       display.scale 1
       display.fill_text("Game Over", width/2-50, height/2 )
     end 
+    if @ticks < 100 
+      display.fill_color = Color[33,33,33]
+      display.text_font GAME_FONT
+      display.text_size=30
+      display.scale 1
+      display.fill_text("Level #{@level}", width/2-50, height/2 )
+    end 
+    do_score display     
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
     display.stroke_rectangle(0, 0, @width, @height)
@@ -114,8 +124,11 @@ class Scene
             @things[i]=nil    
             @things[i2]=nil
             if thing.is_a?(Roid) || thing2.is_a?(Roid)
+
               roid=[thing,thing2].select{|t| t.is_a?(Roid)}.first
               roid.play_explosion
+              points=((1 / roid.radius) * 100).round(1)*10
+              game.player.add_points(points.to_i)
               if roid.radius > Roid::MIN_RADIUS * 1.05 
                 @things << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
                 @things << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
@@ -168,5 +181,14 @@ class Scene
 
   def game_over
     @level=-1
+  end 
+
+  def do_score(display)
+    display.fill_color = Color[33,33,33]
+    display.text_font GAME_FONT
+    display.text_size=20
+    display.scale 1
+    lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
+    display.fill_text("Score: #{game.player.score} Lives: #{lives}  Level #{@level}", 15, 20 )
   end 
 end

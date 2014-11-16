@@ -1,5 +1,6 @@
 require 'mutable_sound'
 require 'scene'
+require 'marquee_scene'
 require 'box'
 require 'ship'
 require 'bullet'
@@ -15,15 +16,15 @@ class CollisionsDemo < Game
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
   attr_accessor :scene, :elapsed_total
+  attr_reader :player 
 
   def setup
     MutableSound.un_mute!
     MutableSound.mute!
-    @level = 1 
+    @level = 0 
     @elapsed_total = 0
     @player = Player.new(self)
-    @scene = Scene.new(self,@level)
-
+    next_level
   end
   
   def next_level

@@ -15,5 +15,8 @@ class Player
   def extra_life
     @lives += 1 
   end 
-
+  
+  def add_points(p)
+    @score += p
+  end 
 end
