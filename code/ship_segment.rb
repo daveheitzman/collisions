@@ -1,10 +1,5 @@
 class ShipSegment < Roid
-  COLOR = Color[255, 33, 44]
-  MAX_VELOCITY=400
-  SHOOT_SOUND=Sound['shoot.wav']
-  THRUST_SOUND=Sound['thrust.wav']
-  THRUST_SOUND_WAIT=0.7
-  attr_accessor :x, :y, :width, :height, :velocity, :in_collision
+  attr_accessor :x, :y, :width, :height, :velocity, :in_collision, :color
   attr_reader :filled, :p_rot , :game 
 
   def initialize(ship)
@@ -17,7 +12,11 @@ class ShipSegment < Roid
     @y1 = -ydelt
     @x2 = xdelt
     @y2 = ydelt
-
+    @color=if ship.is_a?(Roid)
+      Roid::COLOR 
+    else 
+      Ship::COLOR
+    end 
     @velocity_x = ship.velocity_x > 0 ? 15 + ship.velocity_x * rand*3 : -15 + -ship.velocity_x * rand*3
     @velocity_x = ship.velocity_y > 0 ? 15 + ship.velocity_y * rand*3 : -15 + -ship.velocity_y * rand*3
 
@@ -28,7 +27,7 @@ class ShipSegment < Roid
   end
 
   def draw(d)
-      draw_line(d,@p_rot)
+    draw_line(d,@p_rot)
     unless @dead
     end 
   end
@@ -38,7 +37,6 @@ class ShipSegment < Roid
   end
     
   def draw_line(d,rot)
-    color = Ship::COLOR
     d.push
       d.stroke_color = color
       d.stroke_width = 2

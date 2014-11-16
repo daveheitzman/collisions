@@ -5,6 +5,7 @@ require 'ship'
 require 'bullet'
 require 'roid'
 require 'ship_exploding'
+require 'roid_exploding'
 require 'ship_segment'
 
 class CollisionsDemo < Game

@@ -1,23 +1,19 @@
 class RoidExploding < Ship
-  COLOR = Color[133, 47, 222]
+  COLOR = Roid::COLOR
   MAX_VELOCITY=400
   EXPLOSION_SOUND=Sound['ship_explosion.wav']
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader :filled, :p_rot , :game 
 
-  def initialize(ship)
-    super ship.x, ship.y
-    @x = ship.x
-    @y = ship.y
+  def initialize(roid)
+    super roid.x, roid.y
+    @x = roid.x
+    @y = roid.y
     @segments=[]
-    if ship.is_a?(Ship) 
-      EXPLOSION_SOUND.play
-    end 
     (7+rand*6).to_i.times do |t|
-      @segments << ShipSegment.new(ship)
+      @segments << ShipSegment.new(roid)
     end 
-
-    @ttl=55
+    @ttl=90
   end
 
   def draw(d)
@@ -29,7 +25,9 @@ class RoidExploding < Ship
   def update(game, elapsed)
     super
     if !@dead 
-      @segments.each {|s| s.update(game,elapsed) }
+      @segments.each { |s| s.update(game,elapsed) }
+    else 
+      @segments=[]
     end 
   end
   

@@ -17,7 +17,7 @@ class ShipExploding < Ship
       @segments << ShipSegment.new(ship)
     end 
 
-    @ttl=1
+    @ttl=90
   end
 
   def draw(d)

@@ -25,6 +25,7 @@ class Box
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
     @ttl -= 1
+    @dead=true if @ttl < 0 
     @in_collision=false
   end
 
