@@ -97,7 +97,7 @@ class Box
   end 
 
   def immune?
-    true  
-    # @scene.elapsed_total < @end_immune
+    # true  
+    @scene.elapsed_total < @end_immune
   end 
 end

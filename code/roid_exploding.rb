@@ -3,7 +3,7 @@ class RoidExploding < Ship
   MAX_VELOCITY=400
   EXPLOSION_SOUND=MutableSound['ship_explosion.wav']
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader  :p_rot , :game 
+  attr_reader  :p_rot , :game , :segments
 
   def initialize(scene, roid)
     super scene, roid.x, roid.y
@@ -17,9 +17,9 @@ class RoidExploding < Ship
   end
 
   def draw(d)
-    if !@dead 
-      @segments.each {|s| s.draw d}
-    end 
+    # if !@dead 
+    #   @segments.each {|s| s.draw d}
+    # end 
   end
 
   def update(elapsed)
@@ -34,5 +34,5 @@ class RoidExploding < Ship
   def colliding?(thing)
     @in_collision = false
   end
-  
+
 end

@@ -1,6 +1,8 @@
 class ShipSegment < Roid
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision, :color
-  attr_reader  :p_rot 
+  attr_reader  :p_rot
+
+  MAX_SEGMENTS=150 
 
   def initialize(scene,ship)
     super scene, ship.x, ship.y
@@ -22,7 +24,7 @@ class ShipSegment < Roid
 
     @p_rot = TWO_PI*rand
     @p_rot_delta=rand*0.06
-    @ttl=99999
+    @ttl=(35+rand*45).to_i
     @in_collision = false
   end
 

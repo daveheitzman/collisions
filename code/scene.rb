@@ -15,6 +15,7 @@ class Scene
     @height = 650
     @roids = []
     @bullets = []
+    @schrapnel = []
     @outcome="died"
     spawn_player
     (2+level).times{ add_roid }
@@ -56,7 +57,7 @@ class Scene
         end   
       end
     end
-    [@roids,[@ship],@bullets].each do |a|
+    [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.update(elapsed)
       end 
@@ -79,7 +80,7 @@ class Scene
 
   def draw(display)
 # puts 'scene draw'
-    [@roids,[@ship],@bullets].each do |a|
+    [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
       end 
@@ -156,7 +157,8 @@ class Scene
             end   
           else 
             roid=RoidExploding.new(self, roid)
-            @roids << roid 
+            # @roids << roid
+            @schrapnel= roid.segments + @schrapnel 
           end 
         end 
         if bullet.dead 
@@ -165,6 +167,8 @@ class Scene
       end 
     end
     @roids.compact!
+    # @schrapnel.compact!
+    @schrapnel=@schrapnel.select{|s| !s.dead }
     @bullets.compact!
   end 
 

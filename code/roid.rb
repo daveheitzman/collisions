@@ -42,7 +42,6 @@ class Roid < Box
   def update(elapsed)
     @ttl -= 1 
     @dead = true if @ttl < 0
-    @game ||= game
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
     @p_rot += @p_rot_delta
