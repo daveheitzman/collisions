@@ -112,15 +112,12 @@ class Scene
   def collide_boxes
     @roids.each_with_index do |roid, i|
       next if roid.nil? 
-      if roid.is_a?(RoidExploding)
-        @roids[i]=nil if roid.dead
-        roid=nil
-        next
-      end  
+
       if roid.dead
         @roids[i]=nil
+        next
       end
-      
+
       if @ship.colliding?(roid)
         @ship = ShipExploding.new(self, @ship)  
         @outcome='died'
@@ -131,11 +128,13 @@ class Scene
         next if bullet.nil? 
         if bullet.colliding?(roid)
           if bullet.is_a?(Bullet)
+            # if anything hits a bullet , bullet and thing are dead
             @roids[i]=nil
+            @bullets[bi]=nil
           elsif bullet.is_a?(Cannon)
+            # if cannon shots keep going 
             @roids[i]=nil
           end
-          # if anything hits a bullet , bullet and thing are dead
           roid.play_explosion
           points=((1 / roid.radius) * 100).round(1)*10
           game.player.add_points(points.to_i)
