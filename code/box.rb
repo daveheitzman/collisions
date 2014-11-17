@@ -100,4 +100,13 @@ class Box
     # true  
     @scene.elapsed_total < @end_immune
   end 
+
+  def new_direction(radians)
+    newx=Math.cos radians
+    newy=Math.sin radians
+    vel = (@velocity_x**2 + @velocity_y**2)**0.5
+    @velocity_x=vel*newx*0.3 
+    @velocity_y=vel*newy*0.3
+  end 
 end
+

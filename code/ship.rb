@@ -9,10 +9,11 @@ class Ship < Box
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader  :p_rot, :velocity_x, :velocity_y
+  attr_reader  :p_rot, :velocity_x, :velocity_y, :shield_end, :shield_radius
 
   def initialize(scene, x = 0, y = 0)
     super
+    @shield_end = -1
     @x = x
     @y = y
     @in_collision=false
@@ -23,6 +24,7 @@ class Ship < Box
     @p_rot=0
     @radius=5    
     @thrust_sound_last=0
+    @shield_radius=@radius*4
   end
 
   def draw(d)
@@ -109,9 +111,16 @@ class Ship < Box
       d.line_to -(@width/2),(@height/2)
       d.line_to 0,-(@height/2)
       d.end_shape
-
       d.stroke_shape
       d.fill_shape
+
+      if shield_active?
+        d.stroke_color = shield_color
+        d.stroke_ellipse 0, 0, @shield_radius, @shield_radius 
+        d.stroke_shape
+      end 
+      d.stroke_color = color
+      d.fill_color = color
     d.pop
   end
 
@@ -129,6 +138,20 @@ class Ship < Box
     @in_collision = @in_collision && !immune? 
     @dead=true if @in_collision
   end
+  def shield_color 
+    Color[230,130,154]
+  end 
+
+  def shield
+    return if shield_active? 
+    puts 'shield'
+    scene.game.player.lose_shield
+    @shield_end = @scene.elapsed_total + 1.5
+  end 
+
+  def shield_active?  
+    @scene.elapsed_total < @shield_end
+  end 
 
 end
 

@@ -41,8 +41,8 @@ class Scene
         end   
       end 
 
-      @ship.thrust() if game.keyboard.pressing? :x
       @ship.thrust() if game.keyboard.pressing? :up
+      @ship.shield() if game.keyboard.pressing?( :x ) && game.player.shields > 0
 
       if game.keyboard.pressing? :left
         @ship.left()
@@ -117,8 +117,19 @@ class Scene
         @roids[i]=nil
         next
       end
-
-      if @ship.colliding?(roid)
+      if @ship.shield_active? && !@ship.immune? 
+        dist=( (roid.x-@ship.x)**2 + (roid.y-@ship.y)**2 ) ** 0.5
+        if dist < (roid.radius + @ship.shield_radius )
+          @ship.make_immune(0.25)
+          ang=Math.atan( (@ship.x-roid.x)/(0.00001+@ship.y-roid.y) )
+          dot=Math.atan( (@ship.x)/(0.00001+@ship.y) )
+          puts ang.to_s + "," + dot.to_s
+          avg = ( ang + dot )/2
+          @ship.new_direction(avg)
+          @roids[i]=nil
+          player_kills_roid(roid)
+        end 
+      elsif @ship.colliding?(roid)
         @ship = ShipExploding.new(self, @ship)  
         @outcome='died'
         @ttl = 90 # the scene must end when the player dies 
@@ -135,30 +146,7 @@ class Scene
             # if cannon shots keep going 
             @roids[i]=nil
           end
-          roid.play_explosion
-          points=((1 / roid.radius) * 100).round(1)*10
-          game.player.add_points(points.to_i)
-          if roid.radius > Roid::MIN_RADIUS * 1.15 
-            r=rand 
-            # too many rocks were getting generated per level. 
-            if r < @level / 22
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
-            elsif r < (0.4 + @level / 22 ) 
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
-            else 
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-              @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
-            end   
-          else 
-            roid=RoidExploding.new(self, roid)
-            # @roids << roid
-            @schrapnel= roid.segments + @schrapnel 
-          end 
+          player_kills_roid(roid)
         end 
         if bullet.dead 
           @bullets[bi]=nil
@@ -174,7 +162,31 @@ class Scene
   def add_roid
     @roids << Roid.new(self, @width * rand, @height * rand , nil, @level)
   end
-
+  def player_kills_roid(roid)
+    roid.play_explosion
+    points=((1 / roid.radius) * 100).round(1)*10
+    game.player.add_points(points.to_i)
+    if roid.radius > Roid::MIN_RADIUS * 1.15 
+      r=rand 
+      # too many rocks were getting generated per level. 
+      if r < @level / 22
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+      elsif r < (0.4 + @level / 22 ) 
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+      else 
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
+        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+      end   
+    else 
+      roid=RoidExploding.new(self, roid)
+      @schrapnel= roid.segments + @schrapnel 
+    end 
+  end 
 
   def freeze 
   end 
@@ -202,6 +214,6 @@ class Scene
     display.text_size=20
     display.scale 1
     lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
-    display.fill_text("Score: #{game.player.score} Lives: #{lives}  Level #{@level}", 15, 20 )
+    display.fill_text("Score: #{game.player.score} Lives: #{lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
   end 
 end

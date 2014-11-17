@@ -48,7 +48,6 @@ class CollisionsDemo < Game
   def update(elapsed)
     @scene.update(elapsed)
     @elapsed_total += elapsed
-puts @scene.dead.to_s
     if @scene.dead 
       if @scene.outcome=="died" 
         restart_level
