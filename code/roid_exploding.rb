@@ -34,5 +34,5 @@ class RoidExploding < Ship
   def colliding?(thing)
     @in_collision = false
   end
-
+  
 end

@@ -7,10 +7,10 @@ class Roid < Box
   EXPLOSION_SOUND_03=MutableSound['rock03.wav']
   EXPLOSION_SOUNDS = [ EXPLOSION_SOUND_01, EXPLOSION_SOUND_02, EXPLOSION_SOUND_03 ]
 
-  attr_accessor :x, :y, :width, :height, :velocity, :velocity_x, :velocity_y, :in_collision
+  attr_accessor :x, :y, :width, :height, :velocity, :velocity_x, :velocity_y, :in_collision, :dead
   attr_reader  :game, :radius
 
-  def initialize(scene, x=0 , y=0 , rad=nil  )
+  def initialize(scene, x=0, y=0, rad=nil  )
     super(scene, x, y)
     @in_collision=false
     @velocity_x = (rand*128 - 64) * ( 1 + @scene.level/10 )

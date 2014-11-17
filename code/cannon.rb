@@ -1,26 +1,20 @@
-class Bullet < Box
-  COLOR = Color[55, 144, 238]
-
-  attr_accessor :x, :y, :width, :height, :velocity_x, :velocity_y, :in_collision
-  attr_reader :filled 
+class Cannon < Bullet
+  COLOR = Color[250, 199, 144]
 
   def initialize(scene, x = 0, y = 0)
     super
+    @width=7
+    @height=7
+    @p_rot = Math::PI/2
     @dead=false
-    @width=4
-    @height=4
-    @x = x
-    @y = y
-    @in_collision=false
-    @radius=14
-    @filled = true
-    @velocity_x = 0
-    @velocity_y = 0
+    @radius=18
   end
 
   def update(elapsed)
+    super
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
+    @dead=false 
 
     # Vertical wall collision
     if y < 0 || y + height > @scene.height
@@ -31,24 +25,17 @@ class Bullet < Box
     if x < 0 || x + width > @scene.width
       @dead=true
     end
-
   end
 
   def draw(d)
-    @collided = false
     d.push
-    d.stroke_color = COLOR
-    d.stroke_width = 2
-
     d.fill_color = COLOR
     d.fill_rectangle(@x, @y, @width, @height)
-    @collided = false
     d.pop
   end
 
   def colliding?(thing)
     dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
-    @in_collision = dist < thing.radius 
+    @in_collision = dist < (thing.radius + @radius )
   end
-
 end

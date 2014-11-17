@@ -4,6 +4,7 @@ require 'marquee_scene'
 require 'box'
 require 'ship'
 require 'bullet'
+require 'cannon'
 require 'roid'
 require 'ship_exploding'
 require 'roid_exploding'
@@ -29,10 +30,12 @@ class CollisionsDemo < Game
   
   def next_level
     @level+=1
+    puts 'next_level '+@level.to_s
     @scene = Scene.new(self,@level)
   end 
 
   def restart_level
+    puts 'restart_level'
     if @player.lose_life > 0 
       @scene.spawn_player
       @scene.revive
@@ -45,6 +48,7 @@ class CollisionsDemo < Game
   def update(elapsed)
     @scene.update(elapsed)
     @elapsed_total += elapsed
+puts @scene.dead.to_s
     if @scene.dead 
       if @scene.outcome=="died" 
         restart_level
@@ -75,7 +79,8 @@ class CollisionsDemo < Game
     display.fill_text("+ add, - remove",
                       text_x=text_x + 120, text_y= text_y + line_height * 2)
     display.fill_text("elapsed: #{elapsed}", text_x=text_x, text_y= text_y + line_height * 2 )
-    display.fill_text("bullets: #{@scene.things.select{|i| i.is_a?(Bullet) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
+    display.fill_text("bullets: #{@scene.bullets.select{|i| i.is_a?(Bullet) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
+    display.fill_text("roids: #{@scene.roids.select{|i| i.is_a?(Roid) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship rot: #{@scene.ship.p_rot}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("lives: #{@player.lives.to_s}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_color = TEXT_COLOR

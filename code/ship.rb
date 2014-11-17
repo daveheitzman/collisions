@@ -25,7 +25,6 @@ class Ship < Box
     @thrust_sound_last=0
   end
 
-
   def draw(d)
     unless @dead 
       d.stroke_color = COLOR
@@ -74,10 +73,15 @@ class Ship < Box
   end 
 
   def new_bullet
+    # SHOOT_SOUND.play
+    # b=Bullet.new @scene, @x+(@width/2)-5, @y
+    # b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
+    # b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
+    # return b
     SHOOT_SOUND.play
-    b=Bullet.new @scene, @x+(@width/2)-5, @y
-    b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
-    b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
+    b=Cannon.new @scene, @x+(@width/2)-5, @y
+    b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 200) + @velocity_x
+    b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 200) + @velocity_y 
     return b
   end 
 
