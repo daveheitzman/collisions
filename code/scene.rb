@@ -1,6 +1,6 @@
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
-  BULLET_WAIT = 0.25
+  BULLET_WAIT = 0.15
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
 
@@ -32,6 +32,10 @@ class Scene
     @ticks += 1 
     @dead=true if @ttl < 0 
     if @level >= 0
+      if @game.keyboard.released? :z
+        @bullet_off_delay = -1
+      end 
+
       if @game.keyboard.pressing? :z
         if @bullet_off_delay < 0
           @bullets << @ship.missile
