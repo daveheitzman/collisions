@@ -13,6 +13,8 @@ class Ship < Box
 
   def initialize(scene, x = 0, y = 0)
     super
+    @next_bullet_allowed_at = 0 
+    @bullet_off_delay = 0.28
     @shield_end = -1
     @x = x
     @y = y
@@ -76,17 +78,20 @@ class Ship < Box
 
   def new_bullet
     # SHOOT_SOUND.play
-    SHOOT_SOUND.play
-    b=Bullet.new @scene, @x+(@width/2)-5, @y
-    b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
-    b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
-    return b
-    # b=Cannon.new @scene, @x+(@width/2)-5, @y
-    # b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 200) + @velocity_x
-    # b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 200) + @velocity_y 
-    # return b
+    if @scene.elapsed_total > @next_bullet_allowed_at 
+      @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
+      SHOOT_SOUND.play
+      b=Bullet.new @scene, @x+(@width/2)-5, @y
+      b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
+      b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
+      @scene.add_bullet b 
+    end   
   end 
-
+  
+  def missile_allowed
+    @next_bullet_allowed_at = -1 
+  end 
+  
   def draw_triangle(d,rot)
     color= @in_collision ? Color[233, 122, 200] : COLOR
     @last_immune_color ||= 0    

@@ -1,6 +1,5 @@
 class Scene
   BORDER_COLOR = Color[10, 10, 10]
-  BULLET_WAIT = 0.15
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
 
@@ -24,7 +23,7 @@ class Scene
     revive
   end
 
-  def update( elapsed)
+  def update( elapsed )
 # puts 'scene update'
 
     @ttl -= 1
@@ -33,16 +32,11 @@ class Scene
     @dead=true if @ttl < 0 
     if @level >= 0
       if @game.keyboard.released? :z
-        @bullet_off_delay = -1
+        @ship.missile_allowed()        
       end 
 
       if @game.keyboard.pressing? :z
-        if @bullet_off_delay < 0
-          @bullets << @ship.missile
-          @bullet_off_delay=BULLET_WAIT
-        else 
-          @bullet_off_delay -= elapsed
-        end   
+        @ship.missile()        
       end 
 
       @ship.thrust() if game.keyboard.pressing? :up
@@ -52,13 +46,6 @@ class Scene
         @ship.left()
       elsif game.keyboard.pressing? :right
         @ship.right()
-      end
-      if game.keyboard.pressing? :space
-        if @bullet_off_delay < 0
-          @bullet_off_delay=BULLET_WAIT
-        else 
-          @bullet_off_delay -= elapsed
-        end   
       end
     end
     [@roids,[@ship],@bullets, @schrapnel ].each do |a|
@@ -219,5 +206,8 @@ class Scene
     display.scale 1
     lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
     display.fill_text("Score: #{game.player.score} Lives: #{lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
+  end 
+  def add_bullet(b)
+    @bullets << b
   end 
 end
