@@ -108,5 +108,9 @@ class Box
     @velocity_x=vel*newx*0.3 
     @velocity_y=vel*newy*0.3
   end 
+  def slower(float)
+    @velocity_x *= float
+    @velocity_y *= float
+  end 
 end
 

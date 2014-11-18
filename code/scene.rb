@@ -15,6 +15,9 @@ class Scene
     @roids = []
     @bullets = []
     @schrapnel = []
+    pu=PowerUp.new(self,100,200)
+    pu.set_text("Bonus!!")
+    @power_ups = [pu]
     @outcome="died"
     spawn_player
     (2+level).times{ add_roid }
@@ -25,7 +28,7 @@ class Scene
 
   def update( elapsed )
 # puts 'scene update'
-
+  
     @ttl -= 1
 # puts @ttl.to_s
     @ticks += 1 
@@ -66,6 +69,9 @@ class Scene
         @outcome="solved"
       end 
     end 
+    @power_ups.each do |pu|
+      pu.update(elapsed)
+    end 
     freeze 
   end
 
@@ -94,6 +100,10 @@ class Scene
       display.scale 1
       display.fill_text("Level #{@level}", width/2-50, height/2 )
     end 
+    @power_ups.each do |pu|
+      pu.draw(display)
+    end 
+
     do_score( display )     
     display.stroke_color = BORDER_COLOR
     display.stroke_width = 3
@@ -117,6 +127,7 @@ class Scene
           puts ang.to_s + "," + dot.to_s
           avg = ( ang + dot )/2
           @ship.new_direction(avg)
+          # @ship.slower 0.6
           @roids[i]=nil
           player_kills_roid(roid)
         end 

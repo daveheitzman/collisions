@@ -11,6 +11,7 @@ require 'roid_exploding'
 require 'ship_segment'
 require 'level_data'
 require 'player'
+require 'power_up'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
