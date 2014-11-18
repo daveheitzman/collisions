@@ -181,6 +181,7 @@ class Scene
 
   def freeze 
   end 
+
   def spawn_player 
     @ship = Ship.new(self, @width / 2 , @height / 2)
     @ship.make_immune(3)

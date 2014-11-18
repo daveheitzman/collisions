@@ -1,6 +1,6 @@
 class Ship < Box
   COLOR = Color[133, 47, 222]
-  MAX_VELOCITY=400
+  MAX_VELOCITY=200
   # SHOOT_SOUND=MutableSound['shoot.wav']
   SHOOT_SOUND=MutableSound['laser01.wav']
   THRUST_SOUND=MutableSound['thrust.wav']
@@ -14,8 +14,10 @@ class Ship < Box
   def initialize(scene, x = 0, y = 0)
     super
     @next_bullet_allowed_at = 0 
-    @bullet_off_delay = 0.33
+    @bullet_off_delay = 0.34 - 0.01 * @scene.level
     @shield_end = -1
+    @thrust_factor = 1.1 + 0.04 * @scene.level
+    @shield_time = 1.37 + 0.06 * @scene.level
     @x = x
     @y = y
     @in_collision=false
@@ -63,8 +65,8 @@ class Ship < Box
     else
 
     end 
-    @velocity_x = (Math.cos(@p_rot-Math::PI/2) * 1.2) + @velocity_x
-    @velocity_y = (Math.sin(@p_rot-Math::PI/2) * 1.2) + @velocity_y 
+      @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
+      @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
   end 
 
   def missile
@@ -152,7 +154,7 @@ class Ship < Box
     return if shield_active? 
     puts 'shield'
     scene.game.player.lose_shield
-    @shield_end = @scene.elapsed_total + 1.5
+    @shield_end = @scene.elapsed_total + @shield_time
   end 
 
   def shield_active?  

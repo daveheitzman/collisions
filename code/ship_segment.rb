@@ -20,7 +20,7 @@ class ShipSegment < Roid
       Ship::COLOR
     end 
     @velocity_x = ship.velocity_x > 0 ? 8 + ship.velocity_x * rand*2.2 : -8 + -ship.velocity_x * rand*2.2
-    @velocity_x = ship.velocity_y > 0 ? 8 + ship.velocity_y * rand*2.2 : -8 + -ship.velocity_y * rand*2.2
+    @velocity_y = ship.velocity_y > 0 ? 8 + ship.velocity_y * rand*2.2 : -8 + -ship.velocity_y * rand*2.2
 
     @p_rot = TWO_PI*rand
     @p_rot_delta=rand*0.06
@@ -30,8 +30,6 @@ class ShipSegment < Roid
 
   def draw(d)
     draw_line(d,@p_rot)
-    unless @dead
-    end 
   end
 
   def update(elapsed)
