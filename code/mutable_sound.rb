@@ -8,9 +8,11 @@ class MutableSound < Sound
   def play 
     super if !@@mute 
   end  
+
   def self.mute!
     @@mute=true 
   end 
+
   def self.un_mute!
     @@mute=false  
   end 

@@ -1,5 +1,6 @@
-PATH
-  remote: ../../yeah
+GIT
+  remote: git://github.com/yeahrb/yeah.git
+  revision: c7193fb7ae3bce258d357f37a40fe8b79cb028ba
   specs:
     yeah (0.4.3.dev)
       opal (~> 0.7.0.beta1)
@@ -9,10 +10,10 @@ GEM
   specs:
     hike (1.2.3)
     multi_json (1.10.1)
-    opal (0.7.0.beta1)
+    opal (0.7.0.beta2)
       hike (~> 1.2)
       sourcemap (~> 0.1.0)
-      sprockets (>= 2.2.1, < 4.0.0)
+      sprockets (>= 2.2.3, < 4.0.0)
       tilt (~> 1.4)
     rack (1.5.2)
     sourcemap (0.1.1)

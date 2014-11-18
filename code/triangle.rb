@@ -36,20 +36,11 @@ class Hero < Box
 
   def update(game, elapsed)
     super
-    # @p_rot += elapsed 
-    # @p_rot = @p_rot % TWO_PI
     @velocity_x *= 0.99
     @in_collision=false
   end
     
   def left
-    # if @velocity_x > 0.1
-    #   @velocity_x *= 0.85
-    # elsif @velocity_x < -0.1
-    #   @velocity_x *= 1.15
-    # else
-    #   @velocity_x -= 11.5
-    # end 
     @p_rot -= 0.1
     @p_rot = @p_rot % TWO_PI
     @velocity_x -= 11.5
@@ -57,13 +48,6 @@ class Hero < Box
   end 
   
   def right 
-    # if @velocity_x < -0.1
-    #   @velocity_x *= 0.85
-    # elsif @velocity_x > 0.1
-    #   @velocity_x *= 1.15
-    # else
-    #   @velocity_x += 11.5
-    # end 
     @p_rot += 0.1
     @p_rot = @p_rot % TWO_PI
     @velocity_x += 11.5
@@ -73,8 +57,6 @@ class Hero < Box
   def new_bullet
     Sound['shoot.wav'].play
     b=Bullet.new @x+(@width/2)-5, @y
-    # b=Bullet.new 250, 250
-    # b.velocity_y = -15
     b.velocity_x = 0.2*@velocity_x
     return b
   end 
