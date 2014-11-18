@@ -6,6 +6,7 @@ class PowerUp < Box
     @height=55
     @velocity_x = 0
     @velocity_y = 0
+    @ttl=90
   end
 
   def set_text(t)
@@ -21,5 +22,9 @@ class PowerUp < Box
     d.fill_text @text , @x+8, @y+d.text_size 
     @collided = false
   end
+
+  def help(ship)
+    ship.set_bullet(:cannon) unless @dead 
+  end 
 end
 

@@ -112,5 +112,9 @@ class Box
     @velocity_x *= float
     @velocity_y *= float
   end 
+
+  def die!(after_seconds=0)
+    @ttl=after_seconds 
+  end 
 end
 

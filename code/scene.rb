@@ -69,9 +69,6 @@ class Scene
         @outcome="solved"
       end 
     end 
-    @power_ups.each do |pu|
-      pu.update(elapsed)
-    end 
     freeze 
   end
 
@@ -155,6 +152,13 @@ class Scene
         end 
       end 
     end
+
+    @power_ups.each do |power_up|
+      next if power_up.dead
+      @ship.apply_power_up(power_up) if @ship.colliding?(power_up) 
+      # power_up.die!
+    end 
+
     @roids.compact!
     # @schrapnel.compact!
     @schrapnel=@schrapnel.select{|s| !s.dead }
@@ -164,6 +168,7 @@ class Scene
   def add_roid
     @roids << Roid.new(self, @width * rand, @height * rand , nil, @level)
   end
+
   def player_kills_roid(roid)
     roid.play_explosion
     points=((1 / roid.radius) * 100).round(1)*10
@@ -174,10 +179,10 @@ class Scene
       if r < @level / 22
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
+        # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
       elsif r < (0.4 + @level / 22 ) 
-        @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
+        # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
       else 
@@ -219,6 +224,7 @@ class Scene
     lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
     display.fill_text("Score: #{game.player.score} Lives: #{lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
   end 
+
   def add_bullet(b)
     @bullets << b
   end 
