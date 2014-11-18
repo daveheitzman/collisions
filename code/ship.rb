@@ -14,7 +14,7 @@ class Ship < Box
   def initialize(scene, x = 0, y = 0)
     super
     @next_bullet_allowed_at = 0 
-    @bullet_off_delay = 0.28
+    @bullet_off_delay = 0.33
     @shield_end = -1
     @x = x
     @y = y
@@ -63,8 +63,8 @@ class Ship < Box
     else
 
     end 
-    @velocity_x = (Math.cos(@p_rot-Math::PI/2) * 3) + @velocity_x
-    @velocity_y = (Math.sin(@p_rot-Math::PI/2) * 3) + @velocity_y 
+    @velocity_x = (Math.cos(@p_rot-Math::PI/2) * 1.2) + @velocity_x
+    @velocity_y = (Math.sin(@p_rot-Math::PI/2) * 1.2) + @velocity_y 
   end 
 
   def missile
@@ -88,8 +88,9 @@ class Ship < Box
     end   
   end 
   
-  def missile_allowed
-    @next_bullet_allowed_at = -1 
+  def trigger_released
+    #player has let up the 'z' fire key
+    @next_bullet_allowed_at = @scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * 0.75     
   end 
   
   def draw_triangle(d,rot)

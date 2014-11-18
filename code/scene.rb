@@ -32,7 +32,7 @@ class Scene
     @dead=true if @ttl < 0 
     if @level >= 0
       if @game.keyboard.released? :z
-        @ship.missile_allowed()        
+        @ship.trigger_released()        
       end 
 
       if @game.keyboard.pressing? :z
