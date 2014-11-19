@@ -1,4 +1,4 @@
-class PowerUp < Box
+class PowerUpExtraLife < PowerUp
   COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
 
   def initialize(scene, x = 0, y = 0)
@@ -9,6 +9,7 @@ class PowerUp < Box
     @height=31
     @velocity_x = 0
     @velocity_y = 0
+    @text="P"
   end
 
   def set_text(t)
@@ -26,8 +27,9 @@ class PowerUp < Box
   end
 
   def help(ship)
-    #subclass implements 
-    ship.make_immune(2)
+    super
+    @scene.game.player.extra_life unless @dead
+    @dead=true  
   end 
 end
 

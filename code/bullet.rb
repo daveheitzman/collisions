@@ -16,22 +16,30 @@ class Bullet < Box
     @filled = true
     @velocity_x = 0
     @velocity_y = 0
+    @ttl=0
+    @stl=1.6
   end
 
   def update(elapsed)
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
+    @ttl -= 1
+    @stl -= elapsed
+    @dead=true if (@ttl < 0 && @stl < 0 ) 
 
-    # Vertical wall collision
-    if y < 0 || y + height > @scene.height
-      @dead=true
+    # # Vertical wall collision
+    if y < 0
+      @y = y + @scene.height
+    elsif y > @scene.height
+      @y = y - @scene.height
     end
 
-    # Horizontal wall collision
-    if x < 0 || x + width > @scene.width
-      @dead=true
+    if x < 0
+      @x = x + @scene.width
+    elsif x > @scene.width
+      @x = x - @scene.width
     end
-
+    # super 
   end
 
   def draw(d)

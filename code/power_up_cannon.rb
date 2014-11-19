@@ -1,5 +1,6 @@
-class PowerUp < Box
+class PowerUpCannon < PowerUp
   COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
+  puts 'power up cannon color '+COLOR.inspect
 
   def initialize(scene, x = 0, y = 0)
     super 
@@ -9,6 +10,7 @@ class PowerUp < Box
     @height=31
     @velocity_x = 0
     @velocity_y = 0
+    @text="C"
   end
 
   def set_text(t)
@@ -26,8 +28,9 @@ class PowerUp < Box
   end
 
   def help(ship)
-    #subclass implements 
-    ship.make_immune(2)
+    super
+    ship.set_bullet(:cannon, 11) unless @dead 
+    @dead=true 
   end 
 end
 

@@ -3,7 +3,7 @@ class Box
   TWO_PI=Math::PI*2
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader  :scene, :dead, :radius , :ttl
+  attr_reader  :scene, :dead, :radius , :ttl, :stl
 
   def initialize(scene, x = 0, y = 0)
     @scene=scene
@@ -17,7 +17,8 @@ class Box
     @velocity_y = rand*128 - 64 
     @dead=false
     @start_immune=0
-    @ttl = 999999999999999
+    @ttl = 999999999999999 #ticks to live 
+    @stl = -1 #seconds to live 
     @end_immune = 0
   end
 
@@ -26,7 +27,8 @@ class Box
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
     @ttl -= 1
-    @dead=true if @ttl < 0 
+    @stl -= elapsed
+    @dead=true if (@ttl < 0 && @stl < 0 ) 
     @in_collision=false
   end
 

@@ -8,23 +8,24 @@ class Cannon < Bullet
     @p_rot = Math::PI/2
     @dead=false
     @radius=18
+    @stl=1.6
   end
 
   def update(elapsed)
     super
-    @x += @velocity_x * elapsed
-    @y += @velocity_y * elapsed
-    @dead=false 
+    # @x += @velocity_x * elapsed
+    # @y += @velocity_y * elapsed
+    # @dead=false 
 
-    # Vertical wall collision
-    if y < 0 || y + height > @scene.height
-      @dead=true
-    end
+    # # Vertical wall collision
+    # if y < 0 || y + height > @scene.height
+    #   @dead=true
+    # end
 
-    # Horizontal wall collision
-    if x < 0 || x + width > @scene.width
-      @dead=true
-    end
+    # # Horizontal wall collision
+    # if x < 0 || x + width > @scene.width
+    #   @dead=true
+    # end
   end
 
   def draw(d)

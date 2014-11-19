@@ -8,7 +8,8 @@ class Ship < Box
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
   BULLET_TYPES={ :cannon=>Cannon, :bullet=>Bullet }
-  attr_accessor :x, :y, :width, :height, :velocity, :in_collision
+
+  attr_accessor :x, :y, :width, :height, :velocity 
   attr_reader  :p_rot, :velocity_x, :velocity_y, :shield_end, :shield_radius
 
   def initialize(scene, x = 0, y = 0)
@@ -47,8 +48,9 @@ class Ship < Box
 
   def update(elapsed)
     super
-    handle_power_ups
+    handle_power_ups(elapsed)
     limit_velocity
+
   end
     
   def left
@@ -83,7 +85,7 @@ class Ship < Box
 
   def new_bullet
     # SHOOT_SOUND.play
-    if @scene.elapsed_total > @next_bullet_allowed_at 
+    if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
       SHOOT_SOUND.play
       b=BULLET_TYPES[@bullet_type].new @scene, @x+(@width/2)-5, @y
@@ -136,18 +138,20 @@ class Ship < Box
   end
 
   def colliding?(thing)
-    @in_collision = @in_collision || 
-    if thing.is_a?(Roid) || thing.is_a?(PowerUp)
-      dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
-      dist < (thing.radius + @radius) 
-    else
-      false
-    end
-    # if @in_collision
-    #   puts 'ship collided'
-    # end  
-    @in_collision = @in_collision && !immune? 
-    @dead=true if @in_collision
+    in_collision=
+      if thing.is_a?(Roid) 
+        dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
+        in_collision = dist < (thing.radius + @radius) 
+        @dead=true if in_collision && !immune? 
+        in_collision
+      elsif thing.is_a?(PowerUp)
+        c=thing.center 
+        sc=center 
+        dist=( (c[0]-@x)**2 + (c[1]-@y)**2 ) ** 0.5
+        dist < (thing.radius + @radius)*1.6 
+      else
+        false
+      end
   end
 
   def shield_color 
@@ -165,20 +169,24 @@ class Ship < Box
     @scene.elapsed_total < @shield_end
   end 
  
-  def apply_power_up(pu)
-    @power_ups << pu
-  end 
-  
-  def handle_power_ups
-    @power_ups.each do |pu| 
-      next if p.dead
-      pu.help(self) 
+  def handle_power_ups(elapsed)
+    #bullets
+    @bullet_type_duration ||= -1 
+
+    if @bullet_type_duration < 0
+      @bullet_type=:bullet
+    else 
+      @bullet_type=:cannon
+      @bullet_type_duration -= elapsed 
     end 
+
+    #invincibility
+    #speed? 
   end 
 
-  def set_bullet(type)
-# :cannon
+  def set_bullet(type, duration) #seconds 
     @bullet_type = type 
+    @bullet_type_duration = duration 
   end  
 end
 

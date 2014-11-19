@@ -16,21 +16,19 @@ class Scene
     @bullets = []
     @schrapnel = []
     pu=PowerUp.new(self,100,200)
-    pu.set_text("Bonus!!")
+    pu.set_text("+")
+
     @power_ups = [pu]
     @outcome="died"
+    @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.02
     spawn_player
     (2+level).times{ add_roid }
-# puts @roids.size.to_s 
     @bullet_off_delay = -1
     revive
   end
 
   def update( elapsed )
-# puts 'scene update'
-  
     @ttl -= 1
-# puts @ttl.to_s
     @ticks += 1 
     @dead=true if @ttl < 0 
     if @level >= 0
@@ -56,24 +54,40 @@ class Scene
         t.update(elapsed)
       end 
     end 
+
+
     if @level >= 0
       @ship.update( elapsed)
     end 
+
     roids_size=@roids.size
-# puts "roids_size " + roids_size.to_s
     if  @level >= 0
       collide_boxes 
-# puts "@roids.size " + @roids.size.to_s
       if roids_size > 0 && @roids.empty?
         @ttl=90
         @outcome="solved"
       end 
     end 
+      
+    if rand < elapsed * @power_up_multiplier
+      @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
+    end  
+
+    @power_ups.each do |power_up|
+      # next if power_up.dead || power_up.nil?
+      power_up.update(elapsed)
+      power_up.help(@ship) if @ship.colliding?(power_up) 
+    end 
+
+    @power_ups.select!{ |p| p && !p.dead }
+    @roids.select!{ |s| s && !s.dead }
+    @schrapnel.select!{ |s| s && !s.dead }
+    @bullets.select!{ |s| s && !s.dead }
+
     freeze 
   end
 
   def draw(display)
-# puts 'scene draw'
     [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
@@ -153,16 +167,6 @@ class Scene
       end 
     end
 
-    @power_ups.each do |power_up|
-      next if power_up.dead
-      @ship.apply_power_up(power_up) if @ship.colliding?(power_up) 
-      # power_up.die!
-    end 
-
-    @roids.compact!
-    # @schrapnel.compact!
-    @schrapnel=@schrapnel.select{|s| !s.dead }
-    @bullets.compact!
   end 
 
   def add_roid

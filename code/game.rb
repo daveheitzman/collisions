@@ -12,6 +12,9 @@ require 'ship_segment'
 require 'level_data'
 require 'player'
 require 'power_up'
+require 'extra_life'
+require 'power_up_cannon'
+require 'power_up_shield'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]

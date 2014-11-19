@@ -1,4 +1,4 @@
-class PowerUp < Box
+class PowerUpShield < PowerUp
   COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
 
   def initialize(scene, x = 0, y = 0)
@@ -9,6 +9,7 @@ class PowerUp < Box
     @height=31
     @velocity_x = 0
     @velocity_y = 0
+    @text="S"
   end
 
   def set_text(t)
@@ -16,7 +17,7 @@ class PowerUp < Box
   end 
 
   def draw(d)
-    d.stroke_color = COLOR
+    d.stroke_color = COLOR 
     d.text_size = 20
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
@@ -26,8 +27,9 @@ class PowerUp < Box
   end
 
   def help(ship)
-    #subclass implements 
-    ship.make_immune(2)
+    super
+    ship.set_bullet(:cannon, 11) unless @dead 
+    @dead=true 
   end 
 end
 
