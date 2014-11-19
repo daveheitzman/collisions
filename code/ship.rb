@@ -160,7 +160,6 @@ class Ship < Box
 
   def shield
     return if shield_active? 
-    puts 'shield'
     scene.game.player.lose_shield
     @shield_end = @scene.elapsed_total + @shield_time
   end 

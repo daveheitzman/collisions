@@ -28,7 +28,7 @@ class PowerUpShield < PowerUp
 
   def help(ship)
     super
-    ship.set_bullet(:cannon, 11) unless @dead 
+    @scene.game.player.add_shield
     @dead=true 
   end 
 end

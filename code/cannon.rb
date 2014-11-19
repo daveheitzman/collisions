@@ -7,7 +7,7 @@ class Cannon < Bullet
     @height=7
     @p_rot = Math::PI/2
     @dead=false
-    @radius=18
+    @radius=4
     @stl=1.6
   end
 
@@ -31,12 +31,16 @@ class Cannon < Bullet
   def draw(d)
     d.push
     d.fill_color = COLOR
-    d.fill_rectangle(@x, @y, @width, @height)
+    # d.rotate @p_rot
+    # d.fill_rectangle @x, @y, 4 , 4 
+    d.fill_ellipse @x, @y, 4 , 4 
+    # d.stroke_shape
+    # d.fill_rectangle(@x, @y, @width, @height)
     d.pop
   end
 
   def colliding?(thing)
     dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
-    @in_collision = dist < (thing.radius + @radius )
+    @in_collision = dist < (thing.radius + @radius )*1.2
   end
 end

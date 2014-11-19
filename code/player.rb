@@ -5,7 +5,7 @@ class Player
   def initialize(scene)
     @scene=scene
     @lives=3
-    @shields=33
+    @shields=3
     @score=0
   end 
   

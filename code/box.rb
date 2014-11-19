@@ -116,7 +116,8 @@ class Box
   end 
 
   def die!(after_seconds=0)
-    @ttl=after_seconds 
+    @stl=after_seconds 
+    @ttl=-1 
   end 
 end
 

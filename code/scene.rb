@@ -4,7 +4,7 @@ class Scene
   GAME_FONT=Font['envy_code_r.ttf']
 
   attr_accessor  :width, :height
-  attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game, :bullets, :roids
+  attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game, :bullets, :roids, :stl, :ttl
 
   def initialize( game, level )
     @ticks=0
@@ -18,7 +18,9 @@ class Scene
     pu=PowerUp.new(self,100,200)
     pu.set_text("+")
 
-    @power_ups = [pu]
+    @stl = 9999999999999999
+    @ttl = 9999999999999999
+    @power_ups = []
     @outcome="died"
     @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.02
     spawn_player
@@ -28,9 +30,12 @@ class Scene
   end
 
   def update( elapsed )
-    @ttl -= 1
+
     @ticks += 1 
-    @dead=true if @ttl < 0 
+    @ttl -= 1
+    @stl -= elapsed
+    @dead = true if ( @ttl < 0 && @stl < 0 )
+puts "scene update #{@ttl} #{@stl} #{elapsed}"
     if @level >= 0
       if @game.keyboard.released? :z
         @ship.trigger_released()        
@@ -55,19 +60,11 @@ class Scene
       end 
     end 
 
-
     if @level >= 0
       @ship.update( elapsed)
     end 
 
-    roids_size=@roids.size
-    if  @level >= 0
-      collide_boxes 
-      if roids_size > 0 && @roids.empty?
-        @ttl=90
-        @outcome="solved"
-      end 
-    end 
+    collide_boxes 
       
     if rand < elapsed * @power_up_multiplier
       @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
@@ -79,12 +76,21 @@ class Scene
       power_up.help(@ship) if @ship.colliding?(power_up) 
     end 
 
+    roids_size = @roids.size 
     @power_ups.select!{ |p| p && !p.dead }
     @roids.select!{ |s| s && !s.dead }
     @schrapnel.select!{ |s| s && !s.dead }
     @bullets.select!{ |s| s && !s.dead }
 
+    if @level >= 0
+      if roids_size > 0 && @roids.empty?
+        @ttl = -1
+        @stl = 3
+        @outcome="solved"
+      end 
+    end 
     freeze 
+    true
   end
 
   def draw(display)
@@ -123,12 +129,8 @@ class Scene
 
   def collide_boxes
     @roids.each_with_index do |roid, i|
-      next if roid.nil? 
+      next if roid.nil? || roid.dead
 
-      if roid.dead
-        @roids[i]=nil
-        next
-      end
       if @ship.shield_active? && !@ship.immune? 
         dist=( (roid.x-@ship.x)**2 + (roid.y-@ship.y)**2 ) ** 0.5
         if dist < (roid.radius + @ship.shield_radius )
@@ -138,31 +140,27 @@ class Scene
           puts ang.to_s + "," + dot.to_s
           avg = ( ang + dot )/2
           @ship.new_direction(avg)
-          # @ship.slower 0.6
-          @roids[i]=nil
           player_kills_roid(roid)
         end 
       elsif @ship.colliding?(roid)
         @ship = ShipExploding.new(self, @ship)  
         @outcome='died'
-        @ttl = 90 # the scene must end when the player dies 
+        @ttl = -1 # the scene must end when the player dies 
+        @stl = 2 # the scene must end when the player dies 
       end 
 
       @bullets.each_with_index do |bullet, bi| 
         next if bullet.nil? 
         if bullet.colliding?(roid)
-          if bullet.is_a?(Bullet)
+          if bullet.class==Bullet
             # if anything hits a bullet , bullet and thing are dead
-            @roids[i]=nil
-            @bullets[bi]=nil
-          elsif bullet.is_a?(Cannon)
+            bullet.die!
+            roid.die!
+          elsif bullet.class==Cannon
             # if cannon shots keep going 
-            @roids[i]=nil
+            roid.die!
           end
           player_kills_roid(roid)
-        end 
-        if bullet.dead 
-          @bullets[bi]=nil
         end 
       end 
     end
@@ -197,6 +195,7 @@ class Scene
       roid=RoidExploding.new(self, roid)
       @schrapnel= roid.segments + @schrapnel 
     end 
+    roid.die!
   end 
 
   def freeze 
