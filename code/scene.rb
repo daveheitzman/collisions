@@ -36,11 +36,16 @@ class Scene
     @stl -= elapsed
     @dead = true if ( @ttl < 0 && @stl < 0 )
 puts "scene update #{@ttl} #{@stl} #{elapsed}"
-    if @level >= 0
+    if !game_over?
       if @game.keyboard.released? :z
         @ship.trigger_released()        
       end 
 
+      if @game.keyboard.pressing? :ctrl
+        if @game.keyboard.pressing? :r
+          @game.setup
+        end 
+      end 
       if @game.keyboard.pressing? :z
         @ship.missile()        
       end 
@@ -60,7 +65,7 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
       end 
     end 
 
-    if @level >= 0
+    if !game_over?
       @ship.update( elapsed)
     end 
 
@@ -82,7 +87,7 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
     @schrapnel.select!{ |s| s && !s.dead }
     @bullets.select!{ |s| s && !s.dead }
 
-    if @level >= 0
+    if !game_over?
       if roids_size > 0 && @roids.empty?
         @ttl = -1
         @stl = 3
@@ -99,10 +104,10 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
         t.draw(display)
       end 
     end 
-    if @level >= 0 
+    if !game_over?
       @ship.draw(display)
     end 
-    if @level < 0 
+    if game_over?
       display.fill_color = Color[33,33,33]
       display.text_font GAME_FONT
       display.text_size=30
@@ -142,11 +147,15 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
           @ship.new_direction(avg)
           player_kills_roid(roid)
         end 
-      elsif @ship.colliding?(roid)
-        @ship = ShipExploding.new(self, @ship)  
-        @outcome='died'
-        @ttl = -1 # the scene must end when the player dies 
-        @stl = 2 # the scene must end when the player dies 
+      elsif @ship.colliding?(roid) 
+        if @ship.shield_active?
+          roid.die!
+        else
+          @ship = ShipExploding.new(self, @ship)  
+          @outcome='died'
+          @ttl = -1 # the scene must end when the player dies 
+          @stl = 2 # the scene must end when the player dies 
+        end 
       end 
 
       @bullets.each_with_index do |bullet, bi| 
@@ -186,12 +195,12 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
     if roid.radius > Roid::MIN_RADIUS * 1.15 
       r=rand 
       # too many rocks were getting generated per level. 
-      if r < @level / 22
+      if r < (0.4 + @level / 22 ) 
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
         # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
-      elsif r < (0.4 + @level / 22 ) 
+      elsif r < @level / 22
         # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
@@ -224,7 +233,10 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
   end
 
   def game_over
-    @level=-1
+  end 
+
+  def game_over?
+    @game.game_over
   end 
 
   def do_score(display)
