@@ -51,8 +51,5 @@ class ShipSegment < Roid
     d.pop
   end
 
-  def colliding?(thing)
-    @in_collision = false
-  end
 
 end

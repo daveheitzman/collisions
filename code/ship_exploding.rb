@@ -18,7 +18,9 @@ class ShipExploding < Ship
     (7+rand*6).to_i.times do |t|
       @segments << ShipSegment.new(@scene, ship)
     end 
-
+    @segments.each do |s| 
+      scene.bullets << s 
+    end 
     @ttl=155
   end
 

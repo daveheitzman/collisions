@@ -156,11 +156,18 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
             # if anything hits a bullet , bullet and thing are dead
             bullet.die!
             roid.die!
+            player_kills_roid(roid)
           elsif bullet.class==Cannon
             # if cannon shots keep going 
             roid.die!
+            player_kills_roid(roid)
+          elsif bullet.class==ShipSegment
+            if roid.radius < Roid::MIN_RADIUS * 1.15 
+              roid.die!
+              bullet.die!
+              player_kills_roid(roid)
+            end
           end
-          player_kills_roid(roid)
         end 
       end 
     end
@@ -171,7 +178,8 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
     @roids << Roid.new(self, @width * rand, @height * rand , nil, @level)
   end
 
-  def player_kills_roid(roid)
+  def player_kills_roid(roid, roid_killer=nil)
+    roid_killer ||= @ship 
     roid.play_explosion
     points=((1 / roid.radius) * 100).round(1)*10
     game.player.add_points(points.to_i)
