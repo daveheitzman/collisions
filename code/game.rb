@@ -20,6 +20,7 @@ class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
+  TEXT_FONT=Font['Bandal.ttf']
   attr_accessor :scene, :elapsed_total
   attr_reader :player, :game_over 
 
@@ -46,8 +47,8 @@ class CollisionsDemo < Game
     puts 'restart_level'
     if @player.lose_life > 0 
       @scene.spawn_player
-      @scene.revive
       @scene.ship.make_immune(3)
+      @scene.revive
     else 
       @scene.revive
       @scene.game_over
@@ -88,7 +89,7 @@ class CollisionsDemo < Game
     display.translate(offset, offset)
     @scene.draw(display)
     display.pop
-
+    display.text_font=TEXT_FONT
     text_x = @scene.width + offset * 2
     text_y = offset + display.text_size
     line_height = display.text_size
@@ -106,6 +107,7 @@ class CollisionsDemo < Game
     display.fill_text("roids: #{@scene.roids.select{|i| i.is_a?(Roid) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship rot: #{@scene.ship.p_rot}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("lives: #{@player.lives.to_s}", text_x=text_x, text_y= text_y + line_height * 2 )
+    display.fill_text("ship: vel_x/vel_y #{@scene.ship.velocity_x},#{@scene.ship.velocity_y}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("controls: z: shoot, x: shield , ctrl-r: restart, l/r arrows, up: thrust, p: pause ", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_color = TEXT_COLOR
   end

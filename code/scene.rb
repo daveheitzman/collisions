@@ -35,7 +35,7 @@ class Scene
     @ttl -= 1
     @stl -= elapsed
     @dead = true if ( @ttl < 0 && @stl < 0 )
-puts "scene update #{@ttl} #{@stl} #{elapsed}"
+# puts "scene update #{@ttl} #{@stl} #{elapsed}"
     if !game_over?
       if @game.keyboard.released? :z
         @ship.trigger_released()        
@@ -149,8 +149,8 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
         end 
       elsif @ship.colliding?(roid) 
         if @ship.shield_active?
-          roid.die!
-        else
+          player_kills_roid(roid)
+        elsif @ship.dead 
           @ship = ShipExploding.new(self, @ship)  
           @outcome='died'
           @ttl = -1 # the scene must end when the player dies 
@@ -180,7 +180,6 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
         end 
       end 
     end
-
   end 
 
   def add_roid
@@ -210,7 +209,7 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
       end   
     else 
       roid=RoidExploding.new(self, roid)
-      @schrapnel= roid.segments + @schrapnel 
+      @schrapnel= roid.segments + @schrapnel unless @schrapnel.size > 100 
     end 
     roid.die!
   end 
@@ -244,8 +243,8 @@ puts "scene update #{@ttl} #{@stl} #{elapsed}"
     display.text_font GAME_FONT
     display.text_size=20
     display.scale 1
-    lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
-    display.fill_text("Score: #{game.player.score} Lives: #{lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
+    # lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
+    display.fill_text("Score: #{game.player.score} Lives: #{@game.player.lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
   end 
 
   def add_bullet(b)

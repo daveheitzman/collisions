@@ -8,7 +8,7 @@ class Ship < Box
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
   BULLET_TYPES={ :cannon=>Cannon, :bullet=>Bullet }
-
+  DEFAULT_RADIUS=5
   attr_accessor :x, :y, :width, :height, :velocity 
   attr_reader  :p_rot, :velocity_x, :velocity_y, :shield_end, :shield_radius
 
@@ -28,7 +28,7 @@ class Ship < Box
     @velocity_x = 0
     @velocity_y = 0
     @p_rot=0
-    @radius=5    
+    @radius=DEFAULT_RADIUS    
     @thrust_sound_last=0
     @shield_radius=@radius*4
     @power_ups=[]
@@ -38,9 +38,7 @@ class Ship < Box
     unless @dead 
       d.stroke_color = COLOR
       d.stroke_width = 2
-
       draw_triangle(d, @p_rot )
-
       d.fill_color = COLOR
       @collided = false
     end 
@@ -50,7 +48,6 @@ class Ship < Box
     super
     handle_power_ups(elapsed)
     limit_velocity
-
   end
     
   def left
@@ -67,11 +64,9 @@ class Ship < Box
     if @scene.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
       @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
-    else
-
     end 
-      @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
-      @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
+    @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
+    @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
   end 
 
   def missile
@@ -89,8 +84,8 @@ class Ship < Box
       @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
       SHOOT_SOUND.play
       b=BULLET_TYPES[@bullet_type].new @scene, @x+(@width/2)-5, @y
-      b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * 300) + @velocity_x
-      b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * 300) + @velocity_y 
+      b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
+      b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
       @scene.add_bullet b 
     end   
   end 
@@ -138,10 +133,11 @@ class Ship < Box
   end
 
   def colliding?(thing)
+    tmp_radius= shield_active? ? @shield_radius : @radius
     in_collision=
       if thing.is_a?(Roid) 
         dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
-        in_collision = dist < (thing.radius + @radius) 
+        in_collision = dist < (thing.radius + tmp_radius) 
         @dead=true if in_collision && !immune? 
         in_collision
       elsif thing.is_a?(PowerUp)

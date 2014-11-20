@@ -14,8 +14,8 @@ class Bullet < Box
     @in_collision=false
     @radius=14
     @filled = true
-    @velocity_x = 0
-    @velocity_y = 0
+    @velocity_x = 300
+    @velocity_y = 300
     @ttl=0
     @stl=1.6
   end

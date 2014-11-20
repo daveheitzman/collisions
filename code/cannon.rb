@@ -13,29 +13,12 @@ class Cannon < Bullet
 
   def update(elapsed)
     super
-    # @x += @velocity_x * elapsed
-    # @y += @velocity_y * elapsed
-    # @dead=false 
-
-    # # Vertical wall collision
-    # if y < 0 || y + height > @scene.height
-    #   @dead=true
-    # end
-
-    # # Horizontal wall collision
-    # if x < 0 || x + width > @scene.width
-    #   @dead=true
-    # end
   end
 
   def draw(d)
     d.push
     d.fill_color = COLOR
-    # d.rotate @p_rot
-    # d.fill_rectangle @x, @y, 4 , 4 
     d.fill_ellipse @x, @y, 4 , 4 
-    # d.stroke_shape
-    # d.fill_rectangle(@x, @y, @width, @height)
     d.pop
   end
 

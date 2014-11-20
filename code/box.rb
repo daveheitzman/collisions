@@ -19,7 +19,7 @@ class Box
     @start_immune=0
     @ttl = 999999999999999 #ticks to live 
     @stl = -1 #seconds to live 
-    @end_immune = 0
+    @end_immune = scene.elapsed_total+0.1
   end
 
   def update( elapsed)
