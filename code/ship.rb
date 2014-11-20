@@ -9,7 +9,7 @@ class Ship < Box
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
   BULLET_TYPES={ :cannon=>Cannon, :bullet=>Bullet }
   DEFAULT_RADIUS=5
-  attr_accessor :x, :y, :width, :height, :velocity 
+  attr_accessor :x, :y, :width, :height, :velocity , :bullet_type 
   attr_reader  :p_rot, :velocity_x, :velocity_y, :shield_end, :shield_radius
 
   def initialize(scene, x = 0, y = 0)
@@ -31,7 +31,7 @@ class Ship < Box
     @radius=DEFAULT_RADIUS    
     @thrust_sound_last=0
     @shield_radius=@radius*4
-    @power_ups=[]
+    @power_ups=[PowerUpCannon.new(@scene, 100,100 ) ]
   end
 
   def draw(d)
@@ -181,6 +181,7 @@ class Ship < Box
 
   def set_bullet(type, duration) #seconds 
     @bullet_type = type 
+    @scene.game.player.bullet_type=type    
     @bullet_type_duration = duration 
   end  
 end

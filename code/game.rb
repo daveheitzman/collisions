@@ -40,6 +40,7 @@ class CollisionsDemo < Game
     @level+=1
     puts 'next_level '+@level.to_s
     @scene = Scene.new(self,@level)
+    @scene.ship.bullet_type=@player.bullet_type
     @scene.ship.make_immune(3)
   end 
 

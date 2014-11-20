@@ -1,14 +1,16 @@
 
 class Player
   attr_reader :lives  , :score , :scene, :shields
-  
+  attr_accessor :bullet_type
+
   def initialize(scene)
     @scene=scene
     @lives=99
+    @bullet_type=:bullet 
     @shields=93
     @score=0
   end 
-  
+
   def lose_life
     @lives -= 1 
   end 
