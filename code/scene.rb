@@ -34,31 +34,32 @@ class Scene
     @ticks += 1 
     @ttl -= 1
     @stl -= elapsed
+    @bullets=[] if @ship.dead
     @dead = true if ( @ttl < 0 && @stl < 0 )
 # puts "scene update #{@ttl} #{@stl} #{elapsed}"
-    if !game_over?
-      if @game.keyboard.released? :z
-        @ship.trigger_released()        
+    if !game_over? 
+      if !@ship.dead 
+        if @game.keyboard.released? :z
+          @ship.trigger_released()        
+        end 
+        if @game.keyboard.pressing? :z
+          @ship.missile()        
+        end 
+        @ship.thrust() if game.keyboard.pressing? :up
+        @ship.shield() if game.keyboard.pressing?( :x ) && game.player.shields > 0
+        if game.keyboard.pressing? :left
+          @ship.left()
+        elsif game.keyboard.pressing? :right
+          @ship.right()
+        end
       end 
-
       if @game.keyboard.pressing? :ctrl
         if @game.keyboard.pressing? :r
           @game.setup
         end 
       end 
-      if @game.keyboard.pressing? :z
-        @ship.missile()        
-      end 
-
-      @ship.thrust() if game.keyboard.pressing? :up
-      @ship.shield() if game.keyboard.pressing?( :x ) && game.player.shields > 0
-
-      if game.keyboard.pressing? :left
-        @ship.left()
-      elsif game.keyboard.pressing? :right
-        @ship.right()
-      end
     end
+
     [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.update(elapsed)

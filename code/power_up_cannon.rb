@@ -29,7 +29,7 @@ class PowerUpCannon < PowerUp
 
   def help(ship)
     super
-    ship.set_bullet(:cannon, 11) unless @dead 
+    ship.set_bullet(:cannon, 1111111111) unless @dead 
     @dead=true 
   end 
 end
