@@ -37,5 +37,25 @@ class PowerUp < Box
     #subclass implements 
     ship.make_immune(2)
   end 
+
+  def make_twist
+    @p_rot=rand*Math::PI
+    @p_rot_delta=3.94
+    @p_rot_delta=0
+    @twist = @width*rand + @width/2
+    @twist_multi=-18
+  end 
+  def update_twist(elapsed)
+    @twist += elapsed*@twist_multi 
+    if @twist < 0.1 
+      @twist = 0.1 
+      @twist_multi *= -1
+    elsif @twist > @width*0.98 
+      @twist = @width*0.98
+      @twist_multi *= -1
+    end 
+    @twist = @twist % @width 
+  end 
+
 end
 

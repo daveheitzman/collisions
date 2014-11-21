@@ -16,11 +16,7 @@ class PowerUpCannon < PowerUp
     @velocity_x = 0
     @velocity_y = 0
     @text="C"
-    @p_rot=rand*Math::PI
-    @p_rot_delta=3.94
-    @p_rot_delta=0
-    @twist = @width*rand + @width/2
-    @twist_multi=-18
+    make_twist
   end
 
   def set_text(t)
@@ -29,15 +25,7 @@ class PowerUpCannon < PowerUp
 
   def update(elapsed)
     super
-    @twist += elapsed*@twist_multi 
-    if @twist < 0.1 
-      @twist = 0.1 
-      @twist_multi *= -1
-    elsif @twist > @width*0.98 
-      @twist = @width*0.98
-      @twist_multi *= -1
-    end 
-    @twist = @twist % @width 
+    update_twist(elapsed)
   end
 
   def draw(d)
