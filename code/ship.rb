@@ -30,7 +30,7 @@ class Ship < Box
     @radius=DEFAULT_RADIUS    
     @thrust_sound_last=0
     @shield_radius=@radius*4
-    @power_ups=[PowerUpCannon.new(@scene, 100,100 ) ]
+    # @power_ups=[PowerUpCannon.new(@scene, 100,100 ) ]
   end
 
   def draw(d)
@@ -94,7 +94,9 @@ class Ship < Box
     @next_bullet_allowed_at = @scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * 0.75     
   end 
   
-  def draw_triangle(d,rot)
+  def draw_triangle(d,rot, x=nil, y=nil)
+    x ||= @x
+    y ||= @y
     color= @in_collision ? Color[233, 122, 200] : COLOR
     @last_immune_color ||= 0    
     if immune? 
@@ -108,7 +110,7 @@ class Ship < Box
       d.fill_color = color
       d.stroke_width = 2
 
-      d.translate @x, @y
+      d.translate x, y
       d.rotate rot
 
       d.begin_shape

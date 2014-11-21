@@ -10,6 +10,7 @@ class PowerUpExtraLife < PowerUp
     @velocity_x = 0
     @velocity_y = 0
     @text="P"
+    @ship=Ship.new(scene,@x,@y)
   end
 
   def set_text(t)
@@ -17,13 +18,13 @@ class PowerUpExtraLife < PowerUp
   end 
 
   def draw(d)
-    d.stroke_color = COLOR
-    d.text_size = 20
-    d.stroke_width = 2
-    d.stroke_rectangle(@x, @y, @width, @height)
-    d.fill_color = COLOR
-    d.fill_text @text , @x+8, @y+d.text_size 
-    @collided = false
+    d.push
+      d.stroke_color = Ship::COLOR
+      d.stroke_width = 2
+      d.stroke_rectangle(@x-@width*0.5, @y-@height*0.5, @width, @height)
+      d.fill_color = Ship::COLOR
+      @ship.draw_triangle(d,0)
+    d.pop
   end
 
   def help(ship)

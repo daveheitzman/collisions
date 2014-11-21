@@ -12,6 +12,8 @@ class PowerUp < Box
     @p_rot = 0
     @p_rot_delta=0.04
     @text="!"
+    @x = (@scene.height-60)*rand + 30
+    @y = (@scene.width-60)*rand + 30 
   end
 
   def set_text(t)
@@ -25,12 +27,13 @@ class PowerUp < Box
   end
 
   def draw(d)
+    d.push
     d.stroke_color = COLOR
     d.text_size = 20
     d.stroke_width = 2
     d.stroke_rectangle(@x, @y, @width, @height)
-    d.fill_color = COLOR
-    d.fill_text @text , @x+8, @y+d.text_size 
+    d.stroke_text @text
+    d.pop
   end
 
   def help(ship)
