@@ -9,11 +9,20 @@ class PowerUp < Box
     @height=31
     @velocity_x = 0
     @velocity_y = 0
+    @p_rot = 0
+    @p_rot_delta=0.04
+    @text="!"
   end
 
   def set_text(t)
     @text=t
   end 
+  
+  def update(elapsed)
+    super
+    @p_rot += (@p_rot_delta*elapsed)
+    @p_rot = @p_rot % TWO_PI
+  end
 
   def draw(d)
     d.stroke_color = COLOR
@@ -22,7 +31,6 @@ class PowerUp < Box
     d.stroke_rectangle(@x, @y, @width, @height)
     d.fill_color = COLOR
     d.fill_text @text , @x+8, @y+d.text_size 
-    @collided = false
   end
 
   def help(ship)

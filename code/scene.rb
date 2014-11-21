@@ -72,7 +72,7 @@ class Scene
 
     collide_boxes 
       
-    if rand < elapsed * @power_up_multiplier
+    if rand < 30 * elapsed * @power_up_multiplier
       @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
     end  
 
