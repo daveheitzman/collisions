@@ -40,14 +40,14 @@ class CollisionsDemo < Game
     @level+=1
     puts 'next_level '+@level.to_s
     @scene = Scene.new(self,@level)
-    @scene.ship.bullet_type=@player.bullet_type
     @scene.ship.make_immune(3)
   end 
 
   def restart_level
     puts 'restart_level'
     if @player.lose_life > 0 
-      @scene.spawn_player
+      @scene.spawn_ship
+      @player.set_bullet_type Bullet
       @scene.ship.make_immune(3)
       @scene.revive
     else 

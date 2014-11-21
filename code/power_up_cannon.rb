@@ -9,8 +9,8 @@ class PowerUpCannon < PowerUp
     super 
     @ttl=0
     @stl=15
-    @width=12
-    @height=12
+    @width=10
+    @height=10
     @boxh=@height+17
     @boxw=@width+17
     @velocity_x = 0
@@ -38,7 +38,6 @@ class PowerUpCannon < PowerUp
       @twist_multi *= -1
     end 
     @twist = @twist % @width 
-    # @twist = 0.38
   end
 
   def draw(d)
@@ -47,25 +46,13 @@ class PowerUpCannon < PowerUp
       d.fill_color = FILL_COLOR
       d.translate @x, @y
       d.stroke_rectangle(-@boxw/2 , -@boxh/2, @boxw, @boxw )
-      # d.stroke_ellipse(0,0, @width+5, @height+5)
-      # d.stroke_ellipse(0,0, @width-2, @height)
       d.fill_ellipse(0,0, @twist, @height)
     d.pop
-
-    # d.push
-    #   # d.translate @x-0.5*@width, @y-0.5*@height 
-    #   d.stroke_width = 2
-    #   d.translate @x, @y
-    #   d.rotate @p_rot 
-    #   # d.move_to @x,@y 
-    #   d.fill_rectangle(-0.5*@width, -0.5*@height, @width, @height)
-    # d.pop
-    # d.fill_text @text , @x+8, @y+d.text_size 
   end
 
   def help(ship)
     super
-    ship.set_bullet(:cannon, 1111111111) unless @dead 
+    ship.set_bullet_type(Cannon, 1111111111) unless @dead 
     @dead=true 
   end 
 end

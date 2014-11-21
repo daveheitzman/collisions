@@ -23,7 +23,7 @@ class Scene
     @power_ups = []
     @outcome="died"
     @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.02
-    spawn_player
+    spawn_ship
     (2+level).times{ add_roid }
     @bullet_off_delay = -1
     revive
@@ -218,7 +218,7 @@ class Scene
   def freeze 
   end 
 
-  def spawn_player 
+  def spawn_ship 
     @ship = Ship.new(self, @width / 2 , @height / 2)
     @ship.make_immune(3)
   end 

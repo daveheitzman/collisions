@@ -7,9 +7,9 @@ class Ship < Box
   THRUST_SOUND_WAIT=0.7
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
-  BULLET_TYPES={ :cannon=>Cannon, :bullet=>Bullet }
+  BULLET_TYPES=[Cannon, Bullet ]
   DEFAULT_RADIUS=5
-  attr_accessor :x, :y, :width, :height, :velocity , :bullet_type 
+  attr_accessor :x, :y, :width, :height, :velocity 
   attr_reader  :p_rot, :velocity_x, :velocity_y, :shield_end, :shield_radius
 
   def initialize(scene, x = 0, y = 0)
@@ -19,7 +19,6 @@ class Ship < Box
     @shield_end = -1
     @thrust_factor = 1.1 + 0.04 * @scene.level
     @shield_time = 1.37 + 0.06 * @scene.level
-    @bullet_type=:bullet
     @x = x
     @y = y
     @in_collision=false
@@ -83,7 +82,7 @@ class Ship < Box
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
       SHOOT_SOUND.play
-      b=BULLET_TYPES[@bullet_type].new @scene, @x+(@width/2)-5, @y
+      b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y
       b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
       b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
       @scene.add_bullet b 
@@ -166,22 +165,22 @@ class Ship < Box
  
   def handle_power_ups(elapsed)
     #bullets
-    @bullet_type_duration ||= -1 
 
-    if @bullet_type_duration < 0
-      @bullet_type=:bullet
-    else 
-      @bullet_type=:cannon
-      @bullet_type_duration -= elapsed 
-    end 
+    # @bullet_type_duration ||= -1 
+
+    # if @bullet_type_duration < 0
+    #   @bullet_type=Bullet
+    # else 
+    #   @bullet_type=Cannon
+    #   @bullet_type_duration -= elapsed 
+    # end 
 
     #invincibility
     #speed? 
   end 
 
-  def set_bullet(type, duration) #seconds 
-    @bullet_type = type 
-    @scene.game.player.bullet_type=type    
+  def set_bullet_type(type, duration) #seconds 
+    @scene.game.player.set_bullet_type(type)    
     @bullet_type_duration = duration 
   end  
 end

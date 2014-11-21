@@ -1,12 +1,11 @@
 
 class Player
-  attr_reader :lives  , :score , :scene, :shields
-  attr_accessor :bullet_type
+  attr_reader :lives  , :score , :scene, :shields, :bullet_type
 
   def initialize(scene)
     @scene=scene
     @lives=99
-    @bullet_type=:bullet 
+    @bullet_type=Bullet
     @shields=93
     @score=0
   end 
@@ -25,5 +24,8 @@ class Player
   end 
   def lose_shield
     @shields -= 1
+  end 
+  def set_bullet_type(bt)
+    @bullet_type=bt
   end 
 end
