@@ -1,5 +1,6 @@
 class Bullet < Box
-  COLOR = Color[55, 144, 238]
+  # COLOR = Color[55, 144, 238]
+  COLOR = Color[255, 255, 255]
 
   attr_accessor :x, :y, :width, :height, :velocity_x, :velocity_y, :in_collision
   attr_reader :filled 

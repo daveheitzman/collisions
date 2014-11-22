@@ -19,9 +19,8 @@ class ShipSegment < Roid
     else 
       Ship::COLOR
     end 
-
-    @velocity_x = ship.velocity_x + rand*130 - 65 
-    @velocity_y = ship.velocity_y + rand*130 - 65
+    @velocity_x = ship.velocity_x + Math.cos(rand*TWO_PI)*40
+    @velocity_y = ship.velocity_y + Math.sin(rand*TWO_PI)*40
 
     @p_rot = TWO_PI*rand
     @p_rot_delta=rand*0.09

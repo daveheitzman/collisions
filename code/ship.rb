@@ -1,5 +1,5 @@
 class Ship < Box
-  COLOR = Color[133, 47, 222]
+  COLOR = Color[133, 133, 133]
   MAX_VELOCITY=200
   # SHOOT_SOUND=MutableSound['shoot.wav']
   SHOOT_SOUND=MutableSound['laser01.wav']
@@ -91,13 +91,13 @@ class Ship < Box
   
   def trigger_released
     #player has let up the 'z' fire key
-    @next_bullet_allowed_at = (@scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * 0.41 *  @scene.level )     
+    @next_bullet_allowed_at = (@scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * (0.351  ) )     
   end 
   
   def draw_triangle(d,rot, x=nil, y=nil)
     x ||= @x
     y ||= @y
-    color= @in_collision ? Color[233, 122, 200] : COLOR
+    color= @in_collision ? Color[144, 144, 144] : COLOR
     @last_immune_color ||= 0    
     if immune? 
       @last_immune_color += 1
@@ -121,7 +121,7 @@ class Ship < Box
       d.line_to 0,-(@height/2)
       d.end_shape
       d.stroke_shape
-      d.fill_shape
+      # d.fill_shape
 
       if shield_active?
         d.stroke_color = shield_color
@@ -152,7 +152,7 @@ class Ship < Box
   end
 
   def shield_color 
-    @shield_color ||= Color[230,130,154]
+    @shield_color ||= Color[122,122,124]
   end 
 
   def shield

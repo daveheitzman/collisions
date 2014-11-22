@@ -11,6 +11,8 @@ class PowerUpExtraLife < PowerUp
     @velocity_y = 0
     @text="P"
     @ship=Ship.new(scene,@x,@y)
+    @radius *= 1.25
+
   end
 
   def set_text(t)

@@ -1,5 +1,5 @@
 class Roid < Box
-  COLOR = Color[201, 94, 18]
+  COLOR = Color[122,122,122]
   SIZE_RANGE=19..60
   MIN_RADIUS=10
   EXPLOSION_SOUND_01=MutableSound['rock01.wav']

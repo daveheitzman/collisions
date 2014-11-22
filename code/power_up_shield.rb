@@ -1,6 +1,6 @@
 class PowerUpShield < PowerUp
   # COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
-  COLOR=Color[244, 85, 95]
+  COLOR=Color[155,155,155]
 
   def initialize(scene, x = 0, y = 0)
     super 

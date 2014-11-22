@@ -1,4 +1,5 @@
 class Scene
+  BACKGROUND_COLOR=Color[25,25,25]
   BORDER_COLOR = Color[10, 10, 10]
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
@@ -72,7 +73,7 @@ class Scene
 
     collide_boxes 
       
-    if rand < 30 * ( elapsed * @power_up_multiplier )
+    if rand < ( elapsed * @power_up_multiplier )
       @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
     end  
 
@@ -100,6 +101,7 @@ class Scene
   end
 
   def draw(display)
+    draw_play_area display   
     [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
@@ -117,7 +119,7 @@ class Scene
     end 
     #show level banner at start of scene
     if @ticks < 100 
-      display.fill_color = Color[33,33,33]
+      display.fill_color = Color[133,133,133]
       display.text_font GAME_FONT
       display.text_size=30
       display.scale 1
@@ -128,10 +130,14 @@ class Scene
     end 
 
     do_score( display )     
-    display.stroke_color = BORDER_COLOR
-    display.stroke_width = 3
-    display.stroke_rectangle(0, 0, @width, @height)
   end
+  def draw_play_area(display)
+    display.fill_color=BACKGROUND_COLOR
+    display.fill_rectangle(0, 0, @width, @height)
+    display.stroke_width = 3
+    display.stroke_color=BORDER_COLOR 
+    display.stroke_rectangle(0, 0, @width, @height)
+  end 
 
   def collide_boxes
     @roids.each_with_index do |roid, i|

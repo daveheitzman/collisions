@@ -1,5 +1,5 @@
 class Cannon < Bullet
-  COLOR = Color[250, 199, 144]
+  COLOR = Color[230, 230, 222]
 
   def initialize(scene, x = 0, y = 0)
     super
