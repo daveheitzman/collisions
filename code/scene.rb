@@ -111,7 +111,7 @@ class Scene
       @ship.draw(display)
     end 
     if game_over?
-      display.fill_color = Color[33,33,33]
+      display.fill_color = Color[111,111,111]
       display.text_font GAME_FONT
       display.text_size=30
       display.scale 1

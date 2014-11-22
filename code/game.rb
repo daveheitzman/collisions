@@ -52,6 +52,7 @@ class CollisionsDemo < Game
       @scene.revive
     else 
       @scene.revive
+      @game_over=true 
       @scene.game_over
     end 
   end 
