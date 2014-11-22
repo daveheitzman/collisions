@@ -15,7 +15,7 @@ class Ship < Box
   def initialize(scene, x = 0, y = 0)
     super
     @next_bullet_allowed_at = 0 
-    @bullet_off_delay = 0.34 - 0.01 * @scene.level
+    @bullet_off_delay = 0.44 - 0.01 * @scene.level
     @shield_end = -1
     @thrust_factor = 1.1 + 0.04 * @scene.level
     @shield_time = 1.37 + 0.06 * @scene.level
@@ -91,7 +91,7 @@ class Ship < Box
   
   def trigger_released
     #player has let up the 'z' fire key
-    @next_bullet_allowed_at = @scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * 0.75     
+    @next_bullet_allowed_at = (@scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * 0.41 *  @scene.level )     
   end 
   
   def draw_triangle(d,rot, x=nil, y=nil)

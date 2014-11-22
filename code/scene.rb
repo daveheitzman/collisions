@@ -39,14 +39,14 @@ class Scene
 # puts "scene update #{@ttl} #{@stl} #{elapsed}"
     if !game_over? 
       if !@ship.dead 
-        if @game.keyboard.released? :z
+        if @game.keyboard.released? :x
           @ship.trigger_released()        
         end 
-        if @game.keyboard.pressing? :z
+        if @game.keyboard.pressing? :x
           @ship.missile()        
         end 
         @ship.thrust() if game.keyboard.pressing? :up
-        @ship.shield() if game.keyboard.pressing?( :x ) && game.player.shields > 0
+        @ship.shield() if game.keyboard.pressing?( :z ) && game.player.shields > 0
         if game.keyboard.pressing? :left
           @ship.left()
         elsif game.keyboard.pressing? :right
@@ -72,7 +72,7 @@ class Scene
 
     collide_boxes 
       
-    if rand < 30 * elapsed * @power_up_multiplier
+    if rand < 30 * ( elapsed * @power_up_multiplier )
       @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
     end  
 
