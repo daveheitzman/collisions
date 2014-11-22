@@ -1,6 +1,7 @@
 class PowerUpShield < PowerUp
   # COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
   COLOR=Color[155,155,155]
+  BOX_COLOR=Color[220,100,100]
 
   def initialize(scene, x = 0, y = 0)
     super 
@@ -31,10 +32,12 @@ class PowerUpShield < PowerUp
       # d.fill_color = FILL_COLOR
       d.translate @x, @y
       d.stroke_width = 2
-      d.stroke_color = @scene.ship.shield_color
+      # d.stroke_color = @scene.ship.shield_color
+      d.stroke_color = BOX_COLOR
       d.stroke_rectangle(-@boxw/2 , -@boxh/2, @boxw, @boxw )
       d.stroke_width = 0.8+0.4*@twist
-      d.stroke_color = COLOR
+      # puts @twist.to_s # 0-8
+      d.stroke_color = Color[ (200+@twist*5).to_i, 124,124]
       d.stroke_ellipse(0,0, @width, @height)
     d.pop
 

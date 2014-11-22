@@ -152,7 +152,8 @@ class Ship < Box
   end
 
   def shield_color 
-    @shield_color ||= Color[122,122,124]
+    # @shield_color ||= Color[122,122,124]
+    @shield_color ||= Color[230,130,154]
   end 
 
   def shield

@@ -4,9 +4,9 @@ class Player
 
   def initialize(scene)
     @scene=scene
-    @lives=99
+    @lives=3
     @bullet_type=Bullet
-    @shields=93
+    @shields=3
     @score=0
   end 
 

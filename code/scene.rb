@@ -246,11 +246,10 @@ class Scene
   end 
 
   def do_score(display)
-    display.fill_color = Color[33,33,33]
+    display.fill_color = Color[133,130,135]
     display.text_font GAME_FONT
     display.text_size=20
     display.scale 1
-    # lives = (1..(game.player.lives-1)).map{|_| "@" }.join("")
     display.fill_text("Score: #{game.player.score} Lives: #{@game.player.lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
   end 
 
