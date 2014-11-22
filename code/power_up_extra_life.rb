@@ -19,10 +19,10 @@ class PowerUpExtraLife < PowerUp
 
   def draw(d)
     d.push
-      d.translate @x, @y
+      # d.translate @x, @y
       d.stroke_color = Ship::COLOR
       d.stroke_width = 2
-      d.stroke_rectangle(0-@width*0.5, 0-@height*0.5, @width, @height)
+      d.stroke_rectangle(@x-@width*0.5, @y-@height*0.5, @width, @height)
       d.fill_color = Ship::COLOR
       @ship.draw_triangle(d,0)
     d.pop
