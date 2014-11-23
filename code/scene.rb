@@ -27,6 +27,7 @@ class Scene
     spawn_ship
     (2+level).times{ add_roid }
     @bullet_off_delay = -1
+    @alien=Alien.new self, 10, @width/2
     revive
   end
 
@@ -35,6 +36,7 @@ class Scene
     @ticks += 1 
     @ttl -= 1
     @stl -= elapsed
+    @alien.update(elapsed)
     @bullets=[] if @ship.dead
     @dead = true if ( @ttl < 0 && @stl < 0 )
 # puts "scene update #{@ttl} #{@stl} #{elapsed}"
@@ -102,7 +104,7 @@ class Scene
 
   def draw(display)
     draw_play_area display   
-    [@roids,[@ship],@bullets, @schrapnel ].each do |a|
+    [@roids,[@ship,@alien],@bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
       end 

@@ -15,6 +15,7 @@ require 'power_up'
 require 'power_up_extra_life'
 require 'power_up_cannon'
 require 'power_up_shield'
+require 'alien'
 
 class CollisionsDemo < Game
   BG_COLOR = Color[211, 169, 96]
