@@ -24,11 +24,11 @@ class Scene
     @ttl = 9999999999999999
     @power_ups = []
     @outcome="died"
-    @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.02
+    @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.012
     spawn_ship
     (2+level).times{ add_roid }
     @bullet_off_delay = -1
-    @alien=Alien.new self, 10, @width/2
+    @aliens=[]
     revive
   end
 
@@ -36,7 +36,6 @@ class Scene
     @ticks += 1 
     @ttl -= 1
     @stl -= elapsed
-    @alien.update(elapsed)
     @bullets=[] if @ship.dead
     @dead = true if ( @ttl < 0 && @stl < 0 )
 # puts "scene update #{@ttl} #{@stl} #{elapsed}"
@@ -63,7 +62,7 @@ class Scene
       end 
     end 
 
-    [@roids,[@ship],@bullets,@alien_bullets, @schrapnel ].each do |a|
+    [@roids,[@ship], @aliens, @bullets,@alien_bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.update(elapsed)
       end 
@@ -71,13 +70,18 @@ class Scene
 
     if !game_over?
       @ship.update( elapsed)
+      # release power up 
+      if rand < ( elapsed * @power_up_multiplier )
+        @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
+      end  
+
+      if rand < 33*( elapsed * @power_up_multiplier )
+        @aliens<<Alien.new( self )
+      end  
+
     end 
 
     collide_boxes 
-      
-    if rand < ( elapsed * @power_up_multiplier )
-      @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
-    end  
 
     @power_ups.each do |power_up|
       # next if power_up.dead || power_up.nil?
@@ -91,6 +95,7 @@ class Scene
     @schrapnel.select!{ |s| s && !s.dead }
     @bullets.select!{ |s| s && !s.dead }
     @alien_bullets.select!{ |s| s && !s.dead }
+    @aliens.select!{ |s| s && !s.dead }
 
     if !game_over?
       if roids_size > 0 && @roids.empty?
@@ -105,7 +110,7 @@ class Scene
 
   def draw(display)
     draw_play_area display   
-    [@roids,[@ship,@alien], @alien_bullets, @bullets, @schrapnel ].each do |a|
+    [@roids,[@ship],@aliens, @alien_bullets, @bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
       end 
@@ -134,6 +139,7 @@ class Scene
 
     do_score( display )     
   end
+
   def draw_play_area(display)
     display.fill_color=BACKGROUND_COLOR
     display.fill_rectangle(0, 0, @width, @height)

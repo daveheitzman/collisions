@@ -73,8 +73,8 @@ class Ship < Box
   end 
   
   def limit_velocity
-    @velocity_y = MAX_VELOCITY if @velocity_y > MAX_VELOCITY
-    @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
+    # @velocity_y = MAX_VELOCITY if @velocity_y > MAX_VELOCITY
+    # @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
   end 
 
   def new_bullet

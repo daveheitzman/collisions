@@ -5,17 +5,25 @@ class Alien < Ship
   
   def initialize(scene, x = 0, y = 0)
     super 
-    @y = @height*0.3
-    @y = 200
-    @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
+    if rand < 0.5 
+      @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
+      @x=10
+      @velocity_y = 0
+      @velocity_x = (150 + @scene.level*15)
+    else
+      @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
+      @x=@scene.width - 10
+      @velocity_y = 0
+      @velocity_x = (150 + @scene.level*15)*-1.0
+    end 
     @height=40
     @width=40
-    @shoot_delay=0.9 - @scene.level*0.05
-    @velocity_y = 0
-    @velocity_x = 80 + @scene.level*15
+    @shoot_delay=1.3 - @scene.level*0.05
+    @shoot_delay_timer = 0
   end 
 
   def draw(d)
+    return if @dead 
     d.push
       d.stroke_color = COLOR
       d.fill_color = COLOR
@@ -24,10 +32,14 @@ class Alien < Ship
       d.rotate p_rot
       d.begin_shape
       d.move_to 0,0
-      d.move_to 0,-(@height/2)
-      d.line_to @width/2,(@height/2)
-      d.line_to -(@width/2),(@height/2)
-      d.line_to 0,-(@height/2)
+      d.line_to -4,0
+      d.line_to -4,5
+      d.curve_to -16,15, -11,6
+      d.curve_to 0,25, -11, 24
+      d.curve_to 16,15, 11,24
+      d.curve_to 4,5, 11, 6
+      d.line_to 4,0
+      d.line_to 0,0
       d.end_shape
       d.stroke_shape
 
@@ -36,8 +48,15 @@ class Alien < Ship
   end 
 
   def update(elapsed)
+    return if @dead 
+    if @x < 0 || @x > @scene.width || @y < 0 || @y > @scene.width
+    # if @x < 0 || @x > @scene.width 
+      die!
+    end 
     super 
-    if rand < 0.03 
+    @shoot_delay_timer -= elapsed
+    if @shoot_delay_timer < 0
+      @shoot_delay_timer = @shoot_delay 
       new_bullet
     end 
   end 
@@ -47,11 +66,19 @@ class Alien < Ship
     if !@dead 
       # SHOOT_SOUND.play
       rot = rand * TWO_PI
-      vel=70+@scene.level*8
-      b=Bullet.new @scene, @x+(@width/2)-5, @y
+      vel=210+@scene.level*8
+      b=Bullet.new @scene, @x+(@width/2)+5, @y
 
-      b.velocity_x = (Math.cos(rot-Math::PI/2) * vel) + @velocity_x
-      b.velocity_y = (Math.sin(rot-Math::PI/2) * vel) + @velocity_y 
+      b.velocity_x = if @velocity_x < 0 
+        @velocity_x - (Math.cos(rot).abs * vel)
+      else
+        @velocity_x + (Math.cos(rot).abs * vel)
+      end 
+      b.velocity_y = if @velocity_y < 0 
+        @velocity_y - (Math.sin(rot).abs * vel)
+      else
+        @velocity_y + (Math.sin(rot).abs * vel)
+      end 
       @scene.add_alien_bullet b 
     end   
   end 
