@@ -141,7 +141,7 @@ class Ship < Box
         in_collision = dist < (thing.radius + tmp_radius) 
         @dead=true if in_collision && !immune? 
         in_collision
-      elsif thing.is_a?(PowerUp)
+      elsif thing.is_a?(PowerUp) || thing.is_a?(Bullet) || thing.is_a?(Alien)
         c=thing.center 
         sc=center 
         dist=( (c[0]-@x)**2 + (c[1]-@y)**2 ) ** 0.5

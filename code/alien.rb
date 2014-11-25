@@ -18,6 +18,7 @@ class Alien < Ship
     end 
     @height=40
     @width=40
+    @radius = 30
     @shoot_delay=1.3 - @scene.level*0.05
     @shoot_delay_timer = 0
   end 

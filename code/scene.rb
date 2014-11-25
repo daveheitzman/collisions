@@ -78,7 +78,6 @@ class Scene
       if rand < 33*( elapsed * @power_up_multiplier )
         @aliens<<Alien.new( self )
       end  
-
     end 
 
     collide_boxes 
@@ -148,7 +147,15 @@ class Scene
     display.stroke_rectangle(0, 0, @width, @height)
   end 
 
+  def ship_explode_and_die
+    @ship = ShipExploding.new(self, @ship)  
+    @outcome='died'
+    @ttl = -1 # the scene must end when the player dies 
+    @stl = 2 # the scene must end when the player dies 
+  end 
+
   def collide_boxes
+    aliens_and_alien_bullets = (@aliens+@alien_bullets)
     @roids.each_with_index do |roid, i|
       next if roid.nil? || roid.dead
 
@@ -167,20 +174,17 @@ class Scene
         if @ship.shield_active?
           player_kills_roid(roid)
         elsif @ship.dead 
-          @ship = ShipExploding.new(self, @ship)  
-          @outcome='died'
-          @ttl = -1 # the scene must end when the player dies 
-          @stl = 2 # the scene must end when the player dies 
+          ship_explode_and_die
         end 
       end 
       
-      @alien_bullets.each_with_index do |ab, abi| 
-        if @ship.shield_active? 
-          ab.die!
-        elsif @ship.immune?
-        
-        elsif @ship.colliding?(ab) 
-          @ship.die!
+      aliens_and_alien_bullets.each_with_index do |ab, abi| 
+        if @ship.colliding?(ab) 
+          if @ship.shield_active? 
+            ab.die!
+          elsif !@ship.immune?
+            ship_explode_and_die
+          end 
         end 
       end 
 
