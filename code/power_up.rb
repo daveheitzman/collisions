@@ -12,8 +12,8 @@ class PowerUp < Box
     @p_rot = 0
     @p_rot_delta=0.04
     @text="!"
-    @x = (@scene.height-60)*rand + 30
-    @y = (@scene.width-60)*rand + 30 
+    @x = (@scene.height*0.8)*rand + @scene.height*0.1
+    @y = (@scene.width*0.8)*rand + @scene.width*0.1  
   end
 
   def set_text(t)

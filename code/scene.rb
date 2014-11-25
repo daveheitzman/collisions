@@ -32,7 +32,6 @@ class Scene
   end
 
   def update( elapsed )
-
     @ticks += 1 
     @ttl -= 1
     @stl -= elapsed
@@ -56,12 +55,12 @@ class Scene
           @ship.right()
         end
       end 
-      if @game.keyboard.pressing? :ctrl
-        if @game.keyboard.pressing? :r
-          @game.setup
-        end 
-      end 
     end
+    if @game.keyboard.pressing? :ctrl
+      if @game.keyboard.pressing? :r
+        @game.setup
+      end 
+    end 
 
     [@roids,[@ship],@bullets, @schrapnel ].each do |a|
       a.each  do |t|

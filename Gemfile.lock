@@ -1,3 +1,14 @@
+GIT
+  remote: git@github.com:daveheitzman/opal.git
+  revision: 926ab40e4389a22d016b38c43ac1b227418dd329
+  ref: 926ab40e4389a22d016b38c43ac1b227418dd329
+  specs:
+    opal (0.7.0.beta3)
+      hike (~> 1.2)
+      sourcemap (~> 0.1.0)
+      sprockets (>= 2.2.3, < 4.0.0)
+      tilt (~> 1.4)
+
 PATH
   remote: ../../yeah
   specs:
@@ -9,11 +20,6 @@ GEM
   specs:
     hike (1.2.3)
     multi_json (1.10.1)
-    opal (0.7.0.beta2)
-      hike (~> 1.2)
-      sourcemap (~> 0.1.0)
-      sprockets (>= 2.2.3, < 4.0.0)
-      tilt (~> 1.4)
     rack (1.5.2)
     sourcemap (0.1.1)
     sprockets (2.12.3)
@@ -27,4 +33,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  opal!
   yeah!
