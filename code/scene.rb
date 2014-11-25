@@ -15,6 +15,7 @@ class Scene
     @height = 650
     @roids = []
     @bullets = []
+    @alien_bullets = []
     @schrapnel = []
     pu=PowerUp.new(self,100,200)
     pu.set_text("+")
@@ -62,7 +63,7 @@ class Scene
       end 
     end 
 
-    [@roids,[@ship],@bullets, @schrapnel ].each do |a|
+    [@roids,[@ship],@bullets,@alien_bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.update(elapsed)
       end 
@@ -89,6 +90,7 @@ class Scene
     @roids.select!{ |s| s && !s.dead }
     @schrapnel.select!{ |s| s && !s.dead }
     @bullets.select!{ |s| s && !s.dead }
+    @alien_bullets.select!{ |s| s && !s.dead }
 
     if !game_over?
       if roids_size > 0 && @roids.empty?
@@ -103,7 +105,7 @@ class Scene
 
   def draw(display)
     draw_play_area display   
-    [@roids,[@ship,@alien],@bullets, @schrapnel ].each do |a|
+    [@roids,[@ship,@alien], @alien_bullets, @bullets, @schrapnel ].each do |a|
       a.each  do |t|
         t.draw(display)
       end 
@@ -165,29 +167,47 @@ class Scene
           @stl = 2 # the scene must end when the player dies 
         end 
       end 
+      
+      @alien_bullets.each_with_index do |ab, abi| 
+        if @ship.shield_active? 
+          ab.die!
+        elsif @ship.immune?
+        
+        elsif @ship.colliding?(ab) 
+          @ship.die!
+        end 
+      end 
 
       @bullets.each_with_index do |bullet, bi| 
         next if bullet.nil? 
-        if bullet.colliding?(roid)
-          if bullet.class==Bullet
-            # if anything hits a bullet , bullet and thing are dead
-            bullet.die!
-            roid.die!
-            player_kills_roid(roid)
-          elsif bullet.class==Cannon
-            # if cannon shots keep going 
-            roid.die!
-            player_kills_roid(roid)
-          elsif bullet.class==ShipSegment
-            if roid.radius < Roid::MIN_RADIUS * 1.15 
-              roid.die!
-              bullet.die!
-              player_kills_roid(roid)
-            end
-          end
-        end 
+        bullet_roid(bullet,roid)
+      end 
+      @alien_bullets.each_with_index do |bullet, bi| 
+        next if bullet.nil? 
+        bullet_roid(bullet,roid)
       end 
     end
+  end 
+
+  def bullet_roid(bullet,roid)
+    if bullet.colliding?(roid)
+      if bullet.class==Bullet
+        # if anything hits a bullet , bullet and thing are dead
+        bullet.die!
+        roid.die!
+        player_kills_roid(roid)
+      elsif bullet.class==Cannon
+        # if cannon shots keep going 
+        roid.die!
+        player_kills_roid(roid)
+      elsif bullet.class==ShipSegment
+        if roid.radius < Roid::MIN_RADIUS * 1.15 
+          roid.die!
+          bullet.die!
+          player_kills_roid(roid)
+        end
+      end
+    end 
   end 
 
   def add_roid
@@ -256,5 +276,9 @@ class Scene
 
   def add_bullet(b)
     @bullets << b
+  end 
+
+  def add_alien_bullet(b)
+    @alien_bullets << b
   end 
 end
