@@ -2,7 +2,8 @@ class Alien < Ship
   COLOR = Color[244, 22, 18]
   # SHOOT_SOUND = Sound['.wav']
   # FLY_SOUND = Sound['.wav']
-  
+  EXPLOSION_SOUNDS=[]
+
   def initialize(scene, x = 0, y = 0)
     super 
     if rand < 0.5 
@@ -24,13 +25,14 @@ class Alien < Ship
   end 
 
   def draw(d)
+    @dead=false 
     return if @dead 
     d.push
       d.stroke_color = COLOR
       d.fill_color = COLOR
       d.stroke_width = 2
       d.translate x, y
-      d.rotate p_rot
+      # d.rotate p_rot
       d.begin_shape
       d.move_to 0,0
       d.line_to -4,0
@@ -50,7 +52,7 @@ class Alien < Ship
 
   def update(elapsed)
     return if @dead 
-    if @x < 0 || @x > @scene.width || @y < 0 || @y > @scene.width
+    if @x < 0 || @x > @scene.width || @y < 0 || @y > @scene.height
     # if @x < 0 || @x > @scene.width 
       die!
     end 
@@ -84,5 +86,25 @@ class Alien < Ship
     end   
   end 
 
+  def immune? 
+    false
+  end 
+  
+  def colliding?(thing)
+    tmp_radius= shield_active? ? @shield_radius : @radius
+    in_collision=
+      if thing.is_a?(Ship) || thing.is_a?(Alien)
+        c=thing.center 
+        sc=center 
+        dist=( (c[0]-@x)**2 + (c[1]-@y)**2 ) ** 0.5
+        dist < (thing.radius + @radius)*0.1
+      else
+        false
+      end
+  end
+
+  def play_explosion
+    # EXPLOSION_SOUNDS.sample.play
+  end 
 end
 

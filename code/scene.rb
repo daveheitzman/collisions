@@ -156,7 +156,19 @@ class Scene
 
   def collide_boxes
     aliens_and_alien_bullets = (@aliens+@alien_bullets)
-    @roids.each_with_index do |roid, i|
+    hittable_by_ship_bullets = @roids + @aliens 
+
+    aliens_and_alien_bullets.each_with_index do |ab, abi| 
+      if @ship.colliding?(ab) 
+        if @ship.shield_active? 
+          ab.die!
+        elsif !@ship.immune?
+          ship_explode_and_die
+        end 
+      end 
+    end 
+    
+    hittable_by_ship_bullets.each_with_index do |roid, i|
       next if roid.nil? || roid.dead
 
       if @ship.shield_active? && !@ship.immune? 
@@ -177,26 +189,18 @@ class Scene
           ship_explode_and_die
         end 
       end 
-      
-      aliens_and_alien_bullets.each_with_index do |ab, abi| 
-        if @ship.colliding?(ab) 
-          if @ship.shield_active? 
-            ab.die!
-          elsif !@ship.immune?
-            ship_explode_and_die
-          end 
-        end 
-      end 
 
       @bullets.each_with_index do |bullet, bi| 
         next if bullet.nil? 
         bullet_roid(bullet,roid)
       end 
+
       @alien_bullets.each_with_index do |bullet, bi| 
-        next if bullet.nil? 
+        next if bullet.nil? || roid.is_a?(Alien)
         bullet_roid(bullet,roid)
       end 
     end
+
   end 
 
   def bullet_roid(bullet,roid)
@@ -225,6 +229,8 @@ class Scene
   end
 
   def player_kills_roid(roid, roid_killer=nil)
+    return player_kills_alien(roid, roid_killer) if roid.class==Alien
+
     roid_killer ||= @ship 
     roid.play_explosion
     points=((1 / roid.radius) * 100).round(1)*10
@@ -250,6 +256,16 @@ class Scene
       @schrapnel= roid.segments + @schrapnel unless @schrapnel.size > 100 
     end 
     roid.die!
+  end 
+
+  def player_kills_alien(alien, roid_killer=nil)
+    roid_killer ||= @ship 
+    alien.play_explosion
+    points=500
+    game.player.add_points(points.to_i)
+    alien=AlienExploding.new(self, alien)
+    @schrapnel= alien.segments + @schrapnel unless @schrapnel.size > 100 
+    alien.die!
   end 
 
   def freeze 
