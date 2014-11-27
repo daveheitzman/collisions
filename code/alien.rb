@@ -27,20 +27,21 @@ class Alien < Ship
   def draw(d)
     @dead=false 
     return if @dead 
+    bulb_x=15
+    bulb_y=13
     d.push
       d.stroke_color = COLOR
       d.fill_color = COLOR
       d.stroke_width = 2
       d.translate x, y
-      # d.rotate p_rot
       d.begin_shape
       d.move_to 0,0
       d.line_to -4,0
       d.line_to -4,5
-      d.curve_to -16,15, -11,6
-      d.curve_to 0,25, -11, 24
-      d.curve_to 16,15, 11,24
-      d.curve_to 4,5, 11, 6
+      d.curve_to  -bulb_x, bulb_y, -bulb_x + 5, bulb_y-9
+      d.curve_to 0, bulb_y + 10, -bulb_x + 5 , bulb_y + 9
+      d.curve_to bulb_x, bulb_y , bulb_x - 5 , bulb_y + 9 
+      d.curve_to 4,5, bulb_x - 5 , bulb_y - 9
       d.line_to 4,0
       d.line_to 0,0
       d.end_shape
@@ -68,20 +69,23 @@ class Alien < Ship
     # SHOOT_SOUND.play
     if !@dead 
       # SHOOT_SOUND.play
+      vel_matrix=[@velocity_x > 0 ? 1 : -1 , @velocity_y > 0 ? 1 : -1  ]
       rot = rand * TWO_PI
-      vel=210+@scene.level*8
+      vel=270+@scene.level*8
       b=Bullet.new @scene, @x+(@width/2)+5, @y
+      b.velocity_x = (Math.cos(rot) * vel)*vel_matrix[0] + @velocity_x
+      b.velocity_y = (Math.sin(rot) * vel)*vel_matrix[1] + @velocity_y
 
-      b.velocity_x = if @velocity_x < 0 
-        @velocity_x - (Math.cos(rot).abs * vel)
-      else
-        @velocity_x + (Math.cos(rot).abs * vel)
-      end 
-      b.velocity_y = if @velocity_y < 0 
-        @velocity_y - (Math.sin(rot).abs * vel)
-      else
-        @velocity_y + (Math.sin(rot).abs * vel)
-      end 
+      # b.velocity_x = if @velocity_x < 0 
+      #   @velocity_x - (Math.cos(rot).abs * vel)
+      # else
+      #   @velocity_x + (Math.cos(rot).abs * vel)
+      # end 
+      # b.velocity_y = if @velocity_y < 0 
+      #   @velocity_y - (Math.sin(rot).abs * vel)
+      # else
+      #   @velocity_y + (Math.sin(rot).abs * vel)
+      # end 
       @scene.add_alien_bullet b 
     end   
   end 
