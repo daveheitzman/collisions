@@ -3,7 +3,9 @@ class Ship < Box
   MAX_VELOCITY=200
   # SHOOT_SOUND=MutableSound['shoot.wav']
   SHOOT_SOUND=MutableSound['laser01.wav']
+  CANNON_SOUND=MutableSound['cannon.wav']
   THRUST_SOUND=MutableSound['thrust.wav']
+  SHIELD_SOUND=MutableSound['shields_on.wav']
   THRUST_SOUND_WAIT=0.7
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
@@ -81,8 +83,13 @@ class Ship < Box
     # SHOOT_SOUND.play
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
-      SHOOT_SOUND.play
       b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y
+      b=Cannon.new @scene, @x+(@width/2)-5, @y
+      if b.is_a?(Cannon)
+        CANNON_SOUND.play
+      else
+        SHOOT_SOUND.play
+      end 
       b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
       b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
       @scene.add_bullet b 
@@ -159,11 +166,16 @@ class Ship < Box
   def shield
     return if shield_active? 
     scene.game.player.lose_shield
+    SHIELD_SOUND.play
     @shield_end = @scene.elapsed_total + @shield_time
   end 
 
   def shield_active?  
-    @scene.elapsed_total < @shield_end
+    active=@scene.elapsed_total < @shield_end
+    if !active 
+      SHIELD_SOUND.stop
+    end 
+    active
   end 
  
   def handle_power_ups(elapsed)
