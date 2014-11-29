@@ -1,11 +1,12 @@
 class Alien < Ship
   COLOR = Color[244, 22, 18]
   SHOOT_SOUND = MutableSound['laser05.wav']
-  # FLY_SOUND = Sound['.wav']
+  FLY_SOUND = MutableSound['alien_present.wav']
   EXPLOSION_SOUNDS=[]
 
   def initialize(scene, x = 0, y = 0)
     super 
+    @sounds=[SHOOT_SOUND,FLY_SOUND]+EXPLOSION_SOUNDS
     if rand < 0.5 
       @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
       @x=10
@@ -22,10 +23,10 @@ class Alien < Ship
     @radius = 30
     @shoot_delay=1.3 - @scene.level*0.05
     @shoot_delay_timer = 0
+    FLY_SOUND.play.repeat
   end 
 
   def draw(d)
-    @dead=false 
     return if @dead 
     bulb_x=15
     bulb_y=13
@@ -52,9 +53,11 @@ class Alien < Ship
   end 
 
   def update(elapsed)
-    return if @dead 
+    if @dead 
+      silence! 
+      return 
+    end 
     if @x < 0 || @x > @scene.width || @y < 0 || @y > @scene.height
-    # if @x < 0 || @x > @scene.width 
       die!
     end 
     super 
@@ -66,8 +69,8 @@ class Alien < Ship
   end 
 
   def new_bullet
-    # SHOOT_SOUND.play
     if !@dead 
+      SHOOT_SOUND.play
       # SHOOT_SOUND.play
       vel_matrix=[@velocity_x > 0 ? 1 : -1 , @velocity_y > 0 ? 1 : -1  ]
       rot = rand * TWO_PI

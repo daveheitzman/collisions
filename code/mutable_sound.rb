@@ -10,10 +10,12 @@ class MutableSound < Sound
   end  
 
   def self.mute!
+    super
     @@mute=true 
   end 
 
   def self.un_mute!
+    super
     @@mute=false  
   end 
 end 

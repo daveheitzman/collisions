@@ -6,6 +6,7 @@ class Box
   attr_reader  :scene, :dead, :radius , :ttl, :stl
 
   def initialize(scene, x = 0, y = 0)
+    @sounds=[]
     @scene=scene
     @x = x
     @y = y
@@ -29,6 +30,7 @@ class Box
     @ttl -= 1
     @stl -= elapsed
     @dead=true if (@ttl < 0 && @stl < 0 ) 
+    silence! if @dead
     @in_collision=false
   end
 
@@ -118,6 +120,10 @@ class Box
   def die!(after_seconds=0)
     @stl=after_seconds 
     @ttl=-1 
-  end 
+  end
+
+  def silence!
+    @sounds.each do |s| s.stop end 
+  end  
 end
 

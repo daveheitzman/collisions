@@ -63,9 +63,13 @@ class CollisionsDemo < Game
     if elapsed_total > @pause_again
       @pause_again = elapsed_total + 0.2
       @paused = !@paused 
-    else 
-      @paused
+      if @paused 
+        MutableSound.mute!
+      else 
+        MutableSound.un_mute!
+      end
     end 
+    @paused
   end 
   
   def update(elapsed)
