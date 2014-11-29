@@ -1,6 +1,6 @@
 class Alien < Ship
   COLOR = Color[244, 22, 18]
-  # SHOOT_SOUND = Sound['.wav']
+  SHOOT_SOUND = MutableSound['laser05.wav']
   # FLY_SOUND = Sound['.wav']
   EXPLOSION_SOUNDS=[]
 

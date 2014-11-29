@@ -27,8 +27,8 @@ class CollisionsDemo < Game
   attr_reader :player, :game_over 
 
   def setup
-    MutableSound.un_mute!
     MutableSound.mute!
+    MutableSound.un_mute!
     @level = 0 
     @elapsed_total = 0
     @pause_again = 0
