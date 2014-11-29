@@ -26,13 +26,9 @@ class Ship < Box
     @in_collision=false
     @width = 13
     @height = 18
-    @velocity_x = 0
-    @velocity_y = 0
-    @p_rot=0
     @radius=DEFAULT_RADIUS    
     @thrust_sound_last=0
     @shield_radius=@radius*4
-    # @power_ups=[PowerUpCannon.new(@scene, 100,100 ) ]
   end
 
   def draw(d)
@@ -66,8 +62,17 @@ class Ship < Box
       @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
     end 
-    @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
-    @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
+    # @speed +=  @thrust_factor * ( Math.cos( @p_rot - @dir ) + Math.sin(@p_rot - @dir) )
+    # @dir +=  -1 * @thrust_factor * ( @dir - Math::PI/4 @p_rot )/100
+    # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) - Math.cos( HALF_PI + @dir - @p_rot ) )/100
+    # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) + Math.cos( HALF_PI/2 + @dir - @p_rot ) )/100
+    # @dir +=  -1*@thrust_factor * ( Math.sin( @dir - @p_rot  )  )/50
+    # @dir = Math.atan(@velocity_x / @velocity_y)
+    # @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
+    # @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
+    @dir += @thrust_factor * @p_rot 
+    @dir = @dir % TWO_PI
+    @speed += @thrust_factor 
   end 
 
   def missile
@@ -83,15 +88,15 @@ class Ship < Box
     # SHOOT_SOUND.play
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       @next_bullet_allowed_at = @scene.elapsed_total + @bullet_off_delay
-      b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y
-      b=Cannon.new @scene, @x+(@width/2)-5, @y
+      b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y, self
+      # b=Cannon.new @scene, @x+(@width/2)-5, @y, self
       if b.is_a?(Cannon)
         CANNON_SOUND.play
       else
         SHOOT_SOUND.play
       end 
-      b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
-      b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
+      # b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
+      # b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
       @scene.add_bullet b 
     end   
   end 

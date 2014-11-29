@@ -1,9 +1,10 @@
 class Box
   COLOR = Color[201, 94, 18]
   TWO_PI=Math::PI*2
+  HALF_PI = Math::PI / 2 
 
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
-  attr_reader  :scene, :dead, :radius , :ttl, :stl
+  attr_reader  :scene, :dead, :radius , :ttl, :stl, :dir, :speed
 
   def initialize(scene, x = 0, y = 0)
     @sounds=[]
@@ -14,19 +15,37 @@ class Box
     @width = 20
     @height = 20
     @radius=((@width**2+@height**2) ** 0.5) / 2
-    @velocity_x = rand*128 - 64
-    @velocity_y = rand*128 - 64 
+    @velocity_x = 0
+    @velocity_y = 0
+    @p_rot=0 
+    @dir= 0 #direction 
+    @speed= 0
     @dead=false
     @start_immune=0
     @ttl = 999999999999999 #ticks to live 
     @stl = -1 #seconds to live 
     @end_immune = scene.elapsed_total+0.1
   end
-
-  def update( elapsed)
-    check_wall_collision
+  
+  def update_velocity(delta=nil)
+    @speed += delta if delta 
+    if @last_speed != @speed
+      @last_speed = @speed
+      @velocity_x = Math.cos( @dir-HALF_PI )*@speed 
+      @velocity_y = Math.sin( @dir-HALF_PI )*@speed 
+    end  
+  end 
+  
+  def update_position(elapsed)
     @x += @velocity_x * elapsed
     @y += @velocity_y * elapsed
+  end 
+  
+  def update( elapsed)
+    check_wall_collision
+    update_velocity
+    update_position(elapsed)
+    
     @ttl -= 1
     @stl -= elapsed
     @dead=true if (@ttl < 0 && @stl < 0 ) 

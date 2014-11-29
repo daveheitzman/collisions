@@ -40,12 +40,13 @@ class Roid < Box
   end
 
   def update(elapsed)
-    @ttl -= 1 
-    @dead = true if @ttl < 0
-    @x += @velocity_x * elapsed
-    @y += @velocity_y * elapsed
-    @p_rot += @p_rot_delta
-    @p_rot = @p_rot % TWO_PI
+    # @ttl -= 1 
+    # @dead = true if @ttl < 0
+    # @x += @velocity_x * elapsed
+    # @y += @velocity_y * elapsed
+    # @p_rot += @p_rot_delta
+    # @p_rot = @p_rot % TWO_PI
+    super
     check_wall_collision
   end
 

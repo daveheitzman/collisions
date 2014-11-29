@@ -27,8 +27,8 @@ class CollisionsDemo < Game
   attr_reader :player, :game_over 
 
   def setup
-    MutableSound.mute!
     MutableSound.un_mute!
+    MutableSound.mute!
     @level = 0 
     @elapsed_total = 0
     @pause_again = 0
@@ -114,6 +114,7 @@ class CollisionsDemo < Game
     display.fill_text("bullets: #{@scene.bullets.select{|i| i.is_a?(Bullet) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("roids: #{@scene.roids.select{|i| i.is_a?(Roid) }.size }", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship rot: #{@scene.ship.p_rot}", text_x=text_x, text_y= text_y + line_height * 2 )
+    display.fill_text("ship dir: #{@scene.ship.dir}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("lives: #{@player.lives.to_s}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship: vel_x/vel_y #{@scene.ship.velocity_x},#{@scene.ship.velocity_y}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("controls: z: shoot, x: shield , ctrl-r: restart, l/r arrows, up: thrust, p: pause ", text_x=text_x, text_y= text_y + line_height * 2 )

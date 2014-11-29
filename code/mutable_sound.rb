@@ -6,16 +6,20 @@ class MutableSound < Sound
   end
 
   def play 
-    super if !@@mute 
+    if @@mute 
+      return self 
+    else 
+      super 
+    end 
   end  
 
   def self.mute!
-    super
     @@mute=true 
+    return self 
   end 
 
   def self.un_mute!
-    super
-    @@mute=false  
+    @@mute=false
+    return self 
   end 
 end 

@@ -6,6 +6,7 @@ class Cannon < Bullet
     @width=7
     @height=7
     @p_rot = Math::PI/2
+    
     @dead=false
     @radius=4
     @stl=1.6

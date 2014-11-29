@@ -18,6 +18,7 @@ class Alien < Ship
       @velocity_y = 0
       @velocity_x = (150 + @scene.level*15)*-1.0
     end 
+    @speed=45
     @height=40
     @width=40
     @radius = 30
@@ -75,9 +76,9 @@ class Alien < Ship
       vel_matrix=[@velocity_x > 0 ? 1 : -1 , @velocity_y > 0 ? 1 : -1  ]
       rot = rand * TWO_PI
       vel=270+@scene.level*8
-      b=Bullet.new @scene, @x+(@width/2)+5, @y
-      b.velocity_x = (Math.cos(rot) * vel)*vel_matrix[0] + @velocity_x
-      b.velocity_y = (Math.sin(rot) * vel)*vel_matrix[1] + @velocity_y
+      b=Bullet.new @scene, @x+(@width/2)+5, @y, self
+      # b.velocity_x = (Math.cos(rot) * vel)*vel_matrix[0] + @velocity_x
+      # b.velocity_y = (Math.sin(rot) * vel)*vel_matrix[1] + @velocity_y
 
       # b.velocity_x = if @velocity_x < 0 
       #   @velocity_x - (Math.cos(rot).abs * vel)
