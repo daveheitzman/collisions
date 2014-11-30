@@ -24,7 +24,8 @@ class ShipSegment < Roid
     # r=rand
     @velocity_x = ship.velocity_x + rand*130 - 65 
     @velocity_y = ship.velocity_y + rand*130 - 65
-
+    @speed = rand*50+50
+    @dir=rand*TWO_PI
     @p_rot = TWO_PI*rand
     @p_rot_delta=rand*0.09
     @ttl=(35+rand*45).to_i

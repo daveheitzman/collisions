@@ -20,19 +20,13 @@ class Bullet < Box
       @speed=ship.speed + 100
     elsif ship.is_a?(Ship)
       @dir = ship.p_rot 
-      @speed=ship.speed + 500
+      @speed=ship.speed + 370
     end 
     @ttl=0
-    @stl=1.6
+    @stl=1.2
   end
 
   def update(elapsed)
-    # update_velocity(elapsed)
-    # @x += @velocity_x * elapsed
-    # @y += @velocity_y * elapsed
-    # @ttl -= 1
-    # @stl -= elapsed
-    # @dead=true if (@ttl < 0 && @stl < 0 ) 
     super 
 
     # # Vertical wall collision

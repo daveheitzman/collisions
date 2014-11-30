@@ -57,22 +57,45 @@ class Ship < Box
     @p_rot = @p_rot % TWO_PI
   end  
 
-  def thrust
+  def thrust(elapsed)
     if @scene.elapsed_total - @thrust_sound_last  > THRUST_SOUND_WAIT
       @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
     end 
+    @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
+    @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
+
     # @speed +=  @thrust_factor * ( Math.cos( @p_rot - @dir ) + Math.sin(@p_rot - @dir) )
     # @dir +=  -1 * @thrust_factor * ( @dir - Math::PI/4 @p_rot )/100
     # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) - Math.cos( HALF_PI + @dir - @p_rot ) )/100
     # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) + Math.cos( HALF_PI/2 + @dir - @p_rot ) )/100
     # @dir +=  -1*@thrust_factor * ( Math.sin( @dir - @p_rot  )  )/50
     # @dir = Math.atan(@velocity_x / @velocity_y)
-    # @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
-    # @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
-    @dir += @thrust_factor * @p_rot 
-    @dir = @dir % TWO_PI
-    @speed += @thrust_factor 
+    # sin is how much goes into changing the direction 
+    
+    # add_to_dir = Math.sin(@p_rot-Math::PI/2) 
+    # add_to_dir = Math.sin(@p_rot-@dir) 
+    # # add_to_speed = Math.cos(@p_rot-Math::PI/2)
+    # add_to_speed = Math.cos(@p_rot-@dir)
+    # puts 'add_to_dir ' + add_to_dir.to_s 
+    # puts 'add_to_speed ' + add_to_speed.to_s 
+    # @rot_velocity ||= 0.02
+    # @dir += add_to_dir * @rot_velocity
+    # @dir = (TWO_PI + @dir) % TWO_PI
+    # @speed += add_to_speed * @thrust_factor
+
+    # cos is how much goes into changing the speed 
+
+    # @dir = if @velocity_y == 0.0 
+    #   @velocity_x > 0 ? Math::PI * 0.5  : 1.5 * Math::PI
+    # elsif @velocity_x == 0.0 
+    #   @velocity_y > 0 ? Math::PI : 0
+    # else 
+    #   Math.atan(-@velocity_y / @velocity_x)          
+    # end
+    # @dir += @thrust_factor * ( @p_rot - @dir ) * elapsed * 0.1  
+    # @dir = @dir % TWO_PI
+    # @speed += @thrust_factor 
   end 
 
   def missile

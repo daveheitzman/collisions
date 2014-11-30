@@ -47,7 +47,7 @@ class Scene
         if @game.keyboard.pressing? :x
           @ship.missile()        
         end 
-        @ship.thrust() if game.keyboard.pressing? :up
+        @ship.thrust(elapsed) if game.keyboard.pressing? :up
         @ship.shield() if game.keyboard.pressing?( :z ) && game.player.shields > 0
         if game.keyboard.pressing? :left
           @ship.left()

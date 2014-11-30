@@ -17,6 +17,8 @@ class Roid < Box
     @velocity_y = (rand*128 - 64) * ( 1 + @scene.level/10 ) 
     @points = []
     @p_rot=0
+    @speed=rand*50+50
+    @dir=TWO_PI*rand
     @p_rot_delta=rand * 0.01
     @radius = rad || SIZE_RANGE.to_a.sample
     @width = @height = @radius * 2 
