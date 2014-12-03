@@ -2,7 +2,7 @@ class Box
   COLOR = Color[201, 94, 18]
   TWO_PI=Math::PI*2
   HALF_PI = Math::PI / 2 
-
+  MAX_VELOCITY=500
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader  :scene, :dead, :radius , :ttl, :stl, :dir, :speed
 

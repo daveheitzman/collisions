@@ -62,8 +62,6 @@ class Ship < Box
       @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
     end 
-    @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
-    @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
 
     # @speed +=  @thrust_factor * ( Math.cos( @p_rot - @dir ) + Math.sin(@p_rot - @dir) )
     # @dir +=  -1 * @thrust_factor * ( @dir - Math::PI/4 @p_rot )/100
@@ -73,16 +71,65 @@ class Ship < Box
     # @dir = Math.atan(@velocity_x / @velocity_y)
     # sin is how much goes into changing the direction 
     
-    # add_to_dir = Math.sin(@p_rot-Math::PI/2) 
     # add_to_dir = Math.sin(@p_rot-@dir) 
-    # # add_to_speed = Math.cos(@p_rot-Math::PI/2)
     # add_to_speed = Math.cos(@p_rot-@dir)
-    # puts 'add_to_dir ' + add_to_dir.to_s 
-    # puts 'add_to_speed ' + add_to_speed.to_s 
+    # # puts 'add_to_speed ' + add_to_speed.to_s 
     # @rot_velocity ||= 0.02
-    # @dir += add_to_dir * @rot_velocity
+    # # @dir += add_to_dir * @rot_velocity
+    # # @speed += add_to_speed * @thrust_factor
+    # @speed = MAX_VELOCITY if @speed > MAX_VELOCITY
+    # # @dir = @p_rot - ( @speed * add_to_dir)
+    # # @dir = @p_rot - ( Math::PI * add_to_dir)
+
+    # @dir = @dir + ( (@dir-@p_rot) * Math.sin(@p_rot-@dir) * ( @thrust_factor/(@thrust_factor +  @speed) ) )
+
+
+    # @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
+    # @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
+    # speed = ( @velocity_x**2 + @velocity_y**2 )**0.5
+    # dir = Math.atan2(@velocity_x,-@velocity_y)  rescue 0
+    
+    @dir_factor ||= 0.01
+    @thrust_factor=1.5
+    # vx1 = Math.cos( @dir-HALF_PI )*@speed 
+    # vy1 = Math.sin( @dir-HALF_PI )*@speed 
+
+    # vx2 = Math.cos( @p_rot-HALF_PI )*@thrust_factor
+    # vy2 = Math.sin( @p_rot-HALF_PI )*@thrust_factor
+    
+    puts 'dir before ' + @dir.to_s 
+    puts 'speed before ' + @speed.to_s 
+    # vxd = Math.cos( @dir )*@speed - Math.cos( @p_rot - HALF_PI)*@thrust_factor
+    # vyd = Math.sin( @dir )*@speed - Math.sin( @p_rot - HALF_PI )*@thrust_factor
+    vxd = Math.cos( @p_rot - HALF_PI)*@thrust_factor
+    vyd = Math.sin( @p_rot  - HALF_PI)*@thrust_factor
+    vel_x=@velocity_x + vxd 
+    vel_y=@velocity_y + vyd 
+    dir = Math.atan2( vel_x  , -vel_y )
+    speed = ( (vel_x )**2 + (vel_y)**2 )**0.5
+    @dir=dir 
+    @speed=speed
+    puts 'dir after ' + dir.to_s 
+    puts 'speed after ' + speed.to_s 
+    puts 'vxd ' + vxd.to_s 
+    puts 'vyd ' + vyd.to_s 
+    puts '-------- '
+
+    
+    # puts '@p_rot  ' + @p_rot.to_s 
+    # puts '@thrust_factor  ' + @thrust_factor.to_s 
+    # puts 'dir before ' + @dir.to_s 
+    # puts 'speed before ' + @speed.to_s 
+    # @speed += Math.cos(@p_rot - @dir) * @thrust_factor
+    # # @speed = @speed  * @thrust_factor
+    # # @dir += (@p_rot-@dir)*Math.sin(@p_rot-@dir) * ( @speed/(@speed + @thrust_factor+1000) ) 
+    # @dir = @p_rot*@dir_factor + @dir 
     # @dir = (TWO_PI + @dir) % TWO_PI
-    # @speed += add_to_speed * @thrust_factor
+    # puts 'dir after ' + @dir.to_s 
+    # puts 'speed after ' + @speed.to_s 
+
+    # puts 'dir after ' + dir.to_s 
+    # puts 'speed after ' + speed.to_s 
 
     # cos is how much goes into changing the speed 
 
