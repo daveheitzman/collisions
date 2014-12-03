@@ -3,10 +3,12 @@ class Cannon < Bullet
 
   def initialize(scene, x = 0, y = 0)
     super
+    @bullet_off_delay *= 3.2
+
     @width=7
     @height=7
     @p_rot = Math::PI/2
-    
+    @speed=@speed*0.6
     @dead=false
     @radius=4
     @stl=1.6
