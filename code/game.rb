@@ -1,3 +1,4 @@
+module Utils ; end ;
 require 'mutable_sound'
 require 'scene'
 require 'marquee_scene'
@@ -17,8 +18,9 @@ require 'power_up_cannon'
 require 'power_up_shield'
 require 'alien'
 require 'alien_exploding'
+require 'util'
 
-class CollisionsDemo < Game
+class CollisionOids < Game
   BG_COLOR = Color[211, 169, 96]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]

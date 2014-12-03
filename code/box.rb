@@ -1,4 +1,6 @@
+
 class Box
+  include Utils
   COLOR = Color[201, 94, 18]
   TWO_PI=Math::PI*2
   HALF_PI = Math::PI / 2 
@@ -124,13 +126,17 @@ class Box
     @scene.elapsed_total < @end_immune
   end 
 
-  def new_direction(radians)
-    newx=Math.cos radians
-    newy=Math.sin radians
-    vel = (@velocity_x**2 + @velocity_y**2)**0.5
-    @velocity_x=vel*newx*0.3 
-    @velocity_y=vel*newy*0.3
+  def new_direction(smd)
+    #speed,mass,direction
+    @speed=smd[0]
+    @dir=smd[2]
+    # newx=Math.cos radians
+    # newy=Math.sin radians
+    # vel = (@velocity_x**2 + @velocity_y**2)**0.5
+    # @velocity_x=vel*newx*0.3 
+    # @velocity_y=vel*newy*0.3
   end 
+  
   def slower(float)
     @velocity_x *= float
     @velocity_y *= float

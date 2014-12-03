@@ -43,7 +43,6 @@ class Ship < Box
 
   def update(elapsed)
     super
-    handle_power_ups(elapsed)
     limit_velocity
   end
     
@@ -96,23 +95,26 @@ class Ship < Box
 
     # vx2 = Math.cos( @p_rot-HALF_PI )*@thrust_factor
     # vy2 = Math.sin( @p_rot-HALF_PI )*@thrust_factor
-    
+    # velocity_x = Math.cos( @dir-HALF_PI )*@speed 
+    # velocity_y = Math.sin( @dir-HALF_PI )*@speed 
+  
     puts 'dir before ' + @dir.to_s 
     puts 'speed before ' + @speed.to_s 
     # vxd = Math.cos( @dir )*@speed - Math.cos( @p_rot - HALF_PI)*@thrust_factor
     # vyd = Math.sin( @dir )*@speed - Math.sin( @p_rot - HALF_PI )*@thrust_factor
-    vxd = Math.cos( @p_rot - HALF_PI)*@thrust_factor
-    vyd = Math.sin( @p_rot  - HALF_PI)*@thrust_factor
-    vel_x=@velocity_x + vxd 
-    vel_y=@velocity_y + vyd 
-    dir = Math.atan2( vel_x  , -vel_y )
-    speed = ( (vel_x )**2 + (vel_y)**2 )**0.5
-    @dir=dir 
-    @speed=speed
-    puts 'dir after ' + dir.to_s 
-    puts 'speed after ' + speed.to_s 
-    puts 'vxd ' + vxd.to_s 
-    puts 'vyd ' + vyd.to_s 
+
+    # vel_x=Math.cos( @dir-HALF_PI )*@speed + Math.cos( @p_rot - HALF_PI)*@thrust_factor
+    # vel_y=Math.sin( @dir-HALF_PI )*@speed + Math.sin( @p_rot - HALF_PI)*@thrust_factor
+
+    # @dir = Math.atan2( vel_x  , -vel_y )
+    # @speed = ( (vel_x )**2 + (vel_y)**2 )**0.5
+    new_vector = collide( [@speed, 1, @dir],[@thrust_factor, 1 , @p_rot ])
+    @dir = new_vector[2]
+    @speed = new_vector[0]
+    puts 'dir after ' + @dir.to_s 
+    puts 'speed after ' + @speed.to_s 
+    # puts 'vxd ' + vxd.to_s 
+    # puts 'vyd ' + vyd.to_s 
     puts '-------- '
 
     
@@ -251,22 +253,6 @@ class Ship < Box
       SHIELD_SOUND.stop
     end 
     active
-  end 
- 
-  def handle_power_ups(elapsed)
-    #bullets
-
-    # @bullet_type_duration ||= -1 
-
-    # if @bullet_type_duration < 0
-    #   @bullet_type=Bullet
-    # else 
-    #   @bullet_type=Cannon
-    #   @bullet_type_duration -= elapsed 
-    # end 
-
-    #invincibility
-    #speed? 
   end 
 
   def set_bullet_type(type, duration) #seconds 

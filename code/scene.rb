@@ -1,4 +1,5 @@
 class Scene
+  include Utils
   BACKGROUND_COLOR=Color[25,25,25]
   BORDER_COLOR = Color[10, 10, 10]
   THRUST_SOUND_WAIT = 0.5
@@ -176,11 +177,9 @@ class Scene
         dist=( (roid.x-@ship.x)**2 + (roid.y-@ship.y)**2 ) ** 0.5
         if dist < (roid.radius + @ship.shield_radius )
           @ship.make_immune(0.25)
-          ang=Math.atan( (@ship.x-roid.x)/(0.00001+@ship.y-roid.y) )
-          dot=Math.atan( (@ship.x)/(0.00001+@ship.y) )
-          puts ang.to_s + "," + dot.to_s
-          avg = ( ang + dot )/2
-          @ship.new_direction(avg)
+          new_ship_dir=collide( [@ship.speed,1,@ship.dir], [roid.speed,1,roid.dir])
+          new_ship_dir[0] = @ship.speed * 0.5
+          @ship.new_direction(new_ship_dir)
           player_kills_roid(roid)
         end 
       elsif @ship.colliding?(roid) 

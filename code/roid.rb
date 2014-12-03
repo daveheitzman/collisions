@@ -13,8 +13,8 @@ class Roid < Box
   def initialize(scene, x=0, y=0, rad=nil  )
     super(scene, x, y)
     @in_collision=false
-    @velocity_x = (rand*128 - 64) * ( 1 + @scene.level/10 )
-    @velocity_y = (rand*128 - 64) * ( 1 + @scene.level/10 ) 
+    # @velocity_x = (rand*128 - 64) * ( 1 + @scene.level/10 )
+    # @velocity_y = (rand*128 - 64) * ( 1 + @scene.level/10 ) 
     @points = []
     @p_rot=0
     @speed=rand*50+50
@@ -42,12 +42,8 @@ class Roid < Box
   end
 
   def update(elapsed)
-    # @ttl -= 1 
-    # @dead = true if @ttl < 0
-    # @x += @velocity_x * elapsed
-    # @y += @velocity_y * elapsed
-    # @p_rot += @p_rot_delta
-    # @p_rot = @p_rot % TWO_PI
+    @p_rot += @p_rot_delta
+    @p_rot %= TWO_PI
     super
     check_wall_collision
   end
