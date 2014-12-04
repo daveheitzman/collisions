@@ -30,8 +30,9 @@ class Box
   
   def update_velocity(delta=nil)
     @speed += delta if delta 
-    if @last_speed != @speed
+    if @last_speed != @speed || @last_dir != @dir 
       @last_speed = @speed
+      @last_dir = @dir
       @velocity_x = Math.cos( @dir-HALF_PI )*@speed 
       @velocity_y = Math.sin( @dir-HALF_PI )*@speed 
     end  
@@ -51,7 +52,6 @@ class Box
     @stl -= elapsed
     @dead=true if (@ttl < 0 && @stl < 0 ) 
     silence! if @dead
-    @in_collision=false
   end
 
   def check_wall_collision

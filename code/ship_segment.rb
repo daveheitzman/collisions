@@ -14,18 +14,17 @@ class ShipSegment < Roid
     @y1 = -ydelt
     @x2 = xdelt
     @y2 = ydelt
-    @color=if ship.is_a?(Roid)
+    @color=if ship.is_a?(Alien)
+      Alien::COLOR
+    elsif ship.is_a?(Roid)
       Roid::COLOR 
     else 
       Ship::COLOR
     end 
-    # @velocity_x = ship.velocity_x + Math.cos(rand*TWO_PI)*40
-    # @velocity_y = ship.velocity_y + Math.sin(rand*TWO_PI)*40
-    # r=rand
-    @velocity_x = ship.velocity_x + rand*130 - 65 
-    @velocity_y = ship.velocity_y + rand*130 - 65
-    @speed = rand*50+50
-    @dir=rand*TWO_PI
+    @speed = 25 + ship.speed * (rand*1.25 + 0.15)
+
+    @dir=ship.dir - Math::PI * Math.log( rand )
+
     @p_rot = TWO_PI*rand
     @p_rot_delta=rand*0.09
     @ttl=(35+rand*45).to_i

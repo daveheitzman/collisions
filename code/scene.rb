@@ -85,7 +85,6 @@ class Scene
     collide_boxes 
 
     @power_ups.each do |power_up|
-      # next if power_up.dead || power_up.nil?
       power_up.update(elapsed)
       power_up.help(@ship) if @ship.colliding?(power_up) 
     end 

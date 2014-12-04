@@ -18,7 +18,7 @@ class Alien < Ship
     end 
     @stl=12
     @ttl=0
-    @speed=45
+    @speed=105
     @height=40
     @width=40
     @radius = 20
@@ -61,7 +61,13 @@ class Alien < Ship
     if @x < 0 || @x > @scene.width || @y < 0 || @y > @scene.height
       die!
     end 
+    if rand < 0.01
+      # @dir = 2 * Math::PI * rand  
+      # @last_dir_change_at=@scene.elapsed_total
+      @dir = @dir+Math::PI/4 + Math::PI * rand  
+    end
     super 
+      # new_direction([@speed,1,@dir+Math::PI/4 + Math::PI * rand ]) 
     @shoot_delay_timer -= elapsed
     if @shoot_delay_timer < 0
       @shoot_delay_timer = @shoot_delay * (0.4 * rand + 0.8) 

@@ -24,14 +24,14 @@ class ShipExploding < Ship
 
   def draw(d)
     if !@dead 
-      @segments.each {|s| s.draw d}
+      @segments.each { |s| s.draw d}
     end 
   end
 
   def update(elapsed)
     super
     if !@dead 
-      @segments.each {|s| s.update(elapsed) }
+      @segments.each { |s| s.update(elapsed) }
     end 
   end
   
