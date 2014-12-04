@@ -10,18 +10,18 @@ class Alien < Ship
     if rand < 0.5 
       @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
       @x=10
-      @velocity_y = 0
-      @velocity_x = (150 + @scene.level*15)
+      @dir = 0.5*Math::PI 
     else
       @y = (rand * (@scene.height * 0.4) + @scene.height*0.3).to_i
       @x=@scene.width - 10
-      @velocity_y = 0
-      @velocity_x = (150 + @scene.level*15)*-1.0
+      @dir = 1.5*Math::PI 
     end 
+    @stl=12
+    @ttl=0
     @speed=45
     @height=40
     @width=40
-    @radius = 30
+    @radius = 20
     @shoot_delay=1.3 - @scene.level*0.05
     @shoot_delay_timer = 0
     FLY_SOUND.play.repeat
@@ -29,8 +29,8 @@ class Alien < Ship
 
   def draw(d)
     return if @dead 
-    bulb_x=15
-    bulb_y=13
+    bulb_x=19
+    bulb_y=12
     d.push
       d.stroke_color = COLOR
       d.fill_color = COLOR
@@ -64,7 +64,7 @@ class Alien < Ship
     super 
     @shoot_delay_timer -= elapsed
     if @shoot_delay_timer < 0
-      @shoot_delay_timer = @shoot_delay 
+      @shoot_delay_timer = @shoot_delay * (0.4 * rand + 0.8) 
       new_bullet
     end 
   end 
@@ -72,24 +72,7 @@ class Alien < Ship
   def new_bullet
     if !@dead 
       SHOOT_SOUND.play
-      # SHOOT_SOUND.play
-      vel_matrix=[@velocity_x > 0 ? 1 : -1 , @velocity_y > 0 ? 1 : -1  ]
-      rot = rand * TWO_PI
-      vel=270+@scene.level*8
       b=Bullet.new @scene, @x+(@width/2)+5, @y, self
-      # b.velocity_x = (Math.cos(rot) * vel)*vel_matrix[0] + @velocity_x
-      # b.velocity_y = (Math.sin(rot) * vel)*vel_matrix[1] + @velocity_y
-
-      # b.velocity_x = if @velocity_x < 0 
-      #   @velocity_x - (Math.cos(rot).abs * vel)
-      # else
-      #   @velocity_x + (Math.cos(rot).abs * vel)
-      # end 
-      # b.velocity_y = if @velocity_y < 0 
-      #   @velocity_y - (Math.sin(rot).abs * vel)
-      # else
-      #   @velocity_y + (Math.sin(rot).abs * vel)
-      # end 
       @scene.add_alien_bullet b 
     end   
   end 
@@ -99,7 +82,6 @@ class Alien < Ship
   end 
   
   def colliding?(thing)
-    tmp_radius= shield_active? ? @shield_radius : @radius
     in_collision=
       if thing.is_a?(Ship) || thing.is_a?(Alien)
         c=thing.center 

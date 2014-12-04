@@ -4,6 +4,7 @@ class Scene
   BORDER_COLOR = Color[10, 10, 10]
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
+  MAX_SCHRAPNEL=110
 
   attr_accessor  :width, :height
   attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game, :bullets, :roids, :stl, :ttl
@@ -76,8 +77,7 @@ class Scene
         @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
       end  
 
-      if  rand < 20 * (0.2 + 0.1*@level )*( elapsed * @power_up_multiplier )
-        # @aliens<<Alien.new( self )
+      if  rand < 60 * (0.2 + 0.1*@level )*( elapsed * @power_up_multiplier )
         @aliens<<Alien.new( self ) unless @aliens.size > 0
       end  
     end 
@@ -94,6 +94,9 @@ class Scene
     @power_ups.select!{ |p| p && !p.dead }
     @roids.select!{ |s| s && !s.dead }
     @schrapnel.select!{ |s| s && !s.dead }
+    while @schrapnel.size > MAX_SCHRAPNEL
+      @schrapnel.shift
+    end
     @bullets.select!{ |s| s && !s.dead }
     @alien_bullets.select!{ |s| s && !s.dead }
     @aliens.select!{ |s| s && !s.dead }
@@ -179,7 +182,6 @@ class Scene
           @ship.make_immune(0.25)
           new_ship_dir=collide( [@ship.speed,1,@ship.dir], [roid.speed,1,roid.dir])
           new_ship_dir[0] = @ship.speed * 0.5
-          @ship.new_direction(new_ship_dir)
           player_kills_roid(roid)
         end 
       elsif @ship.colliding?(roid) 
@@ -238,7 +240,7 @@ class Scene
     if roid.radius > Roid::MIN_RADIUS * 1.15 
       r=rand 
       # too many rocks were getting generated per level. 
-      if r < (0.4 + @level / 22 ) 
+      if r < (0.33 + @level / 22 ) 
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
         # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
@@ -253,7 +255,7 @@ class Scene
       end   
     else 
       roid=RoidExploding.new(self, roid)
-      @schrapnel= roid.segments + @schrapnel unless @schrapnel.size > 100 
+      @schrapnel= roid.segments + @schrapnel  # unless @schrapnel.size > 100 
     end 
     roid.die!
   end 
@@ -261,10 +263,9 @@ class Scene
   def player_kills_alien(alien, roid_killer=nil)
     roid_killer ||= @ship 
     alien.play_explosion
-    points=500
-    game.player.add_points(points.to_i)
+    game.player.add_points(500)
     alien=AlienExploding.new(self, alien)
-    @schrapnel= alien.segments + @schrapnel unless @schrapnel.size > 100 
+    @schrapnel= alien.segments + @schrapnel # unless @schrapnel.size > 100 
     alien.die!
   end 
 

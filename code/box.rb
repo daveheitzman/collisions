@@ -1,4 +1,3 @@
-
 class Box
   include Utils
   COLOR = Color[201, 94, 18]
@@ -116,7 +115,6 @@ class Box
       top < thing.bottom && bottom > thing.top)
   end
 
-
   def make_immune(seconds)
     @end_immune=@scene.elapsed_total + seconds
   end 
@@ -130,11 +128,6 @@ class Box
     #speed,mass,direction
     @speed=smd[0]
     @dir=smd[2]
-    # newx=Math.cos radians
-    # newy=Math.sin radians
-    # vel = (@velocity_x**2 + @velocity_y**2)**0.5
-    # @velocity_x=vel*newx*0.3 
-    # @velocity_y=vel*newy*0.3
   end 
   
   def slower(float)
@@ -150,5 +143,8 @@ class Box
   def silence!
     @sounds.each do |s| s.stop end 
   end  
+  def collide!(box)
+    new_direction(collide(self,box))
+  end 
 end
 

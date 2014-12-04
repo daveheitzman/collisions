@@ -17,7 +17,7 @@ class Ship < Box
   def initialize(scene, x = 0, y = 0)
     super
     @next_bullet_allowed_at = 0 
-    @bullet_off_delay = 0.44 - 0.01 * @scene.level
+    @bullet_off_delay = 0.94 - 0.01 * @scene.level
     @shield_end = -1
     @thrust_factor = 1.1 + 0.04 * @scene.level
     @shield_time = 1.37 + 0.06 * @scene.level
@@ -61,90 +61,9 @@ class Ship < Box
       @thrust_sound_last=@scene.elapsed_total
       THRUST_SOUND.play
     end 
-
-    # @speed +=  @thrust_factor * ( Math.cos( @p_rot - @dir ) + Math.sin(@p_rot - @dir) )
-    # @dir +=  -1 * @thrust_factor * ( @dir - Math::PI/4 @p_rot )/100
-    # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) - Math.cos( HALF_PI + @dir - @p_rot ) )/100
-    # @dir +=  @thrust_factor * ( Math.sin( @dir - @p_rot ) + Math.cos( HALF_PI/2 + @dir - @p_rot ) )/100
-    # @dir +=  -1*@thrust_factor * ( Math.sin( @dir - @p_rot  )  )/50
-    # @dir = Math.atan(@velocity_x / @velocity_y)
-    # sin is how much goes into changing the direction 
-    
-    # add_to_dir = Math.sin(@p_rot-@dir) 
-    # add_to_speed = Math.cos(@p_rot-@dir)
-    # # puts 'add_to_speed ' + add_to_speed.to_s 
-    # @rot_velocity ||= 0.02
-    # # @dir += add_to_dir * @rot_velocity
-    # # @speed += add_to_speed * @thrust_factor
-    # @speed = MAX_VELOCITY if @speed > MAX_VELOCITY
-    # # @dir = @p_rot - ( @speed * add_to_dir)
-    # # @dir = @p_rot - ( Math::PI * add_to_dir)
-
-    # @dir = @dir + ( (@dir-@p_rot) * Math.sin(@p_rot-@dir) * ( @thrust_factor/(@thrust_factor +  @speed) ) )
-
-
-    # @velocity_x = ( Math.cos(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_x
-    # @velocity_y = ( Math.sin(@p_rot-Math::PI/2) * @thrust_factor ) + @velocity_y 
-    # speed = ( @velocity_x**2 + @velocity_y**2 )**0.5
-    # dir = Math.atan2(@velocity_x,-@velocity_y)  rescue 0
-    
-    @dir_factor ||= 0.01
-    @thrust_factor=1.5
-    # vx1 = Math.cos( @dir-HALF_PI )*@speed 
-    # vy1 = Math.sin( @dir-HALF_PI )*@speed 
-
-    # vx2 = Math.cos( @p_rot-HALF_PI )*@thrust_factor
-    # vy2 = Math.sin( @p_rot-HALF_PI )*@thrust_factor
-    # velocity_x = Math.cos( @dir-HALF_PI )*@speed 
-    # velocity_y = Math.sin( @dir-HALF_PI )*@speed 
-  
-    puts 'dir before ' + @dir.to_s 
-    puts 'speed before ' + @speed.to_s 
-    # vxd = Math.cos( @dir )*@speed - Math.cos( @p_rot - HALF_PI)*@thrust_factor
-    # vyd = Math.sin( @dir )*@speed - Math.sin( @p_rot - HALF_PI )*@thrust_factor
-
-    # vel_x=Math.cos( @dir-HALF_PI )*@speed + Math.cos( @p_rot - HALF_PI)*@thrust_factor
-    # vel_y=Math.sin( @dir-HALF_PI )*@speed + Math.sin( @p_rot - HALF_PI)*@thrust_factor
-
-    # @dir = Math.atan2( vel_x  , -vel_y )
-    # @speed = ( (vel_x )**2 + (vel_y)**2 )**0.5
     new_vector = collide( [@speed, 1, @dir],[@thrust_factor, 1 , @p_rot ])
     @dir = new_vector[2]
     @speed = new_vector[0]
-    puts 'dir after ' + @dir.to_s 
-    puts 'speed after ' + @speed.to_s 
-    # puts 'vxd ' + vxd.to_s 
-    # puts 'vyd ' + vyd.to_s 
-    puts '-------- '
-
-    
-    # puts '@p_rot  ' + @p_rot.to_s 
-    # puts '@thrust_factor  ' + @thrust_factor.to_s 
-    # puts 'dir before ' + @dir.to_s 
-    # puts 'speed before ' + @speed.to_s 
-    # @speed += Math.cos(@p_rot - @dir) * @thrust_factor
-    # # @speed = @speed  * @thrust_factor
-    # # @dir += (@p_rot-@dir)*Math.sin(@p_rot-@dir) * ( @speed/(@speed + @thrust_factor+1000) ) 
-    # @dir = @p_rot*@dir_factor + @dir 
-    # @dir = (TWO_PI + @dir) % TWO_PI
-    # puts 'dir after ' + @dir.to_s 
-    # puts 'speed after ' + @speed.to_s 
-
-    # puts 'dir after ' + dir.to_s 
-    # puts 'speed after ' + speed.to_s 
-
-    # cos is how much goes into changing the speed 
-
-    # @dir = if @velocity_y == 0.0 
-    #   @velocity_x > 0 ? Math::PI * 0.5  : 1.5 * Math::PI
-    # elsif @velocity_x == 0.0 
-    #   @velocity_y > 0 ? Math::PI : 0
-    # else 
-    #   Math.atan(-@velocity_y / @velocity_x)          
-    # end
-    # @dir += @thrust_factor * ( @p_rot - @dir ) * elapsed * 0.1  
-    # @dir = @dir % TWO_PI
-    # @speed += @thrust_factor 
   end 
 
   def missile
@@ -152,30 +71,25 @@ class Ship < Box
   end 
   
   def limit_velocity
-    # @velocity_y = MAX_VELOCITY if @velocity_y > MAX_VELOCITY
-    # @velocity_x = MAX_VELOCITY if @velocity_x > MAX_VELOCITY
+    @speed = MAX_VELOCITY if @speed > MAX_VELOCITY
   end 
 
   def new_bullet
-    # SHOOT_SOUND.play
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
-      # b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y, self
-      b=Cannon.new @scene, @x+(@width/2)-5, @y, self
+      b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y, self
       @next_bullet_allowed_at = @scene.elapsed_total + b.bullet_off_delay
       if b.is_a?(Cannon)
         CANNON_SOUND.play
       else
         SHOOT_SOUND.play
       end 
-      # b.velocity_x = (Math.cos(@p_rot-Math::PI/2) * b.velocity_x) + @velocity_x
-      # b.velocity_y = (Math.sin(@p_rot-Math::PI/2) * b.velocity_y) + @velocity_y 
       @scene.add_bullet b 
     end   
   end 
   
   def trigger_released
     #player has let up the 'z' fire key
-    @next_bullet_allowed_at = (@scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * (0.351  ) )     
+    @next_bullet_allowed_at = (@scene.elapsed_total + ( @next_bullet_allowed_at - @scene.elapsed_total  ) * (0.451  ) )     
   end 
   
   def draw_triangle(d,rot, x=nil, y=nil)

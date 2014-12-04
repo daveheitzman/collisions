@@ -9,8 +9,6 @@ class ShipExploding < Ship
     super scene, ship.x, ship.y
     @x = ship.x
     @y = ship.y
-    # @velocity_x = ship.velocity_x
-    # @velocity_y = ship.velocity_y
     @segments=[]
     if ship.is_a?(Ship) 
       EXPLOSION_SOUND.play
