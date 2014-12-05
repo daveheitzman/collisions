@@ -1,7 +1,8 @@
 class Alien < Ship
   COLOR = Color[244, 22, 18]
-  SHOOT_SOUND = MutableSound['laser05.wav']
-  FLY_SOUND = MutableSound['alien_present.wav']
+  SHOOT_SOUND = MutableSound['alien_laser.ogg']
+  FLY_SOUND = MutableSound['alien_present.ogg']
+  DIE_SOUND = MutableSound['alien_exploding.ogg']
   EXPLOSION_SOUNDS=[]
 
   def initialize(scene, x = 0, y = 0)

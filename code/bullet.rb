@@ -1,12 +1,14 @@
 class Bullet < Box
   # COLOR = Color[55, 144, 238]
   COLOR = Color[255, 255, 255]
+  SHOOT_SOUND=MutableSound['laser02q.ogg']
 
   attr_accessor :x, :y, :width, :height, :velocity_x, :velocity_y, :in_collision
   attr_reader :filled, :bullet_off_delay 
 
   def initialize(scene, x = 0, y = 0, ship=nil)
     super
+    SHOOT_SOUND.play
     @bullet_off_delay = 0.44 - 0.01 * @scene.level
 
     @dead=false

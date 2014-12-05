@@ -77,7 +77,7 @@ class Scene
         @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
       end  
 
-      if  rand < 60 * (0.2 + 0.1*@level )*( elapsed * @power_up_multiplier )
+      if rand < (0.3 + 0.1*@level )*( elapsed * @power_up_multiplier )
         @aliens<<Alien.new( self ) unless @aliens.size > 0
       end  
     end 

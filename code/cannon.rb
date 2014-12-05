@@ -1,10 +1,10 @@
 class Cannon < Bullet
   COLOR = Color[230, 230, 222]
+  SHOOT_SOUND=MutableSound['cannon2.ogg']
 
   def initialize(scene, x = 0, y = 0)
     super
     @bullet_off_delay *= 3.2
-
     @width=7
     @height=7
     @p_rot = Math::PI/2
@@ -12,6 +12,7 @@ class Cannon < Bullet
     @dead=false
     @radius=4
     @stl=1.6
+    # SOUND.play
   end
 
   def update(elapsed)

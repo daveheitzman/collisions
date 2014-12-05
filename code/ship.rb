@@ -2,10 +2,11 @@ class Ship < Box
   COLOR = Color[133, 133, 133]
   MAX_VELOCITY=200
   # SHOOT_SOUND=MutableSound['shoot.wav']
-  SHOOT_SOUND=MutableSound['laser01.wav']
-  CANNON_SOUND=MutableSound['cannon.wav']
+  # SHOOT_SOUND=MutableSound['laser-03.wav']
+  # CANNON_SOUND=MutableSound['cannon.wav']
   THRUST_SOUND=MutableSound['thrust.wav']
-  SHIELD_SOUND=MutableSound['shields_on.wav']
+  # SHIELD_SOUND=MutableSound['shields_on.wav']
+  SHIELD_SOUND=MutableSound['shields_on.ogg']
   THRUST_SOUND_WAIT=0.7
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
@@ -20,7 +21,7 @@ class Ship < Box
     @bullet_off_delay = 0.94 - 0.01 * @scene.level
     @shield_end = -1
     @thrust_factor = 1.1 + 0.04 * @scene.level
-    @shield_time = 1.37 + 0.06 * @scene.level
+    @shield_time = 3.37 + 0.06 * @scene.level
     @x = x
     @y = y
     @in_collision=false
@@ -78,11 +79,11 @@ class Ship < Box
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y, self
       @next_bullet_allowed_at = @scene.elapsed_total + b.bullet_off_delay
-      if b.is_a?(Cannon)
-        CANNON_SOUND.play
-      else
-        SHOOT_SOUND.play
-      end 
+      # if b.is_a?(Cannon)
+      #   # CANNON_SOUND.play
+      # else
+      #   # SHOOT_SOUND.play
+      # end 
       @scene.add_bullet b 
     end   
   end 
