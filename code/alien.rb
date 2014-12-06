@@ -27,6 +27,10 @@ class Alien < Ship
     @shoot_delay_timer = 0
     FLY_SOUND.play.repeat
   end 
+  
+  def shoot_sound
+    SHOOT_SOUND.play
+  end 
 
   def draw(d)
     return if @dead 

@@ -78,12 +78,9 @@ class Ship < Box
   def new_bullet
     if !@dead && @scene.elapsed_total > @next_bullet_allowed_at 
       b=@scene.game.player.bullet_type.new @scene, @x+(@width/2)-5, @y, self
+      # b=Cannon.new @scene, @x+(@width/2)-5, @y, self
+      b.shoot_sound
       @next_bullet_allowed_at = @scene.elapsed_total + b.bullet_off_delay
-      # if b.is_a?(Cannon)
-      #   # CANNON_SOUND.play
-      # else
-      #   # SHOOT_SOUND.play
-      # end 
       @scene.add_bullet b 
     end   
   end 

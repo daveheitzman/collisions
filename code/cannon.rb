@@ -1,6 +1,6 @@
 class Cannon < Bullet
   COLOR = Color[230, 230, 222]
-  SHOOT_SOUND=MutableSound['cannon2.ogg']
+  SHOOT_SOUND = MutableSound['cannon2.ogg']
 
   def initialize(scene, x = 0, y = 0)
     super
@@ -12,8 +12,11 @@ class Cannon < Bullet
     @dead=false
     @radius=4
     @stl=1.6
-    # SOUND.play
   end
+
+  def shoot_sound
+    SHOOT_SOUND.play
+  end 
 
   def update(elapsed)
     super
@@ -30,4 +33,5 @@ class Cannon < Bullet
     dist=( (thing.x-@x)**2 + (thing.y-@y)**2 ) ** 0.5
     @in_collision = dist < (thing.radius + @radius )*1.2
   end
+
 end
