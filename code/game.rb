@@ -24,7 +24,8 @@ class CollisionOids < Game
   BG_COLOR = Color[211, 169, 96]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
-  TEXT_FONT=Font['Bandal.ttf']
+  # TEXT_FONT=Font['Bandal.ttf']
+  TEXT_FONT=Font['http://fonts.googleapis.com/css?family=Inconsolata']
   attr_accessor :scene, :elapsed_total
   attr_reader :player, :game_over 
 

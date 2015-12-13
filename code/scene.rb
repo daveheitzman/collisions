@@ -26,7 +26,7 @@ class Scene
     @ttl = 9999999999999999
     @power_ups = []
     @outcome="died"
-    @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.012
+    @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.017
     spawn_ship
     (2+level).times{ add_roid }
     @bullet_off_delay = -1
