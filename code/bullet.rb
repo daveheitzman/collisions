@@ -1,7 +1,7 @@
 class Bullet < Box
   # COLOR = Color[55, 144, 238]
   COLOR = Color[255, 255, 255]
-  SHOOT_SOUND = MutableSound['laser02q.ogg']
+  SHOOT_SOUND = MutableSound['sound/laser02q.ogg']
 
   attr_accessor :x, :y, :width, :height, :velocity_x, :velocity_y, :in_collision
   attr_reader :filled, :bullet_off_delay 

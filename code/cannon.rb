@@ -1,6 +1,6 @@
 class Cannon < Bullet
   COLOR = Color[230, 230, 222]
-  SHOOT_SOUND = MutableSound['cannon2.ogg']
+  SHOOT_SOUND = MutableSound['sound/cannon2.ogg']
 
   def initialize(scene, x = 0, y = 0)
     super

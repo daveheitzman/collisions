@@ -1,7 +1,7 @@
 class RoidExploding < Ship
   COLOR = Roid::COLOR
   MAX_VELOCITY=400
-  EXPLOSION_SOUND=MutableSound['ship_explosion.wav']
+  EXPLOSION_SOUND=MutableSound['sound/ship_explosion.wav']
   attr_accessor :x, :y, :width, :height, :velocity, :in_collision
   attr_reader  :p_rot , :game , :segments
 

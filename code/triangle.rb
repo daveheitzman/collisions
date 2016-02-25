@@ -55,7 +55,7 @@ class Hero < Box
   end  
 
   def new_bullet
-    Sound['shoot.wav'].play
+    Sound['sound/shoot.wav'].play
     b=Bullet.new @x+(@width/2)-5, @y
     b.velocity_x = 0.2*@velocity_x
     return b
