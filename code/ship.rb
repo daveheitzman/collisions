@@ -4,9 +4,9 @@ class Ship < Box
   # SHOOT_SOUND=MutableSound['shoot.wav']
   # SHOOT_SOUND=MutableSound['laser-03.wav']
   # CANNON_SOUND=MutableSound['cannon.wav']
-  THRUST_SOUND=MutableSound['thrust.wav']
+  THRUST_SOUND=MutableSound['sound/thrust.wav']
   # SHIELD_SOUND=MutableSound['shields_on.wav']
-  SHIELD_SOUND=MutableSound['shields_on.ogg']
+  SHIELD_SOUND=MutableSound['sound/shields_on.ogg']
   THRUST_SOUND_WAIT=0.7
   # todo: make prettier immune state 
   IMMUNE_COLORS=(0..17).map{ |t|  Color[ 120+t*2, 210-t*2, 140+t*2  ] }
