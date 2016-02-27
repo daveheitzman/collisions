@@ -1,4 +1,4 @@
 Yeah.configure do |c|
-  c.title = "Collisions"
+  c.title = "Meteor Madness"
   c.preserve_pixels = false
 end
