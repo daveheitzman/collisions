@@ -8,4 +8,5 @@ bundle exec yeah build
 rsync -e "ssh -i $PEM" -a builds/web $REMOTE:
 ssh $REMOTE <<-TEXTTEXT
   sudo cp -rf web/* /var/www/
+  sudo service lighttpd restart 
 TEXTTEXT
