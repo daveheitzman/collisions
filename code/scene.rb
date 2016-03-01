@@ -297,7 +297,28 @@ class Scene
     display.text_font GAME_FONT
     display.text_size=20
     display.scale 1
-    display.fill_text("Score: #{game.player.score} Lives: #{@game.player.lives} Shields: #{game.player.shields} Level #{@level}", 15, 20 )
+
+    left=15
+    display.fill_color = Color[133,130,135]
+    display.fill_text("Score: #{game.player.score}", left, 20 )
+    display.fill_text("Lives: #{game.player.lives}" , left += 180, 20 )
+
+    # todo: draw little ships at top
+    # sleft=left + 60 
+    # game.player.lives.times do |t| 
+    #   ship.draw_triangle( display, 0, sleft += 80, 25  )
+    #   display.stroke_shape
+    # end 
+    display.fill_color = Color[133,130,135]
+    display.fill_text("Shields: ", left += 180, 20 )
+    sleft=left + 65 
+    game.player.shields.times do |t| ;
+      display.stroke_color = ship.shield_color
+      display.stroke_ellipse( sleft += 16, 14, 6, 6 ) 
+      display.stroke_shape
+    end 
+    display.fill_color = Color[133,130,135]
+    display.fill_text("Level #{@level}", left += 180, 20 )
   end 
 
   def add_bullet(b)
