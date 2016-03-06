@@ -19,6 +19,7 @@ require 'power_up_shield'
 require 'alien'
 require 'alien_exploding'
 require 'util'
+require 'attractive_mode'
 
 class CollisionOids < Game
   BG_COLOR = Color[86,133,106]
@@ -37,6 +38,7 @@ class CollisionOids < Game
     @player = Player.new(self)
     @game_over=false 
     @paused=false
+    # @attractive_mode=AttractiveMode.new(self) 
     next_level
   end
   
@@ -77,10 +79,10 @@ class CollisionOids < Game
   def update(elapsed)
     if keyboard.pressing? :p
       pause
-      # sleep 0.3
     end 
     @elapsed_total += elapsed
     return if @paused
+    # @attractive_mode.update(self) # do nothing if no user input on attractive mode 
 
     @scene.update(elapsed)
     if @scene.dead 

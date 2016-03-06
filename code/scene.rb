@@ -5,7 +5,7 @@ class Scene
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
   MAX_SCHRAPNEL=110
-
+  ALL_KEYS_RECOGNIZED=[:up, :right,:left, :down, :ctrl, :z, :x, :r  ]
   attr_accessor  :width, :height
   attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game, :bullets, :roids, :stl, :ttl
 
@@ -40,6 +40,7 @@ class Scene
     @stl -= elapsed
     @bullets=[] if @ship.dead
     @dead = true if ( @ttl < 0 && @stl < 0 )
+    
     if !game_over? 
       if !@ship.dead 
         if @game.keyboard.released? :x
