@@ -15,5 +15,4 @@ module Utils
     speed = ( (vel_x )**2 + (vel_y)**2 )**0.5
     [speed, smd1[1], dir]
   end 
-
 end 

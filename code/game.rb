@@ -24,9 +24,7 @@ class CollisionOids < Game
   BG_COLOR = Color[86,133,106]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
-  # TEXT_FONT=Font['font/Bandal.ttf']
   TEXT_FONT=Font['font/Guseul.ttf']
-  # TEXT_FONT=Font['http://fonts.googleapis.com/css?family=Inconsolata']
   attr_accessor :scene, :elapsed_total
   attr_reader :player, :game_over 
 
@@ -131,7 +129,6 @@ class CollisionOids < Game
     display.fill_text("ship dir: #{@scene.ship.dir}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("lives: #{@player.lives.to_s}", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_text("ship: vel_x/vel_y #{@scene.ship.velocity_x},#{@scene.ship.velocity_y}", text_x=text_x, text_y= text_y + line_height * 2 )
-    # display.fill_text("controls: z: shoot, x: shield , ctrl-r: restart, l/r arrows, up: thrust, p: pause ", text_x=text_x, text_y= text_y + line_height * 2 )
     display.fill_color = TEXT_COLOR
   end 
 end

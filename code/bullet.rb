@@ -1,5 +1,4 @@
 class Bullet < Box
-  # COLOR = Color[55, 144, 238]
   COLOR = Color[255, 255, 255]
   SHOOT_SOUND = MutableSound['sound/laser02q.ogg']
 
@@ -49,7 +48,6 @@ class Bullet < Box
     elsif x > @scene.width
       @x = x - @scene.width
     end
-    # super 
   end
 
   def draw(d)

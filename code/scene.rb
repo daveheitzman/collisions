@@ -28,7 +28,7 @@ class Scene
     @outcome="died"
     @power_up_multiplier = ( 1 / (@level ** 0.5 ) ) * 0.017
     spawn_ship
-    (2+level).times{ add_roid }
+    (2+level).times{ add_roid if rand > 0.4}
     @bullet_off_delay = -1
     @aliens=[]
     revive
@@ -40,7 +40,6 @@ class Scene
     @stl -= elapsed
     @bullets=[] if @ship.dead
     @dead = true if ( @ttl < 0 && @stl < 0 )
-# puts "scene update #{@ttl} #{@stl} #{elapsed}"
     if !game_over? 
       if !@ship.dead 
         if @game.keyboard.released? :x
@@ -242,10 +241,8 @@ class Scene
       if r < (0.33 + @level / 22 ) 
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
-        # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
       elsif r < @level / 22
-        # @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.7, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.6, @level )
         @roids << Roid.new(self, roid.x, roid.y, roid.radius*0.5, @level )
       else 

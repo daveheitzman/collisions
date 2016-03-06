@@ -21,7 +21,6 @@ class PowerUpExtraLife < PowerUp
 
   def draw(d)
     d.push
-      # d.translate @x, @y
       d.stroke_color = Ship::COLOR
       d.stroke_width = 2
       d.stroke_color = BOX_COLOR 

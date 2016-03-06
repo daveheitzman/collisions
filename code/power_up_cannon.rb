@@ -1,5 +1,4 @@
 class PowerUpCannon < PowerUp
-  # COLOR=Color[(rand*256).to_i, (rand*256).to_i, (rand*256).to_i ]
   COLOR=Color[144, 212, 244 ]
   FILL_COLOR=Color[124, 219, 213 ]
   FILL_COLOR=Cannon::COLOR

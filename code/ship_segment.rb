@@ -53,6 +53,4 @@ class ShipSegment < Roid
       d.stroke_shape
     d.pop
   end
-
-
 end

@@ -17,9 +17,6 @@ class RoidExploding < Ship
   end
 
   def draw(d)
-    # if !@dead 
-    #   @segments.each {|s| s.draw d}
-    # end 
   end
 
   def update(elapsed)

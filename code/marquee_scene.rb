@@ -3,6 +3,7 @@ class MarqueeScene < Scene
     super
     @ttl=90 # about 3 seconds 
   end 
+
   def display
     super 
     display.fill_color = Color[33,33,33]
@@ -11,4 +12,5 @@ class MarqueeScene < Scene
     display.scale 1
     display.fill_text("Level #{@level}", width/2-50, height/2 )
   end 
+
 end

@@ -13,8 +13,6 @@ class Roid < Box
   def initialize(scene, x=0, y=0, rad=nil  )
     super(scene, x, y)
     @in_collision=false
-    # @velocity_x = (rand*128 - 64) * ( 1 + @scene.level/10 )
-    # @velocity_y = (rand*128 - 64) * ( 1 + @scene.level/10 ) 
     @points = []
     @p_rot=0
     @speed=rand*50+50

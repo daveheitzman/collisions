@@ -1,11 +1,7 @@
 class Ship < Box
   COLOR = Color[133, 133, 133]
   MAX_VELOCITY=200
-  # SHOOT_SOUND=MutableSound['shoot.wav']
-  # SHOOT_SOUND=MutableSound['laser-03.wav']
-  # CANNON_SOUND=MutableSound['cannon.wav']
   THRUST_SOUND=MutableSound['sound/thrust.wav']
-  # SHIELD_SOUND=MutableSound['shields_on.wav']
   SHIELD_SOUND=MutableSound['sound/shields_on.ogg']
   THRUST_SOUND_WAIT=0.7
   # todo: make prettier immune state 
@@ -98,7 +94,6 @@ class Ship < Box
     if immune? 
       @last_immune_color += 1
       @last_immune_color %= IMMUNE_COLORS.size 
-      # color = Color[ (rand*128).to_i, (rand*128).to_i, (191+rand*64).to_i  ]
       color = IMMUNE_COLORS[@last_immune_color]
     end 
     d.push
@@ -148,7 +143,6 @@ class Ship < Box
   end
 
   def shield_color 
-    # @shield_color ||= Color[122,122,124]
     @shield_color ||= Color[230,130,154]
   end 
 
