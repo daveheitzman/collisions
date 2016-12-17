@@ -17,7 +17,7 @@ class Ship < Box
     @bullet_off_delay = 0.94 - 0.01 * @scene.level
     @shield_end = -1
     @thrust_factor = 1.1 + 0.04 * @scene.level
-    @shield_time = 3.37 + 0.06 * @scene.level
+    @shield_time = 4.37 + 0.06 * @scene.level
     @x = x
     @y = y
     @in_collision=false
@@ -143,6 +143,13 @@ class Ship < Box
   end
 
   def shield_color 
+    if shield_active? 
+      if ( @shield_end - @scene.elapsed_total ) < 1.8
+        # shield should start flickering or something 
+        return Color[115,65,75]        
+      end   
+    end 
+
     @shield_color ||= Color[230,130,154]
   end 
 

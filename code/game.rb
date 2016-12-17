@@ -111,6 +111,7 @@ class CollisionOids < Game
   end
 
   def stats
+    return true 
     display.text_font=TEXT_FONT
     text_x = @scene.width + offset * 2
     text_y = offset + display.text_size

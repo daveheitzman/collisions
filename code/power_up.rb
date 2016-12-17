@@ -3,6 +3,7 @@ class PowerUp < Box
 
   def initialize(scene, x = 0, y = 0)
     super 
+    USER_GETS_SOUND=MutableSound['sound/coin2.ogg']
     @ttl=0
     @stl=15
     @width=31
@@ -38,6 +39,7 @@ class PowerUp < Box
 
   def help(ship)
     #subclass implements 
+    USER_GETS_SOUND.play
     ship.make_immune(2)
   end 
 
@@ -48,6 +50,7 @@ class PowerUp < Box
     @twist = @width*rand + @width/2
     @twist_multi=-18
   end 
+
   def update_twist(elapsed)
     @twist += elapsed*@twist_multi 
     if @twist < 0.1 
