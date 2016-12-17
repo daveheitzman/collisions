@@ -13,8 +13,8 @@ class Scene
     @ticks=0
     @game=game
     @level=level
-    @width = 700
-    @height = 650
+    @width = 1000
+    @height = 800
     @roids = []
     @bullets = []
     @alien_bullets = []
