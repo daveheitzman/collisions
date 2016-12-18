@@ -21,13 +21,13 @@ require 'alien_exploding'
 require 'util'
 require 'attractive_mode'
 
-class CollisionOids < Game
+class MeteorMadness < Game
   BG_COLOR = Color[86,133,106]
   TEXT_COLOR = Color[10, 10, 10]
   LIGHT_TEXT_COLOR = Color[90, 90, 90]
   TEXT_FONT=Font['font/Guseul.ttf']
   attr_accessor :scene, :elapsed_total
-  attr_reader :player, :game_over 
+  attr_reader :player, :game_over , :game_speed
 
   def setup
     MutableSound.mute!
@@ -38,6 +38,7 @@ class CollisionOids < Game
     @player = Player.new(self)
     @game_over=false 
     @paused=false
+    @game_speed=1
     # @attractive_mode=AttractiveMode.new(self) 
     next_level
   end

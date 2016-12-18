@@ -5,7 +5,7 @@ class Scene
   THRUST_SOUND_WAIT = 0.5
   GAME_FONT=Font['envy_code_r.ttf']
   MAX_SCHRAPNEL=110
-  ALL_KEYS_RECOGNIZED=[:up, :right,:left, :down, :ctrl, :z, :x, :r  ]
+  ALL_KEYS_RECOGNIZED=[:up, :right,:left, :down, :ctrl, :z, :x, :r, :p  ]
   attr_accessor  :width, :height
   attr_reader :box_count, :ship, :hero, :dead, :outcome , :level , :game, :bullets, :roids, :stl, :ttl
 
@@ -71,10 +71,10 @@ class Scene
     end 
 
     if !game_over?
-      @ship.update( elapsed)
+      # @ship.update( elapsed)
       # release power up 
       if rand < ( elapsed * @power_up_multiplier )
-        @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-60)*rand + 30, (width-60)*rand+30 )
+        @power_ups << [PowerUpExtraLife, PowerUpShield, PowerUpCannon].sample.new(self, (height-180)*rand + 90, (width-180)*rand+90 )
       end  
 
       if rand < (0.3 + 0.1*@level )*( elapsed * @power_up_multiplier )
