@@ -16,10 +16,11 @@ class Ship < Box
     @next_bullet_allowed_at = 0 
     @bullet_off_delay = 0.94 - 0.01 * @scene.level
     @shield_end = -1
-    @thrust_factor = 1.1 + 0.04 * @scene.level
+    @thrust_factor = 5.7 + 0.04 * @scene.level
     @shield_time = 4.37 + 0.06 * @scene.level
     @x = x
     @y = y
+    @drag = 0.3
     @in_collision=false
     @width = 13
     @height = 18

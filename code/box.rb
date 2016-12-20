@@ -18,6 +18,7 @@ class Box
     @radius=((@width**2+@height**2) ** 0.5) / 2
     @velocity_x = 0
     @velocity_y = 0
+    @drag=0
     @p_rot=0 
     @dir= 0 #direction 
     @speed= 0
@@ -30,11 +31,13 @@ class Box
   
   def update_velocity(delta=nil)
     @speed += delta if delta 
+    @speed -= @drag 
+    @speed = 0 if @speed < 0 
     if @last_speed != @speed || @last_dir != @dir 
       @last_speed = @speed
       @last_dir = @dir
       @velocity_x = Math.cos( @dir-HALF_PI )*@speed 
-      @velocity_y = Math.sin( @dir-HALF_PI )*@speed 
+      @velocity_y = Math.sin( @dir-HALF_PI )*@speed
     end  
   end 
   

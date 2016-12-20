@@ -19,6 +19,7 @@ class Alien < Ship
     end 
     @stl=12
     @ttl=0
+    @drag=0
     @speed=105
     @height=40
     @width=40
